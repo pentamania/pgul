@@ -1,0 +1,29 @@
+{
+  "name": "pgul",
+  "version": "0.1.0",
+  "description": "pentamania's game util library",
+  "main": "dist/pgul.js",
+  "module": "lib/pgul.esm.js",
+  "types": "src/index.ts",
+  "files": [
+    "src",
+    "lib",
+    "dist",
+    "types"
+  ],
+  "scripts": {
+    "build": "rollup -c",
+    "dev": "rollup -c -w",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "pentamania",
+  "license": "MIT",
+  "devDependencies": {
+    "rollup": "1.1.2",
+    "rollup-plugin-terser": "^7.0.2",
+    "rollup-plugin-typescript2": "^0.28.0",
+    "tslib": "1.9.3",
+    "typescript": "3.3.3"
+  }
+}
