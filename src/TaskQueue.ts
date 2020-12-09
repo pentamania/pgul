@@ -34,6 +34,7 @@ const FAKE_EMPTY_ARRAY: never[] = [];
  * - Action（アクション）：実際の処理。基本はGeneratorFunctionの形式で書く
  * - Task（タスク）：処理の概要。アクションに加えて「いつ」「どのように（引数で指定）」等の情報を持つ。オブジェクト型 T = { action: A }
  * - Queue（キュー）：タスクを実行順に並べた順列のイメージ -> Q = [ T1, T2, T3, ... ]
+ *
  * Q > T > A の順で粒度が細かくなるイメージ
  * さらに複数のQueueを統括する上位概念も設定可能だが、それは別クラスで扱う？
  *
@@ -55,7 +56,6 @@ const FAKE_EMPTY_ARRAY: never[] = [];
 export class TaskQueue {
   private _taskContext: any | null; // actionのthisとなる
   private _tasksInProgress: Generator[] = [];
-  private _taskActionDictionary?: ActionDictionary;
   private _queueProgressGenerator: Generator<
     number,
     void,
@@ -64,17 +64,11 @@ export class TaskQueue {
   private _currentTaskList?: SerialQueueTask[];
 
   /**
-   * @param actionDictionary
-   * @param queueTaskList
-   * @param actionContext
+   * @param queueTaskList キュータスクリスト
+   * @param actionContext action実行時のthis参照となるオブジェクト
    */
-  constructor(
-    queueTaskList: SerialQueueTask[],
-    actionDictionary?: ActionDictionary,
-    actionContext: any = null
-  ) {
+  constructor(queueTaskList: SerialQueueTask[], actionContext: any = null) {
     this.setSerialTaskList(queueTaskList);
-    this._taskActionDictionary = actionDictionary;
     this._taskContext = actionContext;
   }
 
@@ -111,8 +105,7 @@ export class TaskQueue {
    * @param queueTask
    */
   enqueue(queueTask: QueueTaskCommon) {
-    const actionDictionary =
-      this._taskActionDictionary || TaskQueue.ActionDictionary;
+    const actionDictionary = TaskQueue.ActionDictionary;
     const actionfunc =
       typeof queueTask.action === "string"
         ? actionDictionary.get(queueTask.action)
@@ -181,10 +174,11 @@ export class TaskQueue {
   // setParallelTaskList(queueTaskList: SerialQueueTask[]) {
   // }
 
-  static ActionDictionary: ActionDictionary;
+  /**
+   * アクション辞書
+   */
+  static ActionDictionary: ActionDictionary = new Map();
   static setStaticActionDictionary(dic: ActionDictionary) {
-    TaskQueue.ActionDictionary = dic;
+    this.ActionDictionary = dic;
   }
 }
-
-TaskQueue.ActionDictionary = new Map();
