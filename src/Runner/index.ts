@@ -2,7 +2,6 @@ import { Coroutine } from "../Coroutine";
 import { Vector2 } from "../Vector2";
 import { CoroutineAction } from "../interfaces";
 import { toDegree } from "../utils/radianConverter";
-import DefaultActionDictionary from "./DefaultActionDictionary";
 
 export interface RunnerTarget {
   x: number;
@@ -171,8 +170,7 @@ export class Runner extends Coroutine {
     Runner.actionDictionary.set(name, gen);
   }
 
-  // static actionDictionary: Map<string, RunnerAction> = new Map();
-  static actionDictionary: Map<string, RunnerAction> = DefaultActionDictionary;
+  static actionDictionary: Map<string, RunnerAction> = new Map();
 }
 
 export * from "./defaultActions";
