@@ -1,11 +1,11 @@
 // type QueueTaskFunc = GeneratorFunction
 export type TaskAction<CTX = any> = (this: CTX, ...args: any[]) => Generator; // GeneratorFunctionもどき
 
-interface QueueTaskCommon {
-  action: string | TaskAction; // 予め登録したアクション辞書から実行したい処理を
+interface QueueTaskCommon<CTX = any> {
+  action: string | TaskAction<CTX>; // 予め登録したアクション辞書から実行したい処理を
   args?: any[]; // action用の引数（actionData.func実行時の引数）
 }
-export interface SerialQueueTask extends QueueTaskCommon {
+export interface SerialQueueTask<CTX = any> extends QueueTaskCommon<CTX> {
   interval: number; // 前回タスクからの(フレーム/時間)インターバル
 }
 
@@ -18,7 +18,7 @@ export interface SerialQueueTask extends QueueTaskCommon {
 //
 
 // パラレル型も対応？
-interface ParallelQueueTask extends QueueTaskCommon {
+interface ParallelQueueTask<CTX = any> extends QueueTaskCommon<CTX> {
   runAt: number;
 }
 
