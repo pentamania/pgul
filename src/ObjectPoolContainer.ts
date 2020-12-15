@@ -1,4 +1,5 @@
 type ReadyChecker = (obj: any) => boolean;
+type ObjectResetter = (obj: any) => void;
 
 /**
  * @class
@@ -7,6 +8,7 @@ export class ObjectPoolContainer<T = any> {
   private _pools: Map<string, T[]> = new Map();
   private _objReadyChecker: ReadyChecker = (obj: any | undefined) =>
     obj ? obj.parent == null : false;
+  private _objectResetter?: ObjectResetter;
 
   setPool(key: string) {
     if (this._pools.has(key)) return this;
@@ -28,7 +30,7 @@ export class ObjectPoolContainer<T = any> {
     const pool = this._pools.get(key);
     if (!pool) {
       // TODO warn
-      return
+      return;
     }
     pool.push(obj);
   }
@@ -47,14 +49,19 @@ export class ObjectPoolContainer<T = any> {
     const pool = this._pools.get(key);
     if (!pool) {
       // TODO warn
-      return undefined
+      return undefined;
     }
+    let item: T | undefined;
     if (index != null) {
       // return pool[index];
-      const item = pool[index];
-      return this._objReadyChecker(item) ? item : undefined;
+      item = pool[index];
+      item = this._objReadyChecker(item) ? item : undefined;
     }
-    return pool.find((obj) => this._objReadyChecker(obj));
+    item = pool.find((obj) => this._objReadyChecker(obj));
+    if (item && this._objectResetter) {
+      this._objectResetter(item);
+    }
+    return item;
   }
 
   /**
@@ -64,5 +71,9 @@ export class ObjectPoolContainer<T = any> {
    */
   setReadyChecker(func: ReadyChecker) {
     this._objReadyChecker = func;
+  }
+
+  setObjectResetter(func: ObjectResetter) {
+    this._objectResetter = func;
   }
 }
