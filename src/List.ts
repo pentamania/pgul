@@ -1,20 +1,20 @@
-// import { Random } from "./Random";
+import { Random } from "./Random";
 
 /**
  * 配列をゲーム向けに使いやすくするためのクラス
  * WIP
  */
 export class List<T = any> {
-  private _list: T[];
-  private _index = 0;
-  // private _random: any;
+  protected _list: T[];
+  protected _index = 0;
+  protected _random?: Random;
 
   constructor(...items: any) {
     this._list = items;
   }
 
-  push() {
-    return this._list.push(...arguments);
+  push(...arg: T[]) {
+    return this._list.push(...arg);
   }
 
   pop() {
@@ -31,6 +31,24 @@ export class List<T = any> {
 
   decrement() {
     return this._list[--this._index];
+  }
+
+  /**
+   * 配列から無作為に選ぶ
+   * @param random 無指定の場合はインスタンスごとの内部random使う
+   */
+  randomPick(random?: Random) {
+    if (!random) {
+      if (!this._random) this._random = new Random();
+      random = this._random;
+    }
+    const i = random.randInt(0, this.lastIndex);
+    return this._list[i];
+  }
+
+  setRandomSeed(seed: number) {
+    if (!this._random) this._random = new Random();
+    this._random.seed = seed;
   }
 
   get current() {
@@ -51,17 +69,6 @@ export class List<T = any> {
 
   // range(max) {
   //   // todo
-  // }
-
-  // setRandomSeed(seed: number) {
-  //   this._random = new Random(seed);
-  // }
-
-  // pickup(seed: number) {
-  //   if (!this._random) this._random = new Random(seed);
-  //   const i = this._random.randInt(0, this.lastIndex);
-  //   // console.log("inde :", i);
-  //   return this._list[i];
   // }
 }
 
