@@ -2,14 +2,13 @@ import { Random } from "./Random";
 
 /**
  * 配列をゲーム向けに使いやすくするためのクラス
- * WIP
  */
 export class List<T = any> {
   protected _list: T[];
   protected _index = 0;
   protected _random?: Random;
 
-  constructor(...items: any) {
+  constructor(...items: T[]) {
     this._list = items;
   }
 
@@ -25,12 +24,42 @@ export class List<T = any> {
     return this._list.slice(0);
   }
 
-  increment() {
-    return this._list[++this._index];
+  /**
+   * 内部インデックスを設定しつつ、対応するオブジェクトを返す
+   * 範囲外のインデックス値はセットできず、undefinedを返す
+   * @param i
+   */
+  setIndex(i: number) {
+    if (i < 0 || this.lastIndex < i) {
+      // TODO：デバッグビルド時にエラー出す
+      return undefined;
+    }
+    this._index = i;
+    return this._list[this._index];
   }
 
-  decrement() {
-    return this._list[--this._index];
+  /**
+   * 内部インデックスを進めながら、対応するオブジェクトを返す
+   * @param loop インデックスをオーバーしたときループするかどうか。falseの場合、オーバーしそうになると最大インデックスで固定
+   */
+  increment(loop = true) {
+    let nextIndex = this._index + 1;
+    if (this.lastIndex < nextIndex) {
+      nextIndex = loop ? 0 : this.lastIndex;
+    }
+    return this.setIndex(nextIndex);
+  }
+
+  /**
+   * 内部インデックスを減じながら、対応するオブジェクトを返す  。
+   * @param loop インデックスをオーバーしたときループするかどうか。falseの場合、オーバーしそうになると0で固定
+   */
+  decrement(loop = true) {
+    let nextIndex = this._index - 1;
+    if (nextIndex < 0) {
+      nextIndex = loop ? this.lastIndex : 0;
+    }
+    return this.setIndex(nextIndex);
   }
 
   /**
@@ -51,18 +80,37 @@ export class List<T = any> {
     this._random.seed = seed;
   }
 
+  /**
+   * 現在の内部インデックス値
+   */
+  get currentIndex() {
+    return this._index;
+  }
+
+  /**
+   * 現在の内部インデックス値に対応するオブジェクトを返す
+   */
   get current() {
     return this._list[this._index];
   }
 
+  /**
+   * Array.lengthと一緒
+   */
   get length() {
     return this._list.length;
   }
 
+  /**
+   * 内部インデックス最大値（≒List内の全要素数）
+   */
   get lastIndex() {
     return this._list.length - 1;
   }
 
+  /**
+   * List内最後の要素
+   */
   get last() {
     return this._list[this.lastIndex];
   }
