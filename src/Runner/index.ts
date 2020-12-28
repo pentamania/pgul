@@ -166,6 +166,14 @@ export class Runner extends Coroutine {
     return this._speed;
   }
 
+  get vx(): number {
+    return this.vector.x;
+  }
+
+  get vy(): number {
+    return this.vector.y;
+  }
+
   static registerAction(name: string, gen: CoroutineAction) {
     Runner.actionDictionary.set(name, gen);
   }
