@@ -162,6 +162,14 @@ export class Runner extends Coroutine {
     return this;
   }
 
+  /**
+   * vector方向回転
+   * @param args
+   */
+  rotateVector(...args: Parameters<typeof Vector2.prototype.rotate>) {
+    this.vector.rotate(...args);
+  }
+
   get speed() {
     return this._speed;
   }
