@@ -15,7 +15,7 @@ export class Coroutine {
   protected _generator?: Generator;
   protected _taskList: CoroutineTask[] = [];
   protected _loop = false;
-  isAwake = true;
+  protected _isAwake = true;
 
   // constructor(options) {
   // }
@@ -25,7 +25,7 @@ export class Coroutine {
    * ループが有効な場合はジェネレーターをリセットする
    */
   step() {
-    if (!this.isAwake) return;
+    if (!this._isAwake) return;
     if (!this._generator) return;
 
     // 進行
@@ -80,18 +80,18 @@ export class Coroutine {
    * 内部ジェネレーターリセットも兼ねる
    */
   start() {
-    this.isAwake = true;
+    this._isAwake = true;
     this.reset();
     return this;
   }
 
   pause() {
-    this.isAwake = false;
+    this._isAwake = false;
     return this;
   }
 
   resume() {
-    this.isAwake = true;
+    this._isAwake = true;
     return this;
   }
 
@@ -103,6 +103,16 @@ export class Coroutine {
   setLoop(flag = true) {
     this._loop = flag;
     return this;
+  }
+
+  /**
+   * @readonly
+   * 稼働状態を返す。
+   * falseの際はstepを実行しても進まない
+   * pause/resumeなどで更新
+   */
+  get isAwake() {
+    return this._isAwake;
   }
 
   /**
