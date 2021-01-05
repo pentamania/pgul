@@ -23,13 +23,14 @@ export class Coroutine {
   /**
    * ルーチン処理を進める
    * ループが有効な場合はジェネレーターをリセットする
+   * @returns 稼働状態であればnext結果を返す
    */
-  step() {
+  step(): void | IteratorResult<any> {
     if (!this._isAwake) return;
     if (!this._generator) return;
 
     // 進行
-    const nextResult = this._generator.next();
+    const result = this._generator.next();
 
     // // イベント発火
     // this.has('next') && this.flare('next',  {
@@ -37,18 +38,21 @@ export class Coroutine {
     // })
 
     // すべての処理が終わったら
-    if (nextResult.done) {
+    if (result.done) {
       if (this._loop) {
         this.reset(); // 巻き戻す
       } else {
         this.clear();
       }
     }
+
+    // return this._generator != null;
+    return result;
   }
 
   /**
-   * resetする？
    * @param taskObj func<*function>とarguments<any[]>をもったオブジェクト
+   * @param resetAfterAdding
    */
   addTask(taskObj: CoroutineTask, resetAfterAdding = false) {
     this._taskList.push(taskObj);
