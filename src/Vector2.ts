@@ -18,16 +18,18 @@ export class Vector2 {
     return this;
   }
 
-  rotate(rad: number, pivotX: number = 0, pivotY: number = 0) {
+  rotate(angleRadian: number, pivotX: number = 0, pivotY: number = 0) {
     const fromPivotX = this._x - pivotX;
     const fromPivotY = this._y - pivotY;
-    const x2 = fromPivotX * Math.cos(rad) - fromPivotY * Math.sin(rad);
-    const y2 = fromPivotX * Math.sin(rad) + fromPivotY * Math.cos(rad);
+    const x2 =
+      fromPivotX * Math.cos(angleRadian) - fromPivotY * Math.sin(angleRadian);
+    const y2 =
+      fromPivotX * Math.sin(angleRadian) + fromPivotY * Math.cos(angleRadian);
     return this.set(pivotX + x2, pivotY + y2);
   }
 
-  rotateByDegree(deg: number) {
-    return this.rotate(toRadian(deg));
+  rotateByDegree(angleDegree: number, pivotX: number = 0, pivotY: number = 0) {
+    return this.rotate(toRadian(angleDegree), pivotX, pivotY);
   }
 
   normalize(): this {
