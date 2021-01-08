@@ -65,22 +65,29 @@ export class ObjectPoolContainer<KT = string, T = any> {
    * @param key プール取得キー
    * @param index [optional ]添字を指定した場合、その中身が存在＆準備できてれば、それを返す
    */
-  pick(key: string, index?: number): T | undefined {
+  pick(key: KT, index?: number, objReadyChecker?: ReadyChecker): T | undefined {
     const pool = this._pools.get(key);
     if (!pool) {
       // TODO warn
       return undefined;
     }
+    const readyChecker = objReadyChecker
+      ? objReadyChecker
+      : this._objReadyChecker;
+
     let item: T | undefined;
     if (index != null) {
       // return pool[index];
       item = pool[index];
-      item = this._objReadyChecker(item) ? item : undefined;
+      item = readyChecker(item) ? item : undefined;
+    } else {
+      item = pool.find((obj) => readyChecker(obj));
     }
-    item = pool.find((obj) => this._objReadyChecker(obj));
+
     if (item && this._objectResetter) {
       this._objectResetter(item);
     }
+
     return item;
   }
 
