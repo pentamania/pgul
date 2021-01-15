@@ -7,13 +7,34 @@ export class List<T = any> {
   protected _list: T[];
   protected _index = 0;
   protected _random?: Random;
+  protected _limitSize?: number;
 
   constructor(...items: T[]) {
     this._list = items;
   }
 
-  push(...arg: T[]) {
-    return this._list.push(...arg);
+  /**
+   * 通常はArray.pushと同じだが、
+   * サイズが設定されている場合、サイズ超過時に頭の要素が押し出されて返却される
+   *
+   * 複数pushした場合、押し出した分を配列として返却
+   *
+   * @param arg
+   */
+  push(...arg: T[]): number | T | T[] {
+    const newLength = this._list.push(...arg);
+    if (this._limitSize && this._limitSize < newLength) {
+      const shifted = [];
+      while (this._limitSize < this._list.length) {
+        shifted.push(this._list.shift()!);
+      }
+      if (shifted.length > 1) {
+        return shifted;
+      } else {
+        return shifted[0];
+      }
+    }
+    return newLength;
   }
 
   pop() {
@@ -60,6 +81,26 @@ export class List<T = any> {
       nextIndex = loop ? this.lastIndex : 0;
     }
     return this.setIndex(nextIndex);
+  }
+
+  /**
+   * リスト容量を取得（未設定のときはundefined）
+   */
+  getSize(): number | undefined {
+    return this._limitSize;
+  }
+
+  /**
+   * リストの容量を設定する
+   * @param v
+   */
+  setSize(v: number): void {
+    if (v <= 0) {
+      // TODO: only warn on dev mode
+      console.warn("[pgul] Cannot set 0 or lower number as List size");
+      return;
+    }
+    this._limitSize = v;
   }
 
   /**
