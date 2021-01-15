@@ -80,6 +80,13 @@ export class List<T = any> {
     this._random.seed = seed;
   }
 
+  /***
+   * リストの中身をクリア
+   */
+  clear() {
+    this._list.length = 0;
+  }
+
   /**
    * 現在の内部インデックス値
    */
