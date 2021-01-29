@@ -9,6 +9,8 @@ export * from "./AreaRect";
 export * from "./ObjectPoolContainer";
 export * from "./utils/radianConverter";
 
+export * from "./mixins/Menuable";
+
 import * as utils from "./utils/index";
 export { utils };
 
