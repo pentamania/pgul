@@ -46,6 +46,15 @@ export class List<T = any> {
   }
 
   /**
+   * 内部インデックスを設定しつつ、対応するオブジェクトを返す（内部処理用）
+   * @param i
+   */
+  protected _setIndexAndReturnValue(i: number): T {
+    this._index = i;
+    return this._list[this._index];
+  }
+
+  /**
    * 内部インデックスを設定しつつ、対応するオブジェクトを返す
    * 範囲外のインデックス値はセットできず、undefinedを返す
    * @param i
@@ -55,32 +64,31 @@ export class List<T = any> {
       // TODO：デバッグビルド時にエラー出す
       return undefined;
     }
-    this._index = i;
-    return this._list[this._index];
+    this._setIndexAndReturnValue(i);
   }
 
   /**
-   * 内部インデックスを進めながら、対応するオブジェクトを返す
+   * 内部インデックスを進めながら、対応するオブジェクトを返す.
    * @param loop インデックスをオーバーしたときループするかどうか。falseの場合、オーバーしそうになると最大インデックスで固定
    */
-  increment(loop = true) {
+  increment(loop = true): T {
     let nextIndex = this._index + 1;
     if (this.lastIndex < nextIndex) {
       nextIndex = loop ? 0 : this.lastIndex;
     }
-    return this.setIndex(nextIndex);
+    return this._setIndexAndReturnValue(nextIndex);
   }
 
   /**
-   * 内部インデックスを減じながら、対応するオブジェクトを返す  。
+   * 内部インデックスを減じながら、対応するオブジェクトを返す.
    * @param loop インデックスをオーバーしたときループするかどうか。falseの場合、オーバーしそうになると0で固定
    */
-  decrement(loop = true) {
+  decrement(loop = true): T {
     let nextIndex = this._index - 1;
     if (nextIndex < 0) {
       nextIndex = loop ? this.lastIndex : 0;
     }
-    return this.setIndex(nextIndex);
+    return this._setIndexAndReturnValue(nextIndex);
   }
 
   /**
