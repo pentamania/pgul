@@ -7,6 +7,7 @@ export * from "./Runner/index";
 export * from "./TaskQueue";
 export * from "./AreaRect";
 export * from "./ObjectPoolContainer";
+export * from "./Automaton";
 export * from "./utils/radianConverter";
 
 export * from "./mixins/Menuable";
