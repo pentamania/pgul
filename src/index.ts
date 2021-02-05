@@ -9,6 +9,7 @@ export * from "./AreaRect";
 export * from "./ObjectPoolContainer";
 export * from "./Automaton";
 export * from "./utils/radianConverter";
+export * from "./Debugger";
 
 export * from "./mixins/Menuable";
 
