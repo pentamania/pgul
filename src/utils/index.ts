@@ -6,5 +6,6 @@ export { default as merge } from "./merge";
 export { default as getDistanceSquared } from "./getDistanceSquared";
 export * from "./radianConverter";
 export { default as stringToEnum } from "./stringToEnum";
+export { default as objectKeysToEnum } from "./keysToEnum";
 export { default as zeroFillNum } from "./zeroFillNum";
 export { default as combineGeneratorFunctions } from "./combineGeneratorFunctions";
