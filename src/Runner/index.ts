@@ -175,6 +175,19 @@ export class Runner extends Coroutine {
   }
 
   /**
+   * vector方向回転
+   * @param args
+   */
+  rotateVector(angleRadian: number) {
+    this._vectorRadian += angleRadian;
+    this.vector.setFromRadian(this._vectorRadian, this._speed);
+  }
+  // rotateVector(...args: Parameters<typeof Vector2.prototype.rotate>) {
+  //   this.vector.rotate(...args);
+  //   this._vectorRadian = this.vector.getAngleByRadian();
+  // }
+
+  /**
    * 速度をセット。内部的にはvector長をセットします。
    * @param speed
    */
@@ -184,14 +197,6 @@ export class Runner extends Coroutine {
     // this.vector.normalize().mul(this._speed);
     this.vector.setFromRadian(this._vectorRadian, this._speed);
     return this;
-  }
-
-  /**
-   * vector方向回転
-   * @param args
-   */
-  rotateVector(...args: Parameters<typeof Vector2.prototype.rotate>) {
-    this.vector.rotate(...args);
   }
 
   /**
