@@ -218,6 +218,13 @@ export class Runner extends Coroutine {
     return this.vector.y;
   }
 
+  /**
+   * vectorの向きをラジアン値で返す
+   */
+  get vectorAngle() {
+    return this._vectorRadian;
+  }
+
   static registerAction(name: string, gen: CoroutineAction) {
     Runner.actionDictionary.set(name, gen);
   }
