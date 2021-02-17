@@ -147,22 +147,18 @@ export class Runner<T = any> extends Coroutine {
   /**
    * 進行方向を変える（度数単位）
    * @param degree 度数単位
-   * @param rotateTargetToo 本体の角度も変えるかどうか
    */
-  setDirection(degree: number, rotateTargetToo = false) {
-    return this.setDirectionByRadian(toRadian(degree), rotateTargetToo);
+  setDirection(degree: number) {
+    return this.setDirectionByRadian(toRadian(degree));
   }
 
   /**
    * 進行方向を変える（ラジアン値）
    * @param radian
-   * @param rotateTargetToo
    */
-  setDirectionByRadian(radian: number, rotateTargetToo = false) {
+  setDirectionByRadian(radian: number) {
     this._vectorRadian = radian;
     this.vector.setFromRadian(this._vectorRadian, this._speed);
-    if (rotateTargetToo && this.target && this.target.rotation != null)
-      this.target.rotation = toDegree(radian);
     return this;
   }
 
