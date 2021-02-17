@@ -3,14 +3,6 @@ import { Vector2 } from "../Vector2";
 import { CoroutineAction } from "../interfaces";
 import { toDegree, toRadian } from "../utils/radianConverter";
 
-export interface RunnerTarget {
-  x: number;
-  y: number;
-  rotation?: number; // Radian想定
-  angle?: number; // Degree想定（仮）
-  [key: string]: any; // その他プロパティ
-}
-
 /**
  * this参照をRunnerとしたGeneratorFunction型
  */
@@ -20,7 +12,7 @@ export type RunnerAction = CoroutineAction<Runner>;
  * Runner
  * Corutionの機能を使って対象物のパラメータ（主にx,y値）を変化させるためのクラス
  */
-export class Runner extends Coroutine {
+export class Runner<T = any> extends Coroutine {
   private _speed: number = 1;
   /**
    * vector方向計算用の内部ラジアン値
@@ -34,9 +26,9 @@ export class Runner extends Coroutine {
   /**
    * Runner対象オブジェクト
    */
-  target?: RunnerTarget;
+  target?: T;
 
-  constructor(target?: RunnerTarget) {
+  constructor(target?: T) {
     super();
     if (target) this.setTarget(target);
   }
@@ -44,7 +36,7 @@ export class Runner extends Coroutine {
   /**
    * @param target
    */
-  setTarget(target: RunnerTarget) {
+  setTarget(target: T) {
     this.target = target;
     return this;
   }
