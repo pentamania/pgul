@@ -1,19 +1,28 @@
 import { toRadian } from "../utils/radianConverter";
-import { Runner, RunnerTarget, RunnerAction } from "./index";
+import { Runner } from "./index";
+
+export interface BasicRunnerTarget2D {
+  x: number;
+  y: number;
+  rotation?: number; // Radian想定
+  angle?: number; // Degree想定（仮）
+  [key: string]: any; // その他プロパティ
+}
 
 /**
  * ひたすらvector方向に進む
  * @param duration
  */
-export function* straight(this: Runner, duration: number) {
+export function* straight(this: Runner<BasicRunnerTarget2D>, duration: number) {
   let count = 0;
   while (count < duration) {
-    this.target!.x += this.vector.x;
-    this.target!.y += this.vector.y;
+    if (this.target) {
+      this.target.x += this.vx;
+      this.target.y += this.vy;
+    }
     yield count++;
   }
 }
-
 // 以下ではthis: Runnerを省けるが、代わりにインテリセンスによる引数表示がなくなって不便
 // export const straight: RunnerAction = function* (duration: number) {
 //   let count = 0;
@@ -25,15 +34,20 @@ export function* straight(this: Runner, duration: number) {
 // };
 
 /**
- * 指定フレームかけてその場で回転
+ * 指定フレームかけてその場でターゲットを回転
  * @param duration
  * @param degree
  */
-export function* rotate(this: Runner, duration: number, degree: number) {
+export function* rotate(
+  this: Runner<BasicRunnerTarget2D>,
+  duration: number,
+  degree: number
+) {
   let count = 0;
   const turnDegUnit = degree / duration;
   while (count < duration) {
-    if (this.target!.rotation != null) this.target!.rotation += turnDegUnit;
+    if (this.target && this.target.rotation != null)
+      this.target.rotation += turnDegUnit;
     // yield this.target!.rotation += count;
     // this.vector.rotate(turnUnitRad);
     yield count++;
@@ -46,14 +60,19 @@ export function* rotate(this: Runner, duration: number, degree: number) {
  * @param duration
  * @param degree
  */
-export function* turnAround(this: Runner, duration: number, degree: number) {
+export function* turnAround(
+  this: Runner<BasicRunnerTarget2D>,
+  duration: number,
+  degree: number
+) {
   let count = 0;
   const turnUnit = toRadian(degree / duration);
   while (count < duration) {
-    this.vector.rotate(turnUnit);
-    this.target!.x += this.vector.x;
-    this.target!.y += this.vector.y;
-    // this.target!.rotation = this.vector.getAngleByDegree();
+    this.rotateVector(this.vectorAngle + turnUnit);
+    if (this.target) {
+      this.target.x += this.vx;
+      this.target.y += this.vy;
+    }
     yield count++;
   }
 }
@@ -63,22 +82,26 @@ export function* turnAround(this: Runner, duration: number, degree: number) {
  * @param duration
  * @param magnitude
  */
-export function* accelerate(this: Runner, duration: number, magnitude = 1.0) {
+export function* accelerate(
+  this: Runner<BasicRunnerTarget2D>,
+  duration: number,
+  magnitude = 1.0
+) {
   let count = 0;
-  const svx = this.vector.x;
-  const svy = this.vector.y;
-  const dvx = this.vector.x * magnitude;
-  const dvy = this.vector.y * magnitude;
+  const svx = this.vx;
+  const svy = this.vy;
+  const dvx = this.vx * magnitude;
+  const dvy = this.vy * magnitude;
   const vxUnit = (dvx - svx) / duration;
   const vyUnit = (dvy - svy) / duration;
   // const speedDelta = targetSpeed - this.vector.length();
   // const speedUnit = speedDelta/duration;
   while (count < duration) {
-    this.vector.x += vxUnit;
-    this.vector.y += vyUnit;
-
-    this.target!.x += this.vector.x;
-    this.target!.y += this.vector.y;
+    this.setVector(this.vx + vxUnit, this.vy + vyUnit);
+    if (this.target) {
+      this.target.x += this.vx;
+      this.target.y += this.vy;
+    }
     yield count++;
   }
 }
@@ -88,9 +111,14 @@ export function* accelerate(this: Runner, duration: number, magnitude = 1.0) {
  * @param duration
  * @param prop
  */
-export function* to(this: Runner, duration: number, prop: any) {
+export function* to(
+  this: Runner,
+  duration: number,
+  prop: { [k: string]: any }
+) {
   // function* (this: Runner, duration: number, prop: ToPropObject) {
   let count = 0;
+  // TODO: reduceで書き換え
   const unitDic = Object.create(null);
   Object.keys(prop).forEach((key) => {
     const val = prop[key];
@@ -131,17 +159,17 @@ export function* wait(this: Runner, duration: number = Infinity) {
  * @param widening
  */
 export function* sine(
-  this: Runner,
+  this: Runner<BasicRunnerTarget2D>,
   duration = Infinity,
   radius = 64,
   frequency = 6,
   wideningUnit?: number
 ) {
+  if (!this.target) return;
   let _count = 0;
   const baseX = this.target!.x;
   const baseY = this.target!.y;
-  const verticalVector = this.vector
-    .clone()
+  const verticalVector = this.getVector()
     .rotate(-Math.PI / 2)
     .normalize();
   while (_count < duration) {
@@ -151,8 +179,9 @@ export function* sine(
     const correctedVertRad = baseVertRad * sine;
     var vvx = verticalVector.x * correctedVertRad;
     var vvy = verticalVector.y * correctedVertRad;
-    this.target!.x = baseX + this.vector.x * _count + vvx;
-    this.target!.y = baseY + this.vector.y * _count + vvy;
+
+    this.target!.x = baseX + this.vx * _count + vvx;
+    this.target!.y = baseY + this.vy * _count + vvy;
     yield _count++;
   }
 }
