@@ -1,5 +1,5 @@
 import { toRadian } from "../utils/radianConverter";
-import { Runner } from "./index";
+import { Runner } from "./Runner";
 
 export interface BasicRunnerTarget2D {
   x: number;
