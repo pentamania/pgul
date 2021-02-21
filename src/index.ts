@@ -16,6 +16,9 @@ export * from "./mixins/Menuable";
 import * as utils from "./utils/index";
 export { utils };
 
+import * as canvasHelper from "./canvas/index";
+export { canvasHelper };
+
 // helper系
 // import * as phinaHelper from './helpers/phina'
 
