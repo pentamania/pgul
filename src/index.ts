@@ -11,6 +11,8 @@ export * from "./Automaton";
 export * from "./utils/radianConverter";
 export * from "./Debugger";
 
+export * from "./dom/Stats";
+
 export * from "./mixins/Menuable";
 
 import * as utils from "./utils/index";
