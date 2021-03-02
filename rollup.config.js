@@ -1,7 +1,7 @@
-// nodeのpathは使えない？
 import typescript from "rollup-plugin-typescript2";
 import { terser } from "rollup-plugin-terser";
-import { libName, namespace } from "./package.json";
+
+const NS = "pgul";
 
 /* plugin options */
 const plugins = [
@@ -26,9 +26,8 @@ export default [
   {
     input: "./src/index.ts",
     output: {
-      name: namespace,
-      // file: 'dist/pgul.js',
-      file: `dist/${libName}.js`,
+      name: NS,
+      file: "dist/pgul.js",
       sourcemap: true,
       format: "iife",
     },
@@ -39,9 +38,8 @@ export default [
   {
     input: "./src/index.ts",
     output: {
-      name: namespace,
-      // file: 'dist/pgul.min.js',
-      file: `dist/${libName}.min.js`,
+      name: NS,
+      file: "dist/pgul.min.js",
       format: "iife",
       sourcemap: true,
     },
@@ -52,8 +50,7 @@ export default [
   {
     input: "./src/index.ts",
     output: {
-      // file: 'dist/pgul.esm.js',
-      file: `dist/${libName}.esm.js`,
+      file: "dist/pgul.esm.js",
       format: "esm",
     },
     plugins: plugins,
