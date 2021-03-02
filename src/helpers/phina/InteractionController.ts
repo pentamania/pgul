@@ -8,6 +8,9 @@ const DOWN_KEY = "down";
 const LEFT_KEY = "left";
 const RIGHT_KEY = "right";
 
+type StrOrNum = string | number;
+type KeyCode = string | number;
+
 // phina.app.DomApp想定
 interface App {
   on: (
@@ -19,14 +22,14 @@ interface App {
     cb: (e: { type: "enterframe"; target: App }) => any
   ) => this;
   keyboard: {
-    getKey: (key: string) => boolean;
-    getKeyDown: (key: string) => boolean;
-    getKeyUp: (key: string) => boolean;
+    getKey: (key: KeyCode) => boolean;
+    getKeyDown: (key: KeyCode) => boolean;
+    getKeyUp: (key: KeyCode) => boolean;
   };
   gamepad?: {
-    getKey: (key: string) => boolean;
-    getKeyDown: (key: string) => boolean;
-    getKeyUp: (key: string) => boolean;
+    getKey: (key: KeyCode) => boolean;
+    getKeyDown: (key: KeyCode) => boolean;
+    getKeyUp: (key: KeyCode) => boolean;
     getStickDirection: (id: any) => { x: number; y: number };
 
     // 独自拡張用
@@ -39,11 +42,9 @@ interface App {
   };
 }
 
-type StrOrNum = string | number;
-
 export interface keyAssignData {
-  kb: string;
-  gp?: string;
+  kb: KeyCode;
+  gp?: KeyCode;
 }
 
 export type KeyAssingMap<T> = Map<T, keyAssignData>;
@@ -157,14 +158,14 @@ export class InteractionController<AK extends StrOrNum = StrOrNum> {
    * @param kbKey
    * @param gpKey
    */
-  defineKey(actionKey: AK, kbKey: string, gpKey?: string): void {
+  defineKey(actionKey: AK, kbKey: KeyCode, gpKey?: KeyCode): void {
     this._assignMap.set(actionKey, {
       kb: kbKey,
       gp: gpKey,
     });
   }
 
-  assignKey(actionKey: AK, kbKey: string, gpKey?: string): void {
+  assignKey(actionKey: AK, kbKey: KeyCode, gpKey?: KeyCode): void {
     const keyAssign = this._assignMap.get(actionKey);
     if (!keyAssign) {
       return this.defineKey(actionKey, kbKey, gpKey);
