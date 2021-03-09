@@ -15,6 +15,7 @@ export * from "./dom/Stats";
 
 export * from "./mixins/Menuable";
 export * from "./mixins/RunnerDriven";
+export * from "./mixins/Traceable";
 
 import * as utils from "./utils/index";
 export { utils };
