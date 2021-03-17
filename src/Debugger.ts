@@ -27,6 +27,10 @@ export class Debugger<QP = { [k: string]: any }> {
     return Debugger.isProduction;
   }
 
+  get isDev() {
+    return !Debugger.isProduction;
+  }
+
   get queryParams(): QP {
     // クローンする？
     return Debugger.queryParameters as QP;
