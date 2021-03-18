@@ -1,7 +1,3 @@
-type LooseObject = {
-  [k in string | number]: any;
-};
-
 /**
  * 指定オブジェクトのキーから
  * {key: "key"} の文字列Enum風ハッシュマップオブジェクトを作成
@@ -14,9 +10,9 @@ type LooseObject = {
  *
  * @param o
  */
-export default function objectKeysToEnum<T extends LooseObject>(
-  o: T
-): { [K in keyof T]: K } {
+export default function objectKeysToEnum<
+  T extends Record<string | number, any>
+>(o: T): { [K in keyof T]: K } {
   return Object.keys(o).reduce((accumulator, currentValue) => {
     accumulator[currentValue] = currentValue;
     return accumulator;
