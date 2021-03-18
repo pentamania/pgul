@@ -11,7 +11,7 @@
  */
 export default function timesMap<T = any>(
   num: number,
-  cb: (i?: number, n?: number) => T
+  cb: (i: number, n: number) => T
 ): T[] {
   const arr = [];
   for (let i = 0; i < num; i++) {
