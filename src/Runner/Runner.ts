@@ -176,13 +176,16 @@ export class Runner<T = any> extends Coroutine {
   // }
 
   /**
-   * 速度をセット。内部的にはvector長をセットします。
+   * 速度をセット（内部的にはvector長をセット）
    * @param speed
    */
   setSpeed(speed: number) {
-    // 値が極端に小さいときは0補正（でないと変な方向を向いていることにされる）
-    this._speed = speed < 0.00000001 ? 0 : speed;
+    // // normalizeを使った方法：値が極端に小さいときは0補正が必要
+    // // でないと変な方向を向いていることにされる
+    // this._speed = speed < 0.00000001 ? 0 : speed;
     // this.vector.normalize().mul(this._speed);
+
+    this._speed = speed;
     this.vector.setFromRadian(this._vectorRadian, this._speed);
     return this;
   }
