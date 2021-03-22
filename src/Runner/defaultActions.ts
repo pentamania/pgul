@@ -68,7 +68,7 @@ export function* turnAround(
   let count = 0;
   const turnUnit = toRadian(degree / duration);
   while (count < duration) {
-    this.rotateVector(this.vectorAngle + turnUnit);
+    this.rotateVector(turnUnit);
     if (this.target) {
       this.target.x += this.vx;
       this.target.y += this.vy;
