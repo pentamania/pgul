@@ -13,21 +13,29 @@ export type RunnerAction = CoroutineAction<Runner>;
  * Corutionの機能を使って対象物のパラメータ（主にx,y値）を変化させるためのクラス
  */
 export class Runner<T = any> extends Coroutine {
+  /** 速度値（内部的にはvector長） */
   private _speed: number = 1;
+
   /**
-   * vector方向計算用の内部ラジアン値
+   * vector用の内部ラジアン値
+   * 基本的にはこの値をベースにvectorパラメータを更新する
    */
   private _vectorRadian: number = 0;
+
   /**
    * vectorプロパティは保護されてます。
    * 取得する場合は`getVector`メソッドを使用のこと
    */
   protected vector: Readonly<Vector2> = new Vector2(1, 0);
+
   /**
    * Runner対象オブジェクト
    */
   target?: T;
 
+  /**
+   * @param target
+   */
   constructor(target?: T) {
     super();
     if (target) this.setTarget(target);
@@ -47,7 +55,7 @@ export class Runner<T = any> extends Coroutine {
    * @example
    * const runner = new Runner();
    *
-   * // 指定durationかけて指定Xへ移動するアクション（thisはRunnerを指す）
+   * // サンプルアクション：指定durationかけて指定Xへ移動する（thisはRunnerを指す）
    * const gotoAction = function* (x, duration) {
    *   let count = 0;
    *   const progressUnit = (x - this.target.x) / duration;
@@ -120,32 +128,37 @@ export class Runner<T = any> extends Coroutine {
   }
 
   /**
-   * vectorをセット
-   * @param x
-   * @param y
+   * vectorパラメータをセット
+   * @param x 無指定の場合はそのまま
+   * @param y 無指定の場合はそのまま
    */
-  setVector(x: number | undefined, y: number | undefined) {
+  setVector(x?: number, y?: number) {
+    // 例外的に一旦vectorを直接操作 -> 内部ラジアン値更新
     this.vector.set(x, y);
-    // 内部ラジアン値も変更
     this._vectorRadian = this.vector.getAngleByRadian();
     return this;
   }
 
   /**
-   * 度数単位で現在のvector方向を取得
+   * 度数単位で現在の進行方向（vector方向）を取得
    */
   getDirection() {
+    // 注：vectorから直接計算しないこと
     // return this.vector.getAngleByDegree();
     return toDegree(this._vectorRadian);
   }
 
+  /**
+   * ラジアン単位で現在の進行方向（vector方向）を取得
+   */
   getDirectionByRadian() {
+    // 注：vectorから直接計算しないこと
     // return this.vector.getAngleByRadian();
     return this._vectorRadian;
   }
 
   /**
-   * 進行方向を変える（度数単位）
+   * 進行方向（vector方向）をセット（度数単位）
    * @param degree 度数単位
    */
   setDirection(degree: number) {
@@ -153,7 +166,7 @@ export class Runner<T = any> extends Coroutine {
   }
 
   /**
-   * 進行方向を変える（ラジアン値）
+   * 進行方向（vector方向）をセット（ラジアン値）
    * @param radian
    */
   setDirectionByRadian(radian: number) {
@@ -163,17 +176,13 @@ export class Runner<T = any> extends Coroutine {
   }
 
   /**
-   * vector方向回転
-   * @param args
+   * 進行方向（vector）を回転
+   * @param addedAngleRadian
    */
-  rotateVector(angleRadian: number) {
-    this._vectorRadian += angleRadian;
+  rotateVector(addedAngleRadian: number) {
+    this._vectorRadian += addedAngleRadian;
     this.vector.setFromRadian(this._vectorRadian, this._speed);
   }
-  // rotateVector(...args: Parameters<typeof Vector2.prototype.rotate>) {
-  //   this.vector.rotate(...args);
-  //   this._vectorRadian = this.vector.getAngleByRadian();
-  // }
 
   /**
    * 速度をセット（内部的にはvector長をセット）
@@ -197,14 +206,23 @@ export class Runner<T = any> extends Coroutine {
     return this.vector.clone();
   }
 
+  /**
+   * 速度（vector長）
+   */
   get speed() {
     return this._speed;
   }
 
+  /**
+   * x軸進行方向（vector.x）
+   */
   get vx(): number {
     return this.vector.x;
   }
 
+  /**
+   * y軸進行方向（vector.y）
+   */
   get vy(): number {
     return this.vector.y;
   }
