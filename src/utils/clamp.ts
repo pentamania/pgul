@@ -1,5 +1,5 @@
 /**
- * clamp
+ * 数字を指定した範囲にクランプする
  * @param n
  * @param min
  * @param max

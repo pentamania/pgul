@@ -1,8 +1,9 @@
 /**
  * 複数のGeneratorFunctionを組み合わせて実行するGeneratorFunctionを返す
- * 具体的には内部で各Generatorを実行するラッパーGenerator生成Function自体を生成する
+ * 具体的には内部で各Generatorを実行するラッパーGeneratorFunctionを生成する
  *
  * 各Generatorの`this`は本メソッドにおける`this`と一緒になる
+ * また引数指定した順番にGeneratorは実行される
  *
  * @see https://runstant.com/pentamania/projects/858db919
  * @example
