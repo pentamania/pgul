@@ -24,6 +24,7 @@ export class Stats {
     label: string;
   }[] = [];
   private _domElement: HTMLDivElement = document.createElement("div");
+  private _text: string = "";
 
   /**
    * @param updateEveryFrame 毎フレーム更新する
@@ -104,7 +105,9 @@ export class Stats {
   }
 
   set text(v: string) {
+    if (v === this._text) return;
     this._domElement.innerText = v;
+    this._text = v;
   }
 
   get domElement() {
