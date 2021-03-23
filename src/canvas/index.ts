@@ -1,3 +1,4 @@
+export * from "./createSingleGradation";
 export * from "./haloGradation";
 export * from "./pixelEach";
 export * from "./createCheckPattern";
