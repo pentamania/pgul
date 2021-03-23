@@ -3,3 +3,4 @@ export * from "./pixelEach";
 export * from "./createCheckPattern";
 export * from "./imageBlending";
 export * from "./talkBubble";
+export * from "./thornedTalkBubble";
