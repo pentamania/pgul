@@ -160,7 +160,7 @@ export function RunnerDriven<
       // 全てのrunner処理が死んだら、都度アクションセットを切り替える処理
       this._onRunnerAllDead = () => {
         if (!this._actionBundleList) return;
-        this.setParallelActionRunners(this._actionBundleList.increment(), true);
+        this.setParallelActionRunners(this._actionBundleList.increment());
       };
     }
 
@@ -180,7 +180,8 @@ export function RunnerDriven<
      */
     removeAllRunners() {
       this._runners.length = 0;
-      this._onRunnerAllDead = undefined; // いる？
+      // actionPatternサイクルで不具合が発生するので_onRunnerAllDeadはクリアしない
+      // this._onRunnerAllDead = undefined;
       return this;
     }
 
