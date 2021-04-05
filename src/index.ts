@@ -6,6 +6,7 @@ export * from "./Coroutine";
 export * from "./Runner/index";
 export * from "./TaskQueue";
 export * from "./AreaRect";
+export * from "./Pool";
 export * from "./ObjectPoolContainer";
 export * from "./Automaton";
 export * from "./utils/radianConverter";
