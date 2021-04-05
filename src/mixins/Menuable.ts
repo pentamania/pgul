@@ -15,16 +15,11 @@ export interface FocusableMenuItem {
   defocus: () => any;
 }
 
-// いらないかも？
-type ItemContainable = GConstructor<{
-  // addChild: (ch: any) => any;
-}>;
-
 /**
  * 項目indexは追加した順番に付与
  * @param Base
  */
-export function Menuable<TBase extends ItemContainable>(Base: TBase) {
+export function Menuable<TBase extends GConstructor>(Base: TBase) {
   return class Menuable extends Base {
     _currentItemIndex: number = 0;
     _optionItems: FocusableMenuItem[] = [];
@@ -34,7 +29,6 @@ export function Menuable<TBase extends ItemContainable>(Base: TBase) {
      * @param item
      */
     addItem(item: FocusableMenuItem) {
-      // this.addChild(item);
       item.defocus();
       this._optionItems.push(item);
     }
