@@ -1,18 +1,20 @@
 import { GConstructor } from "./common";
 
 /**
- * focus, defocusのimplement用
+ * Menuableのitemとして追加可能な型
  *
  * @example
  * import { Foo } from "./foo";
  * class OptionItem extends Foo implements FocusableMenuItem {
  *   focus() { this.alpha = 1.0 }
  *   defocus() { this.alpha = 0.5 }
+ *   execute() { console.log("hallow!") }
  * }
  */
 export interface FocusableMenuItem {
-  focus: () => any;
-  defocus: () => any;
+  focus: Function;
+  defocus: Function;
+  execute?: Function;
 }
 
 /**
@@ -66,6 +68,21 @@ export function Menuable<TBase extends GConstructor>(Base: TBase) {
      */
     selectNext() {
       this.selectItem(this._currentItemIndex + 1);
+    }
+
+    /**
+     * 現在の項目に仕込まれた処理を実行
+     * @returns
+     */
+    runOption() {
+      if (this.currentItem.execute) {
+        return this.currentItem.execute();
+      }
+      return false;
+    }
+
+    get currentItem() {
+      return this._optionItems[this._currentItemIndex];
     }
 
     get currentItemIndex() {
