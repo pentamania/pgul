@@ -78,12 +78,14 @@ export function Menuable<TBase extends GConstructor>(Base: TBase) {
     }
 
     /**
-     * 現在の項目に仕込まれた処理を実行
-     * @returns
+     * 現在のItemに仕込まれた処理を実行
+     *
+     * @param args 実行処理の引数
+     * @returns 実行結果を返す。何もしなかった場合はfalseを返す（仮）
      */
-    runOption() {
+    runOption(...args: any) {
       if (this.currentItem.execute) {
-        return this.currentItem.execute();
+        return this.currentItem.execute(...args);
       }
       return false;
     }
