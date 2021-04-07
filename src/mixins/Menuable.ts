@@ -30,13 +30,19 @@ export function Menuable<TBase extends GConstructor>(Base: TBase) {
      * 項目オブジェクトを追加
      * @param item
      */
-    addItem(item: FocusableMenuItem) {
-      item.defocus();
-      this._optionItems.push(item);
+    addItem(...items: FocusableMenuItem[]) {
+      items.forEach((item) => {
+        this._optionItems.push(item);
+      });
+
+      // Update focus
+      this.selectItem(this._currentItemIndex);
     }
 
     /**
      * 指定インデックスの項目を選択（フォーカス）状態にする
+     * （== その他のItemは非フォーカス化）
+     *
      * @param itemIndex 0 ~ 最大インデックスの範囲内に補正されます
      */
     selectItem(itemIndex: number) {
@@ -53,6 +59,7 @@ export function Menuable<TBase extends GConstructor>(Base: TBase) {
           item.defocus();
         }
       });
+
       this._currentItemIndex = itemIndex;
     }
 
