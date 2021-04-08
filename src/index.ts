@@ -11,6 +11,7 @@ export * from "./ObjectPoolContainer";
 export * from "./Automaton";
 export * from "./utils/radianConverter";
 export * from "./Debugger";
+export * from "./MenuController";
 
 export * from "./dom/Stats";
 
