@@ -3,10 +3,17 @@ import { Vector2 } from "../../Vector2";
 const DEFAULT_GAMEPAD_THRESHOLD = 0.3;
 const STICK_TILT_THRESHOLD = 0.29;
 const DEFAULT_DOUBLE_INPUT_DELAY_FRAME = 16;
-const UP_KEY = "up";
-const DOWN_KEY = "down";
-const LEFT_KEY = "left";
-const RIGHT_KEY = "right";
+
+// Keyboard & Gamepad common keys
+export const UP_KEY_COMMON = "up";
+export const DOWN_KEY_COMMON = "down";
+export const LEFT_KEY_COMMON = "left";
+export const RIGHT_KEY_COMMON = "right";
+export type DirectionKey =
+  | typeof UP_KEY_COMMON
+  | typeof DOWN_KEY_COMMON
+  | typeof LEFT_KEY_COMMON
+  | typeof RIGHT_KEY_COMMON;
 
 type StrOrNum = string | number;
 type KeyCode = string | number;
@@ -254,7 +261,7 @@ export class InteractionController<AK extends StrOrNum = StrOrNum> {
   }
 
   /**
-   * ↑入力を検知
+   * ↑入力かどうか
    *
    * @example
    * update() {
@@ -262,33 +269,40 @@ export class InteractionController<AK extends StrOrNum = StrOrNum> {
    *     this.goUp()
    *   }
    * }
+   *
+   * @returns 入力中はtrueを返す
    */
-  pressUp() {
+  pressUp(): boolean {
     const isGpPressed = (() => {
       if (this._app.gamepad) {
         const gpAngle = this._app.gamepad.getStickDirection(0);
-        return this._app.gamepad.getKey(UP_KEY) || gpAngle
+        return this._app.gamepad.getKey(UP_KEY_COMMON) || gpAngle
           ? gpAngle.y < -this._gamepadStickThreshold
           : false;
       } else {
         return false;
       }
     })();
-    return this._app.keyboard.getKey(UP_KEY) || isGpPressed;
+    return this._app.keyboard.getKey(UP_KEY_COMMON) || isGpPressed;
   }
 
-  pressDown() {
+  /**
+   * ↓入力中かどうか
+   *
+   * @returns 入力中はtrueを返す
+   */
+  pressDown(): boolean {
     const isGpPressed = (() => {
       if (this._app.gamepad) {
         const gpAngle = this._app.gamepad.getStickDirection(0);
-        return this._app.gamepad.getKey(DOWN_KEY) || gpAngle
+        return this._app.gamepad.getKey(DOWN_KEY_COMMON) || gpAngle
           ? gpAngle.y > this._gamepadStickThreshold
           : false;
       } else {
         return false;
       }
     })();
-    return this._app.keyboard.getKey(DOWN_KEY) || isGpPressed;
+    return this._app.keyboard.getKey(DOWN_KEY_COMMON) || isGpPressed;
     // return (kb.getKey('down') || gp.getKey(DOWN_KEY) || gpAngle.y > GAMEPAD_THRESHOLD)
   }
 
@@ -296,28 +310,28 @@ export class InteractionController<AK extends StrOrNum = StrOrNum> {
     const isGpPressed = (() => {
       if (this._app.gamepad) {
         const gpAngle = this._app.gamepad.getStickDirection(0);
-        return this._app.gamepad.getKey(LEFT_KEY) || gpAngle
+        return this._app.gamepad.getKey(LEFT_KEY_COMMON) || gpAngle
           ? gpAngle.x < -this._gamepadStickThreshold
           : false;
       } else {
         return false;
       }
     })();
-    return this._app.keyboard.getKey(LEFT_KEY) || isGpPressed;
+    return this._app.keyboard.getKey(LEFT_KEY_COMMON) || isGpPressed;
   }
 
   pressRight() {
     const isGpPressed = (() => {
       if (this._app.gamepad) {
         const gpAngle = this._app.gamepad.getStickDirection(0);
-        return this._app.gamepad.getKey(RIGHT_KEY) || gpAngle
+        return this._app.gamepad.getKey(RIGHT_KEY_COMMON) || gpAngle
           ? gpAngle.x > this._gamepadStickThreshold
           : false;
       } else {
         return false;
       }
     })();
-    return this._app.keyboard.getKey(RIGHT_KEY) || isGpPressed;
+    return this._app.keyboard.getKey(RIGHT_KEY_COMMON) || isGpPressed;
   }
 
   /**
@@ -328,7 +342,7 @@ export class InteractionController<AK extends StrOrNum = StrOrNum> {
     const isGpKeyDown = (() => {
       if (this._app.gamepad) {
         const gpAngle = this._app.gamepad.getStickDirection(0);
-        return this._app.gamepad.getKeyDown(UP_KEY) || gpAngle
+        return this._app.gamepad.getKeyDown(UP_KEY_COMMON) || gpAngle
           ? this._app.gamepad.isStickUpdated &&
               gpAngle.y < -this._gamepadStickThreshold
           : false;
@@ -336,7 +350,7 @@ export class InteractionController<AK extends StrOrNum = StrOrNum> {
         return false;
       }
     })();
-    return this._app.keyboard.getKeyDown(UP_KEY) || isGpKeyDown;
+    return this._app.keyboard.getKeyDown(UP_KEY_COMMON) || isGpKeyDown;
   }
 
   /**
@@ -347,7 +361,7 @@ export class InteractionController<AK extends StrOrNum = StrOrNum> {
     const isGpKeyDown = (() => {
       if (this._app.gamepad) {
         const gpAngle = this._app.gamepad.getStickDirection(0);
-        return this._app.gamepad.getKeyDown(DOWN_KEY) || gpAngle
+        return this._app.gamepad.getKeyDown(DOWN_KEY_COMMON) || gpAngle
           ? this._app.gamepad.isStickUpdated &&
               gpAngle.y > this._gamepadStickThreshold
           : false;
@@ -355,7 +369,43 @@ export class InteractionController<AK extends StrOrNum = StrOrNum> {
         return false;
       }
     })();
-    return this._app.keyboard.getKeyDown(DOWN_KEY) || isGpKeyDown;
+    return this._app.keyboard.getKeyDown(DOWN_KEY_COMMON) || isGpKeyDown;
+  }
+
+  /**
+   * →キーのkeydown
+   */
+  rightKeyDown() {
+    const isGpKeyDown = (() => {
+      if (this._app.gamepad) {
+        const gpAngle = this._app.gamepad.getStickDirection(0);
+        return this._app.gamepad.getKeyDown(RIGHT_KEY_COMMON) || gpAngle
+          ? this._app.gamepad.isStickUpdated &&
+              gpAngle.x > this._gamepadStickThreshold
+          : false;
+      } else {
+        return false;
+      }
+    })();
+    return this._app.keyboard.getKeyDown(RIGHT_KEY_COMMON) || isGpKeyDown;
+  }
+
+  /**
+   * ←キーのkeydown
+   */
+  leftKeyDown() {
+    const isGpKeyDown = (() => {
+      if (this._app.gamepad) {
+        const gpAngle = this._app.gamepad.getStickDirection(0);
+        return this._app.gamepad.getKeyDown(LEFT_KEY_COMMON) || gpAngle
+          ? this._app.gamepad.isStickUpdated &&
+              gpAngle.x < -this._gamepadStickThreshold
+          : false;
+      } else {
+        return false;
+      }
+    })();
+    return this._app.keyboard.getKeyDown(LEFT_KEY_COMMON) || isGpKeyDown;
   }
 
   /**
