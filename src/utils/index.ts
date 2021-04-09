@@ -10,3 +10,4 @@ export { default as objectKeysToEnum } from "./keysToEnum";
 export { default as zeroFillNum } from "./zeroFillNum";
 export { default as combineGeneratorFunctions } from "./combineGeneratorFunctions";
 export { default as createStepGenerator } from "./createStepGenerator";
+export { default as formatToPercentage } from "./formatToPercentage";
