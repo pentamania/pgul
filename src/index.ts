@@ -12,6 +12,7 @@ export * from "./Automaton";
 export * from "./utils/radianConverter";
 export * from "./Debugger";
 export * from "./MenuController";
+export * from "./ColorHelper";
 
 export * from "./dom/Stats";
 
