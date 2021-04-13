@@ -11,6 +11,42 @@ export type RunnerAction = CoroutineAction<Runner>;
 /**
  * Runner
  * Corutionの機能を使って対象物のパラメータ（主にx,y値）を変化させるためのクラス
+ *
+ * @example
+ * const point = {x: 0, y: 0};
+ * const runner = new Runner(point);
+ * // pointパラメータを1/60秒毎にx, yそれぞれ2ずつ加算する
+ * // それを120ステップ行う
+ * runner.setVector(2, 2);
+ * runner.addAction(function* progressAction() {
+ *   let count = 0;
+ *   while (count < 120) {
+ *     this.target.x += this.vx;
+ *     this.target.y += this.vy;
+ *     yield count++;
+ *   }
+ * });
+ * function loop() {
+ *  const res = runner.step();
+ *  if (res) requestAnimationFrame(loop);
+ * }
+ * loop();
+ *
+ * @description
+ * ### vectorについて
+ * Runnerは対象物をコントロールするための2次元Vectorを内部に保持する
+ * これにより速度や進行方向を操作することが可能
+ *
+ * #### vector値の読み書き
+ * - 読み取りはgetVector, vx/vy getter
+ * - 変更はsetVector, vx/vy setter
+ *
+ * などを使い、直接のVector書き換えはやらないこと
+ *
+ * vector長の大きさはsetSpeed、
+ * 方向はsetDirection等
+ * でも操作可能
+ *
  */
 export class Runner<T = any> extends Coroutine {
   /** 速度値（内部的にはvector長） */
@@ -107,7 +143,6 @@ export class Runner<T = any> extends Coroutine {
    * // 4. アクション文字列＋引数指定パターン：引数が何なのか忘れるとつらい、正直イマイチかも
    * Runner.registerAction("goto", gotoAction);
    * runner.addAction("goto", 200, 120);
-   *
    *
    * @param action GeneratorFunctionでthisをRunnerにしたもの、文字列指定で予め登録したAction実行可能？
    * @param args 可変長でRunnerAction実行時の引数パラメータを設定（文字列指定で有効、それ以外は使いずらいかも？）
