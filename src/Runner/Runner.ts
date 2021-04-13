@@ -219,12 +219,18 @@ export class Runner<T = any> extends Coroutine {
   get vx(): number {
     return this.vector.x;
   }
+  set vx(v: number) {
+    this.setVector(v);
+  }
 
   /**
    * y軸進行方向（vector.y）
    */
   get vy(): number {
     return this.vector.y;
+  }
+  set vy(v: number) {
+    this.setVector(undefined, v);
   }
 
   /**
