@@ -9,13 +9,17 @@ export class List<T = any> {
   protected _random?: Random;
   protected _limitSize?: number;
 
+  /**
+   * @param items 追加する要素。REST parameterでいくつでも追加可能
+   */
   constructor(...items: T[]) {
     this._list = items;
   }
 
   /**
-   * 通常はArray.pushと同じだが、
-   * サイズが設定されている場合、サイズ超過時に頭の要素が押し出されて返却される
+   * 通常はArray.pushと同じ
+   * ただしサイズが設定されている場合、
+   * サイズ超過時に頭の要素が押し出されて返却される
    *
    * 複数pushした場合、押し出した分を配列として返却
    *
@@ -37,16 +41,24 @@ export class List<T = any> {
     return newLength;
   }
 
+  /**
+   * Array.popラッパー
+   */
   pop() {
     return this._list.pop();
   }
 
+  /**
+   * 複製した内部配列を返す（シャロ―クローン）
+   */
   getList() {
     return this._list.slice(0);
   }
 
   /**
-   * 内部インデックスを設定しつつ、対応するオブジェクトを返す（内部処理用）
+   * 内部インデックス値を設定しつつ、対応する要素を返す
+   * （内部処理用）
+   *
    * @param i
    */
   protected _setIndexAndReturnValue(i: number): T {
@@ -55,8 +67,9 @@ export class List<T = any> {
   }
 
   /**
-   * 内部インデックスを設定しつつ、対応するオブジェクトを返す
+   * 内部インデックス値を設定しつつ、対応する要素を返す
    * 範囲外のインデックス値はセットできず、undefinedを返す
+   *
    * @param i
    */
   setIndex(i: number) {
@@ -68,8 +81,11 @@ export class List<T = any> {
   }
 
   /**
-   * 内部インデックスを進めながら、対応するオブジェクトを返す.
-   * @param loop インデックスをオーバーしたときループするかどうか。falseの場合、オーバーしそうになると最大インデックスで固定
+   * 内部インデックス値を進めながら、対応する要素を返す.
+   *
+   * @param loop
+   * インデックスをオーバーしたときループするかどうか（default: true）
+   * falseの場合、オーバーしそうになったら最大インデックスで固定
    */
   increment(loop = true): T {
     let nextIndex = this._index + 1;
@@ -80,8 +96,11 @@ export class List<T = any> {
   }
 
   /**
-   * 内部インデックスを減じながら、対応するオブジェクトを返す.
-   * @param loop インデックスをオーバーしたときループするかどうか。falseの場合、オーバーしそうになると0で固定
+   * 内部インデックス値を減じながら、対応する要素を返す.
+   *
+   * @param loop
+   * インデックスをオーバーしたときループするかどうか
+   * falseの場合、オーバーしそうになったら0で固定
    */
   decrement(loop = true): T {
     let nextIndex = this._index - 1;
@@ -92,14 +111,17 @@ export class List<T = any> {
   }
 
   /**
-   * リスト容量を取得（未設定のときはundefined）
+   * リストサイズ値を取得
+   *
+   * @returns サイズ値、未設定のときはundefined
    */
   getSize(): number | undefined {
     return this._limitSize;
   }
 
   /**
-   * リストの容量を設定する
+   * リストのサイズ（格納可能な要素数）を設定する
+   *
    * @param v
    */
   setSize(v: number): void {
@@ -113,7 +135,8 @@ export class List<T = any> {
 
   /**
    * 配列から無作為に選ぶ
-   * @param random 無指定の場合はインスタンスごとの内部random使う
+   *
+   * @param random 無指定の場合はインスタンスごとの内部Randomモジュール使用
    */
   randomPick(random?: Random) {
     if (!random) {
@@ -124,6 +147,11 @@ export class List<T = any> {
     return this._list[i];
   }
 
+  /**
+   * 内部Randomモジュールのシード値を設定
+   *
+   * @param seed
+   */
   setRandomSeed(seed: number) {
     if (!this._random) this._random = new Random();
     this._random.seed = seed;
@@ -144,7 +172,7 @@ export class List<T = any> {
   }
 
   /**
-   * 現在の内部インデックス値に対応するオブジェクトを返す
+   * 現在の内部インデックス値に対応する要素を返す
    */
   get current() {
     return this._list[this._index];
@@ -165,7 +193,7 @@ export class List<T = any> {
   }
 
   /**
-   * List内最後の要素
+   * List内最後の要素を返す
    */
   get last() {
     return this._list[this.lastIndex];
