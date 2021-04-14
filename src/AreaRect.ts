@@ -1,4 +1,4 @@
-import { LooseVector2 } from "./interfaces";
+import { LooseVector2 } from "./utilTypes";
 import clamp from "./utils/clamp";
 
 export class AreaRect {

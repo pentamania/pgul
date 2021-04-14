@@ -27,6 +27,8 @@ export { utils };
 import * as canvasHelper from "./canvas/index";
 export { canvasHelper };
 
+export * from "./utilTypes";
+
 // helper系
 // import * as phinaHelper from './helpers/phina'
 

@@ -1,12 +1,12 @@
 import { Coroutine } from "../Coroutine";
 import { Vector2 } from "../Vector2";
 import { toDegree, toRadian } from "../utils/radianConverter";
-import { CoroutineAction } from "../interfaces";
+import { ContextBindableGeneratorFunction } from "../utilTypes";
 
 /**
  * this参照をRunnerとしたGeneratorFunction型
  */
-export type RunnerAction = CoroutineAction<Runner>;
+export type RunnerAction = ContextBindableGeneratorFunction<Runner>;
 
 /**
  * Runner
@@ -275,7 +275,7 @@ export class Runner<T = any> extends Coroutine {
     return this._vectorRadian;
   }
 
-  static registerAction(name: string, gen: CoroutineAction) {
+  static registerAction(name: string, gen: ContextBindableGeneratorFunction) {
     Runner.actionDictionary.set(name, gen);
   }
 
