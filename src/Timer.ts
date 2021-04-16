@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 export class Timer {
   private _past: number;
