@@ -104,6 +104,17 @@ export class Stats {
     }
   }
 
+  /**
+   * DOM要素の表示・非表示
+   */
+  set visible(v: boolean) {
+    if (!v) {
+      this._domElement.style.visibility = "hidden";
+    } else {
+      this._domElement.style.visibility = "visible";
+    }
+  }
+
   set text(v: string) {
     if (v === this._text) return;
     this._domElement.innerText = v;
