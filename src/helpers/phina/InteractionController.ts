@@ -1,3 +1,4 @@
+import { Bit } from "../../utilTypes";
 import { Vector2 } from "../../Vector2";
 
 const DEFAULT_GAMEPAD_THRESHOLD = 0.3;
@@ -71,13 +72,11 @@ interface App {
 
     // 以下独自拡張 ======================
 
-    /**
-     * 傾き管理フラグ number扱いだが 0 | 1で管理
-     */
-    currentTilt: { [stickId: number]: number };
-    tiltLast: { [stickId: number]: number };
-    tilting: { [stickId: number]: number };
-    tiltDown: { [stickId: number]: number };
+    // 傾き管理フラグマップ群
+    currentTilt: { [stickId: number]: Bit };
+    tiltLast: { [stickId: number]: Bit };
+    tilting: { [stickId: number]: Bit };
+    tiltDown: { [stickId: number]: Bit };
 
     getStickTilt: (stickId: number) => boolean;
     // getStickNeutral: (stickId: number) => boolean;
@@ -147,7 +146,8 @@ function extendGamePad(app: App) {
     gp.sticks.forEach((_stick, id) => {
       gp.tiltLast[id] = gp.tilting[id];
       gp.tilting[id] = gp.currentTilt[id];
-      gp.tiltDown[id] = (gp.tilting[id] ^ gp.tiltLast[id]) & gp.tilting[id];
+      gp.tiltDown[id] = ((gp.tilting[id] ^ gp.tiltLast[id]) &
+        gp.tilting[id]) as Bit;
     });
   });
 

@@ -12,3 +12,5 @@ export type ContextBindableGeneratorFunction<CTX = any> = (
   this: CTX,
   ...args: any[]
 ) => Generator;
+
+export type Bit = 0 | 1;
