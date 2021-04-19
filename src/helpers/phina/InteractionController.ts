@@ -70,7 +70,7 @@ interface App {
      */
     _updateStick: (value: number, stickId: number, axisName: "x" | "y") => void;
 
-    // 以下独自拡張用 ======================
+    // 以下独自拡張 ======================
 
     /**
      * 傾き管理フラグ number扱いだが 0 | 1で管理
@@ -82,6 +82,12 @@ interface App {
 
     getStickTilt: (stickId: number) => boolean;
     // getStickNeutral: (stickId: number) => boolean;
+
+    /**
+     * getStickDirectionでいちいち新規作成せず、
+     * こちらのベクトル参照を返す
+     */
+    _stickDirection: Vector2;
   };
 }
 
@@ -143,6 +149,16 @@ function extendGamePad(app: App) {
   /* getStickTilt実装 */
   gamepad.getStickTilt = function (stickId) {
     return gamepad.tiltDown[stickId] == 1;
+  };
+
+  /* getStickDirection override */
+  gamepad._stickDirection = new Vector2(0, 0);
+  gamepad.getStickDirection = function (stickId) {
+    stickId = stickId || 0;
+    this._stickDirection.x = this.sticks[stickId].x;
+    this._stickDirection.y = this.sticks[stickId].y;
+    return this._stickDirection;
+    // return this.sticks ? this.sticks[stickId].clone() : new Vector2(0, 0);
   };
 }
 
