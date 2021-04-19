@@ -79,7 +79,6 @@ interface App {
     tilting: { [stickId: number]: number };
     tiltDown: { [stickId: number]: number };
 
-    isStickUpdated: boolean;
     getStickTilt: (stickId: number) => boolean;
     // getStickNeutral: (stickId: number) => boolean;
   };
@@ -103,9 +102,6 @@ function extendGamePad(app: App) {
   if (!app.gamepad) return;
   const gamepad = app.gamepad;
 
-  let isResetEventSet = false;
-  gamepad.isStickUpdated = false;
-
   /* _updateStick拡張オーバライド */
   gamepad._updateStick = function (value, stickId, axisName) {
     if (!this.sticks[stickId]) {
@@ -127,9 +123,6 @@ function extendGamePad(app: App) {
         this.currentTilt[stickId] = 0;
       }
     }
-
-    // 以下を追加：スティック更新フラグを立てる
-    this.isStickUpdated = true;
   };
 
   /* 毎フレーム傾きフラグ更新処理 */
@@ -150,18 +143,6 @@ function extendGamePad(app: App) {
   gamepad.getStickTilt = function (stickId) {
     return gamepad.tiltDown[stickId] == 1;
   };
-
-  const stickFlagResetFunc = (gp: App["gamepad"]) => {
-    gp!.isStickUpdated = false;
-    isResetEventSet = false;
-  };
-  app.on("enterframe", () => {
-    if (gamepad.isStickUpdated && !isResetEventSet) {
-      isResetEventSet = true;
-      // 次のフレームにフラグリセットを仕込む
-      app.one("enterframe", () => stickFlagResetFunc(gamepad));
-    }
-  });
 }
 
 /**
