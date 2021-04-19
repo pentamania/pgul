@@ -37,15 +37,51 @@ interface App {
     getKey: (key: KeyCode) => boolean;
     getKeyDown: (key: KeyCode) => boolean;
     getKeyUp: (key: KeyCode) => boolean;
-    getStickDirection: (id: any) => { x: number; y: number };
 
-    // 独自拡張用
+    /**
+     * x, yでスティック状態を保持
+     * 0 ~ 2の３本
+     *
+     * 本来はphina.geom.Vector2だがpgul.Vector2で代用
+     * x/yプロパティ、cloneメソッドが必要
+     */
     sticks: Vector2[];
-    _prevSticks: Vector2[];
-    isStickUpdated: boolean;
+
+    /**
+     * 本来はphina.geom.Vector2を返却
+     */
+    getStickDirection: (stickId: number) => Vector2;
+
+    /**
+     * ラップ元GamePad(rawgamepad)のtimestampが更新（->何らかの状態更新があった）
+     * されるたびに呼び出される関数
+     *
+     * わずかな変化でも呼び出されるので、
+     * 一回入力のつもりでも何度も実行されがち
+     * 特にアナログスティックを有効にするとほぼ毎フレーム実行される
+     *
+     * @override
+     * @param {number} value
+     * 新しい入力値：-1.0 – 1.0
+     * @see https://developer.mozilla.org/en-US/docs/Web/API/Gamepad/axes
+     * @param {number} stickId
+     * @param {"x"|"y"} axisName 軸名
+     */
     _updateStick: (value: number, stickId: number, axisName: "x" | "y") => void;
-    getStickTilt: (stickId?: number, threshold?: number) => boolean;
-    getStickNeutral: (stickId?: number, threshold?: number) => boolean;
+
+    // 以下独自拡張用 ======================
+
+    /**
+     * 傾き管理フラグ number扱いだが 0 | 1で管理
+     */
+    currentTilt: { [stickId: number]: number };
+    tiltLast: { [stickId: number]: number };
+    tilting: { [stickId: number]: number };
+    tiltDown: { [stickId: number]: number };
+
+    isStickUpdated: boolean;
+    getStickTilt: (stickId: number) => boolean;
+    // getStickNeutral: (stickId: number) => boolean;
   };
 }
 
@@ -70,18 +106,49 @@ function extendGamePad(app: App) {
   let isResetEventSet = false;
   gamepad.isStickUpdated = false;
 
-  /**
-   * @override
-   * 元のrawgamepadのtimestampが更新（何らかの状態更新があった）されるたびに呼び出される関数
-   * 一回入力のつもりでも何度も呼び出されて扱いが難しい
-   */
+  /* _updateStick拡張オーバライド */
   gamepad._updateStick = function (value, stickId, axisName) {
     if (!this.sticks[stickId]) {
-      this.sticks[stickId] = new Vector2(0, 0); // ホントはphina.geom.Vector2だが…
+      // ※本来はphina.geom.Vector2
+      this.sticks[stickId] = new Vector2(0, 0);
     }
-    // console.log("更新された？", this.sticks[stickId][axisName] !== value);
     this.sticks[stickId][axisName] = value;
+
+    /* tilting flag update */
+    {
+      const vx = this.sticks[stickId]["x"];
+      const vy = this.sticks[stickId]["y"];
+      if (
+        STICK_TILT_THRESHOLD <= Math.abs(vx) ||
+        STICK_TILT_THRESHOLD <= Math.abs(vy)
+      ) {
+        this.currentTilt[stickId] = 1;
+      } else {
+        this.currentTilt[stickId] = 0;
+      }
+    }
+
+    // 以下を追加：スティック更新フラグを立てる
     this.isStickUpdated = true;
+  };
+
+  /* 毎フレーム傾きフラグ更新処理 */
+  gamepad.currentTilt = {};
+  gamepad.tilting = {};
+  gamepad.tiltLast = {};
+  gamepad.tiltDown = {};
+  app.on("enterframe", () => {
+    const gp = gamepad;
+    gp.sticks.forEach((_stick, id) => {
+      gp.tiltLast[id] = gp.tilting[id];
+      gp.tilting[id] = gp.currentTilt[id];
+      gp.tiltDown[id] = (gp.tilting[id] ^ gp.tiltLast[id]) & gp.tilting[id];
+    });
+  });
+
+  /* getStickTilt実装 */
+  gamepad.getStickTilt = function (stickId) {
+    return gamepad.tiltDown[stickId] == 1;
   };
 
   const stickFlagResetFunc = (gp: App["gamepad"]) => {
@@ -343,7 +410,7 @@ export class InteractionController<AK extends StrOrNum = StrOrNum> {
       if (this._app.gamepad) {
         const gpAngle = this._app.gamepad.getStickDirection(0);
         return this._app.gamepad.getKeyDown(UP_KEY_COMMON) || gpAngle
-          ? this._app.gamepad.isStickUpdated &&
+          ? this._app.gamepad.getStickTilt(0) &&
               gpAngle.y < -this._gamepadStickThreshold
           : false;
       } else {
@@ -362,7 +429,7 @@ export class InteractionController<AK extends StrOrNum = StrOrNum> {
       if (this._app.gamepad) {
         const gpAngle = this._app.gamepad.getStickDirection(0);
         return this._app.gamepad.getKeyDown(DOWN_KEY_COMMON) || gpAngle
-          ? this._app.gamepad.isStickUpdated &&
+          ? this._app.gamepad.getStickTilt(0) &&
               gpAngle.y > this._gamepadStickThreshold
           : false;
       } else {
@@ -380,7 +447,7 @@ export class InteractionController<AK extends StrOrNum = StrOrNum> {
       if (this._app.gamepad) {
         const gpAngle = this._app.gamepad.getStickDirection(0);
         return this._app.gamepad.getKeyDown(RIGHT_KEY_COMMON) || gpAngle
-          ? this._app.gamepad.isStickUpdated &&
+          ? this._app.gamepad.getStickTilt(0) &&
               gpAngle.x > this._gamepadStickThreshold
           : false;
       } else {
@@ -398,7 +465,7 @@ export class InteractionController<AK extends StrOrNum = StrOrNum> {
       if (this._app.gamepad) {
         const gpAngle = this._app.gamepad.getStickDirection(0);
         return this._app.gamepad.getKeyDown(LEFT_KEY_COMMON) || gpAngle
-          ? this._app.gamepad.isStickUpdated &&
+          ? this._app.gamepad.getStickTilt(0) &&
               gpAngle.x < -this._gamepadStickThreshold
           : false;
       } else {
