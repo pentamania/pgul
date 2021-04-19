@@ -1,7 +1,6 @@
 import { Vector2 } from "../../Vector2";
 
 const DEFAULT_GAMEPAD_THRESHOLD = 0.3;
-const STICK_TILT_THRESHOLD = 0.29;
 const DEFAULT_DOUBLE_INPUT_DELAY_FRAME = 16;
 const LEFT_STICK_ID = 0;
 
@@ -88,6 +87,11 @@ interface App {
      * こちらのベクトル参照を返す
      */
     _stickDirection: Vector2;
+
+    /**
+     * スティックが傾いたとする範囲
+     */
+    stickDeadZoneThreshold: number;
   };
 }
 
@@ -109,6 +113,9 @@ function extendGamePad(app: App) {
   if (!app.gamepad) return;
   const gamepad = app.gamepad;
 
+  /* 傾きしきい値の初期化 */
+  gamepad.stickDeadZoneThreshold = DEFAULT_GAMEPAD_THRESHOLD;
+
   /* _updateStick拡張オーバライド */
   gamepad._updateStick = function (value, stickId, axisName) {
     if (!this.sticks[stickId]) {
@@ -121,10 +128,8 @@ function extendGamePad(app: App) {
     {
       const vx = this.sticks[stickId]["x"];
       const vy = this.sticks[stickId]["y"];
-      if (
-        STICK_TILT_THRESHOLD <= Math.abs(vx) ||
-        STICK_TILT_THRESHOLD <= Math.abs(vy)
-      ) {
+      const threshold = this.stickDeadZoneThreshold;
+      if (threshold <= Math.abs(vx) || threshold <= Math.abs(vy)) {
         this.currentTilt[stickId] = 1;
       } else {
         this.currentTilt[stickId] = 0;
@@ -172,7 +177,6 @@ function extendGamePad(app: App) {
 export class InteractionController<AK extends StrOrNum = StrOrNum> {
   private _app!: App;
   private _assignMap: KeyAssingMap<AK> = new Map();
-  private _gamepadStickThreshold: number = DEFAULT_GAMEPAD_THRESHOLD;
   // private _doubleKeySuspendCountMap: {[key:AK]: number} = {}
   private _doubleKeySuspendCountMap: Map<AK, number> = new Map();
   private _doubleKeyDownAcceptThreshold: number = DEFAULT_DOUBLE_INPUT_DELAY_FRAME;
@@ -342,7 +346,7 @@ export class InteractionController<AK extends StrOrNum = StrOrNum> {
       if (this._app.gamepad) {
         const gpAngle = this._app.gamepad.getStickDirection(LEFT_STICK_ID);
         return this._app.gamepad.getKey(UP_KEY_COMMON) || gpAngle
-          ? gpAngle.y < -this._gamepadStickThreshold
+          ? gpAngle.y < -this.gamepadStickThreshold
           : false;
       } else {
         return false;
@@ -361,7 +365,7 @@ export class InteractionController<AK extends StrOrNum = StrOrNum> {
       if (this._app.gamepad) {
         const gpAngle = this._app.gamepad.getStickDirection(LEFT_STICK_ID);
         return this._app.gamepad.getKey(DOWN_KEY_COMMON) || gpAngle
-          ? gpAngle.y > this._gamepadStickThreshold
+          ? gpAngle.y > this.gamepadStickThreshold
           : false;
       } else {
         return false;
@@ -376,7 +380,7 @@ export class InteractionController<AK extends StrOrNum = StrOrNum> {
       if (this._app.gamepad) {
         const gpAngle = this._app.gamepad.getStickDirection(LEFT_STICK_ID);
         return this._app.gamepad.getKey(LEFT_KEY_COMMON) || gpAngle
-          ? gpAngle.x < -this._gamepadStickThreshold
+          ? gpAngle.x < -this.gamepadStickThreshold
           : false;
       } else {
         return false;
@@ -390,7 +394,7 @@ export class InteractionController<AK extends StrOrNum = StrOrNum> {
       if (this._app.gamepad) {
         const gpAngle = this._app.gamepad.getStickDirection(LEFT_STICK_ID);
         return this._app.gamepad.getKey(RIGHT_KEY_COMMON) || gpAngle
-          ? gpAngle.x > this._gamepadStickThreshold
+          ? gpAngle.x > this.gamepadStickThreshold
           : false;
       } else {
         return false;
@@ -409,7 +413,7 @@ export class InteractionController<AK extends StrOrNum = StrOrNum> {
         const gpAngle = this._app.gamepad.getStickDirection(LEFT_STICK_ID);
         return this._app.gamepad.getKeyDown(UP_KEY_COMMON) || gpAngle
           ? this._app.gamepad.getStickTilt(LEFT_STICK_ID) &&
-              gpAngle.y < -this._gamepadStickThreshold
+              gpAngle.y < -this.gamepadStickThreshold
           : false;
       } else {
         return false;
@@ -428,7 +432,7 @@ export class InteractionController<AK extends StrOrNum = StrOrNum> {
         const gpAngle = this._app.gamepad.getStickDirection(LEFT_STICK_ID);
         return this._app.gamepad.getKeyDown(DOWN_KEY_COMMON) || gpAngle
           ? this._app.gamepad.getStickTilt(LEFT_STICK_ID) &&
-              gpAngle.y > this._gamepadStickThreshold
+              gpAngle.y > this.gamepadStickThreshold
           : false;
       } else {
         return false;
@@ -446,7 +450,7 @@ export class InteractionController<AK extends StrOrNum = StrOrNum> {
         const gpAngle = this._app.gamepad.getStickDirection(LEFT_STICK_ID);
         return this._app.gamepad.getKeyDown(RIGHT_KEY_COMMON) || gpAngle
           ? this._app.gamepad.getStickTilt(LEFT_STICK_ID) &&
-              gpAngle.x > this._gamepadStickThreshold
+              gpAngle.x > this.gamepadStickThreshold
           : false;
       } else {
         return false;
@@ -464,7 +468,7 @@ export class InteractionController<AK extends StrOrNum = StrOrNum> {
         const gpAngle = this._app.gamepad.getStickDirection(LEFT_STICK_ID);
         return this._app.gamepad.getKeyDown(LEFT_KEY_COMMON) || gpAngle
           ? this._app.gamepad.getStickTilt(LEFT_STICK_ID) &&
-              gpAngle.x < -this._gamepadStickThreshold
+              gpAngle.x < -this.gamepadStickThreshold
           : false;
       } else {
         return false;
@@ -476,8 +480,13 @@ export class InteractionController<AK extends StrOrNum = StrOrNum> {
   /**
    * ゲームパッドのスティックを傾けたとする範囲
    */
+  get gamepadStickThreshold() {
+    if (!this._app.gamepad) return 0;
+    return this._app.gamepad.stickDeadZoneThreshold;
+  }
   set gamepadStickThreshold(v: number) {
-    this._gamepadStickThreshold = v;
+    if (!this._app.gamepad) return;
+    this._app.gamepad.stickDeadZoneThreshold = v;
   }
 
   /**
