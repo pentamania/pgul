@@ -121,7 +121,9 @@ export class InteractionController<AK extends KeyTag = KeyTag> {
     if (!aData) return false;
 
     const isGamepadActive =
-      this._app.gamepad && aData.gp && this._app.gamepad.getKeyDown(aData.gp)
+      this.gamepadAvailable &&
+      aData.gp &&
+      this._app.gamepad!.getKeyDown(aData.gp)
         ? true
         : false;
     return this._app.keyboard.getKeyDown(aData.kb) || isGamepadActive;
@@ -155,7 +157,7 @@ export class InteractionController<AK extends KeyTag = KeyTag> {
     if (!aData) return false;
 
     const isGamepadActive =
-      this._app.gamepad && aData.gp && this._app.gamepad.getKey(aData.gp)
+      this.gamepadAvailable && aData.gp && this._app.gamepad!.getKey(aData.gp)
         ? true
         : false;
     return this._app.keyboard.getKey(aData.kb) || isGamepadActive;
@@ -169,7 +171,7 @@ export class InteractionController<AK extends KeyTag = KeyTag> {
     const aData = this.getKeyAssignData(actionKey);
     if (!aData) return false;
     const isGamepadActive =
-      this._app.gamepad && aData.gp && this._app.gamepad.getKeyUp(aData.gp)
+      this.gamepadAvailable && aData.gp && this._app.gamepad!.getKeyUp(aData.gp)
         ? true
         : false;
     return this._app.keyboard.getKeyUp(aData.kb) || isGamepadActive;
@@ -189,9 +191,9 @@ export class InteractionController<AK extends KeyTag = KeyTag> {
    */
   pressUp(): boolean {
     const isGpPressed = (() => {
-      if (this._app.gamepad) {
-        const gpAngle = this._app.gamepad.getStickDirection(LEFT_STICK_ID);
-        return this._app.gamepad.getKey(UP_KEY_COMMON) || gpAngle
+      if (this.gamepadAvailable) {
+        const gpAngle = this._app.gamepad!.getStickDirection(LEFT_STICK_ID);
+        return this._app.gamepad!.getKey(UP_KEY_COMMON) || gpAngle
           ? gpAngle.y < -this.gamepadStickThreshold
           : false;
       } else {
@@ -208,9 +210,9 @@ export class InteractionController<AK extends KeyTag = KeyTag> {
    */
   pressDown(): boolean {
     const isGpPressed = (() => {
-      if (this._app.gamepad) {
-        const gpAngle = this._app.gamepad.getStickDirection(LEFT_STICK_ID);
-        return this._app.gamepad.getKey(DOWN_KEY_COMMON) || gpAngle
+      if (this.gamepadAvailable) {
+        const gpAngle = this._app.gamepad!.getStickDirection(LEFT_STICK_ID);
+        return this._app.gamepad!.getKey(DOWN_KEY_COMMON) || gpAngle
           ? gpAngle.y > this.gamepadStickThreshold
           : false;
       } else {
@@ -223,9 +225,9 @@ export class InteractionController<AK extends KeyTag = KeyTag> {
 
   pressLeft() {
     const isGpPressed = (() => {
-      if (this._app.gamepad) {
-        const gpAngle = this._app.gamepad.getStickDirection(LEFT_STICK_ID);
-        return this._app.gamepad.getKey(LEFT_KEY_COMMON) || gpAngle
+      if (this.gamepadAvailable) {
+        const gpAngle = this._app.gamepad!.getStickDirection(LEFT_STICK_ID);
+        return this._app.gamepad!.getKey(LEFT_KEY_COMMON) || gpAngle
           ? gpAngle.x < -this.gamepadStickThreshold
           : false;
       } else {
@@ -237,9 +239,9 @@ export class InteractionController<AK extends KeyTag = KeyTag> {
 
   pressRight() {
     const isGpPressed = (() => {
-      if (this._app.gamepad) {
-        const gpAngle = this._app.gamepad.getStickDirection(LEFT_STICK_ID);
-        return this._app.gamepad.getKey(RIGHT_KEY_COMMON) || gpAngle
+      if (this.gamepadAvailable) {
+        const gpAngle = this._app.gamepad!.getStickDirection(LEFT_STICK_ID);
+        return this._app.gamepad!.getKey(RIGHT_KEY_COMMON) || gpAngle
           ? gpAngle.x > this.gamepadStickThreshold
           : false;
       } else {
@@ -255,10 +257,11 @@ export class InteractionController<AK extends KeyTag = KeyTag> {
    */
   upKeyDown() {
     const isGpKeyDown = (() => {
-      if (this._app.gamepad) {
-        const gpAngle = this._app.gamepad.getStickDirection(LEFT_STICK_ID);
-        return this._app.gamepad.getKeyDown(UP_KEY_COMMON) || gpAngle
-          ? this._app.gamepad.getStickTilt(LEFT_STICK_ID) &&
+      if (this.gamepadAvailable) {
+        const gp = this._app.gamepad!;
+        const gpAngle = gp.getStickDirection(LEFT_STICK_ID);
+        return gp.getKeyDown(UP_KEY_COMMON) || gpAngle
+          ? gp.getStickTilt(LEFT_STICK_ID) &&
               gpAngle.y < -this.gamepadStickThreshold
           : false;
       } else {
@@ -274,10 +277,11 @@ export class InteractionController<AK extends KeyTag = KeyTag> {
    */
   downKeyDown() {
     const isGpKeyDown = (() => {
-      if (this._app.gamepad) {
-        const gpAngle = this._app.gamepad.getStickDirection(LEFT_STICK_ID);
-        return this._app.gamepad.getKeyDown(DOWN_KEY_COMMON) || gpAngle
-          ? this._app.gamepad.getStickTilt(LEFT_STICK_ID) &&
+      if (this.gamepadAvailable) {
+        const gp = this._app.gamepad!;
+        const gpAngle = gp.getStickDirection(LEFT_STICK_ID);
+        return gp.getKeyDown(DOWN_KEY_COMMON) || gpAngle
+          ? gp.getStickTilt(LEFT_STICK_ID) &&
               gpAngle.y > this.gamepadStickThreshold
           : false;
       } else {
@@ -292,10 +296,11 @@ export class InteractionController<AK extends KeyTag = KeyTag> {
    */
   rightKeyDown() {
     const isGpKeyDown = (() => {
-      if (this._app.gamepad) {
-        const gpAngle = this._app.gamepad.getStickDirection(LEFT_STICK_ID);
-        return this._app.gamepad.getKeyDown(RIGHT_KEY_COMMON) || gpAngle
-          ? this._app.gamepad.getStickTilt(LEFT_STICK_ID) &&
+      if (this.gamepadAvailable) {
+        const gp = this._app.gamepad!;
+        const gpAngle = gp.getStickDirection(LEFT_STICK_ID);
+        return gp.getKeyDown(RIGHT_KEY_COMMON) || gpAngle
+          ? gp.getStickTilt(LEFT_STICK_ID) &&
               gpAngle.x > this.gamepadStickThreshold
           : false;
       } else {
@@ -310,10 +315,11 @@ export class InteractionController<AK extends KeyTag = KeyTag> {
    */
   leftKeyDown() {
     const isGpKeyDown = (() => {
-      if (this._app.gamepad) {
-        const gpAngle = this._app.gamepad.getStickDirection(LEFT_STICK_ID);
-        return this._app.gamepad.getKeyDown(LEFT_KEY_COMMON) || gpAngle
-          ? this._app.gamepad.getStickTilt(LEFT_STICK_ID) &&
+      if (this.gamepadAvailable) {
+        const gp = this._app.gamepad!;
+        const gpAngle = gp.getStickDirection(LEFT_STICK_ID);
+        return gp.getKeyDown(LEFT_KEY_COMMON) || gpAngle
+          ? gp.getStickTilt(LEFT_STICK_ID) &&
               gpAngle.x < -this.gamepadStickThreshold
           : false;
       } else {
@@ -340,5 +346,9 @@ export class InteractionController<AK extends KeyTag = KeyTag> {
    */
   set doubleKeyDownAcceptThreshold(v: number) {
     this._doubleKeyDownAcceptThreshold = v;
+  }
+
+  get gamepadAvailable(): boolean {
+    return this._app.gamepad != null && !this._app.gamepad.isLocked;
   }
 }

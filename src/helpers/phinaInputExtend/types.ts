@@ -9,14 +9,28 @@ export interface keyAssignData {
 }
 
 /**
- * phina.app.DomApp想定
+ * phina.app.DomApp (v0.2.2) 想定
+ *
+ * gamepadを使用する場合は以下のような拡張定義を行うこと
+ *
+ * @example
+ * import { GameApp, GamepadManager } from "phina.js";
+ * const app = new GameApp();
+ * const gamepadManager = new GamepadManager();
+ * const gamepad = gamepadManager.get();
+ * if (gamepad) {
+ *   app.on("enterframe", () => {
+ *     gamepadManager.update();
+ *   });
+ *   Object.defineProperty(app, "gamepad", {
+ *     value: gamepad,
+ *     writable: false,
+ *     configurable: false,
+ *   });
+ * }
  */
 export interface App {
   on: (
-    eventType: "enterframe",
-    cb: (e: { type: "enterframe"; target: App }) => any
-  ) => this;
-  one: (
     eventType: "enterframe",
     cb: (e: { type: "enterframe"; target: App }) => any
   ) => this;
@@ -32,10 +46,10 @@ export interface App {
 
     /**
      * x, yでスティック状態を保持
-     * 0 ~ 2の３本
+     * デフォルトではid: 0 ~ 2の３本が定義
      *
      * 本来はphina.geom.Vector2だがpgul.Vector2で代用
-     * x/yプロパティ、cloneメソッドが必要
+     * x,yプロパティのみが必要
      */
     sticks: Vector2[];
 
@@ -69,7 +83,15 @@ export interface App {
     tilting: { [stickId: number]: Bit };
     tiltDown: { [stickId: number]: Bit };
 
+    /**
+     * 対応スティックが傾いたフレームだけtrueを返す
+     */
     getStickTilt: (stickId: number) => boolean;
+
+    /**
+     * 対応スティックがニュートラル位置に戻ったフレームだけtrueを返す
+     * 未実装
+     */
     // getStickNeutral: (stickId: number) => boolean;
 
     /**
@@ -82,5 +104,16 @@ export interface App {
      * スティックが傾いたとする範囲
      */
     stickDeadZoneThreshold: number;
+
+    /**
+     * 操作を無効にする
+     * ウィンドウにフォーカスが当たってないときなど
+     */
+    isLocked: boolean;
   };
+
+  /**
+   * Other members
+   */
+  [other: string]: any;
 }

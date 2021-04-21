@@ -12,6 +12,39 @@ export default function extendGamePad(app: App) {
   if (!app.gamepad) return;
   const gamepad = app.gamepad;
 
+  /* Add gamepad app focus locking feature */
+  {
+    gamepad.isLocked = false;
+
+    // getXxx methods override
+    const superGetKey = gamepad.getKey.bind(gamepad);
+    gamepad.getKey = function (...args) {
+      if (this.isLocked) return false;
+      return superGetKey(...args);
+    };
+    const superGetKeyDown = gamepad.getKeyDown.bind(gamepad);
+    gamepad.getKeyDown = function (...args) {
+      if (this.isLocked) return false;
+      return superGetKeyDown(...args);
+    };
+    const superGetKeyUp = gamepad.getKeyUp.bind(gamepad);
+    gamepad.getKeyUp = function (...args) {
+      if (this.isLocked) return false;
+      return superGetKeyUp(...args);
+    };
+
+    // Update locked state
+    window.addEventListener("focus", () => {
+      gamepad.isLocked = !document.hasFocus();
+    });
+    window.addEventListener("blur", () => {
+      gamepad.isLocked = !document.hasFocus();
+    });
+
+    // 最初の起動時のフォーカス状態に応じてロック状態変更
+    gamepad.isLocked = !document.hasFocus();
+  }
+
   /* 傾きしきい値の初期化 */
   gamepad.stickDeadZoneThreshold = DEFAULT_GAMEPAD_THRESHOLD;
 
