@@ -1,49 +1,49 @@
 import { Bit } from "../../utilTypes";
 import { Vector2 } from "../../Vector2";
 import { DEFAULT_GAMEPAD_THRESHOLD } from "./const";
-import { App } from "./types";
+import { App, PhinaGamepad } from "./types";
 
 /**
- * gamepadオブジェクトを独自拡張
- *
- * @param app
+ * Add gamepad locking feature via window focus/defocus
  */
-export default function extendGamePad(app: App) {
+function extendFocusLockFeature(gamepad: PhinaGamepad) {
+  gamepad.isLocked = false;
+
+  // getXxx methods override
+  const superGetKey = gamepad.getKey.bind(gamepad);
+  gamepad.getKey = function (...args) {
+    if (this.isLocked) return false;
+    return superGetKey(...args);
+  };
+  const superGetKeyDown = gamepad.getKeyDown.bind(gamepad);
+  gamepad.getKeyDown = function (...args) {
+    if (this.isLocked) return false;
+    return superGetKeyDown(...args);
+  };
+  const superGetKeyUp = gamepad.getKeyUp.bind(gamepad);
+  gamepad.getKeyUp = function (...args) {
+    if (this.isLocked) return false;
+    return superGetKeyUp(...args);
+  };
+
+  // Update locked state
+  window.addEventListener("focus", () => {
+    gamepad.isLocked = !document.hasFocus();
+  });
+  window.addEventListener("blur", () => {
+    gamepad.isLocked = !document.hasFocus();
+  });
+
+  // 最初の起動時のフォーカス状態に応じてロック状態変更
+  gamepad.isLocked = !document.hasFocus();
+}
+
+/**
+ * Add thumbstick tilt detecting feature to app
+ */
+function extendStickTiltDetectFeature(app: App) {
   if (!app.gamepad) return;
   const gamepad = app.gamepad;
-
-  /* Add gamepad app focus locking feature */
-  {
-    gamepad.isLocked = false;
-
-    // getXxx methods override
-    const superGetKey = gamepad.getKey.bind(gamepad);
-    gamepad.getKey = function (...args) {
-      if (this.isLocked) return false;
-      return superGetKey(...args);
-    };
-    const superGetKeyDown = gamepad.getKeyDown.bind(gamepad);
-    gamepad.getKeyDown = function (...args) {
-      if (this.isLocked) return false;
-      return superGetKeyDown(...args);
-    };
-    const superGetKeyUp = gamepad.getKeyUp.bind(gamepad);
-    gamepad.getKeyUp = function (...args) {
-      if (this.isLocked) return false;
-      return superGetKeyUp(...args);
-    };
-
-    // Update locked state
-    window.addEventListener("focus", () => {
-      gamepad.isLocked = !document.hasFocus();
-    });
-    window.addEventListener("blur", () => {
-      gamepad.isLocked = !document.hasFocus();
-    });
-
-    // 最初の起動時のフォーカス状態に応じてロック状態変更
-    gamepad.isLocked = !document.hasFocus();
-  }
 
   /* 傾きしきい値の初期化 */
   gamepad.stickDeadZoneThreshold = DEFAULT_GAMEPAD_THRESHOLD;
@@ -75,12 +75,11 @@ export default function extendGamePad(app: App) {
   gamepad.tiltLast = {};
   gamepad.tiltDown = {};
   app.on("enterframe", () => {
-    const gp = gamepad;
-    gp.sticks.forEach((_stick, id) => {
-      gp.tiltLast[id] = gp.tilting[id];
-      gp.tilting[id] = gp.currentTilt[id];
-      gp.tiltDown[id] = ((gp.tilting[id] ^ gp.tiltLast[id]) &
-        gp.tilting[id]) as Bit;
+    gamepad.sticks.forEach((_stick, id) => {
+      gamepad.tiltLast[id] = gamepad.tilting[id];
+      gamepad.tilting[id] = gamepad.currentTilt[id];
+      gamepad.tiltDown[id] = ((gamepad.tilting[id] ^ gamepad.tiltLast[id]) &
+        gamepad.tilting[id]) as Bit;
     });
   });
 
@@ -88,6 +87,19 @@ export default function extendGamePad(app: App) {
   gamepad.getStickTilt = function (stickId) {
     return gamepad.tiltDown[stickId] == 1;
   };
+}
+
+/**
+ * gamepadオブジェクトを独自拡張
+ *
+ * @param app
+ */
+export default function extendGamePad(app: App) {
+  if (!app.gamepad) return;
+  const gamepad = app.gamepad;
+
+  extendStickTiltDetectFeature(app);
+  extendFocusLockFeature(gamepad);
 
   /* getStickDirection override */
   gamepad._stickDirection = new Vector2(0, 0);
