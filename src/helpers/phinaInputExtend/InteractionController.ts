@@ -26,7 +26,6 @@ export type DirectionKey =
 export class InteractionController<AK extends KeyTag = KeyTag> {
   private _app!: App;
   private _assignMap: KeyAssignMap<AK> = new Map();
-  // private _doubleKeySuspendCountMap: {[key:AK]: number} = {}
   private _doubleKeySuspendCountMap: Map<AK, number> = new Map();
   private _doubleKeyDownAcceptThreshold: number = DEFAULT_DOUBLE_INPUT_DELAY_FRAME;
 
@@ -87,6 +86,15 @@ export class InteractionController<AK extends KeyTag = KeyTag> {
     });
   }
 
+  /**
+   * Apply keyboard/gamepad key to specifed action.
+   * Defines new key if specifed key does not exists
+   *
+   * @param actionKey
+   * @param kbKey
+   * @param gpKey
+   * @returns
+   */
   assignKey(actionKey: AK, kbKey: KeyCode, gpKey?: KeyCode): void {
     const keyAssign = this._assignMap.get(actionKey);
     if (!keyAssign) {
@@ -103,6 +111,12 @@ export class InteractionController<AK extends KeyTag = KeyTag> {
     return Object.fromEntries(this._assignMap);
   }
 
+  /**
+   * Return assignData of specifed action
+   *
+   * @param actionKey
+   * @returns
+   */
   getKeyAssignData(actionKey: AK): keyAssignData | undefined {
     const aData = this._assignMap.get(actionKey);
     if (!aData) {
@@ -114,6 +128,7 @@ export class InteractionController<AK extends KeyTag = KeyTag> {
 
   /**
    * 登録したアクションのキーを押した瞬間
+   *
    * @param actionKey
    */
   keyDown(actionKey: AK): boolean {
@@ -150,6 +165,7 @@ export class InteractionController<AK extends KeyTag = KeyTag> {
 
   /**
    * 登録したアクションのキーが入力中
+   *
    * @param actionKey
    */
   keyPress(actionKey: AK): boolean {
@@ -165,6 +181,7 @@ export class InteractionController<AK extends KeyTag = KeyTag> {
 
   /**
    * 登録したアクションのキーを上げた瞬間
+   *
    * @param actionKey
    */
   keyUp(actionKey: AK): boolean {
@@ -253,7 +270,6 @@ export class InteractionController<AK extends KeyTag = KeyTag> {
 
   /**
    * ↑キーのkeydown
-   * GPのgetKeyDownは何故か効かないことがある
    */
   upKeyDown() {
     const isGpKeyDown = (() => {
@@ -273,7 +289,6 @@ export class InteractionController<AK extends KeyTag = KeyTag> {
 
   /**
    * 下キーのkeydown
-   * GPのgetKeyDownは何故か効かないことがある
    */
   downKeyDown() {
     const isGpKeyDown = (() => {
@@ -348,6 +363,9 @@ export class InteractionController<AK extends KeyTag = KeyTag> {
     this._doubleKeyDownAcceptThreshold = v;
   }
 
+  /**
+   * ゲームパッドが使用可能かどうか
+   */
   get gamepadAvailable(): boolean {
     return this._app.gamepad != null && !this._app.gamepad.isLocked;
   }
