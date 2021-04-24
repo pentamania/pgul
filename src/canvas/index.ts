@@ -5,3 +5,4 @@ export * from "./createCheckPattern";
 export * from "./imageBlending";
 export * from "./talkBubble";
 export * from "./thornedTalkBubble";
+export * from "./trapezoid";
