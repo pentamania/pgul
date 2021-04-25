@@ -5,8 +5,11 @@ import { ContextBindableGeneratorFunction } from "../utilTypes";
 
 /**
  * this参照をRunnerとしたGeneratorFunction型
+ * Genericsでtargetプロパティの型を指定可能
  */
-export type RunnerAction = ContextBindableGeneratorFunction<Runner>;
+export type RunnerAction<RT = any> = ContextBindableGeneratorFunction<
+  Runner<RT>
+>;
 
 /**
  * Runner
