@@ -369,4 +369,12 @@ export class InteractionController<AK extends KeyTag = KeyTag> {
   get gamepadAvailable(): boolean {
     return this._app.gamepad != null && !this._app.gamepad.isLocked;
   }
+
+  get keyboard() {
+    return this._app.keyboard;
+  }
+
+  get gamepad() {
+    return this._app.gamepad;
+  }
 }
