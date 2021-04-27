@@ -105,6 +105,20 @@ export class InteractionController<AK extends KeyTag = KeyTag> {
   }
 
   /**
+   * @param actionKey
+   * @param gpKey
+   * @returns
+   */
+  assignGamepadKey(actionKey: AK, gpKey: KeyCode) {
+    const keyAssign = this._assignMap.get(actionKey);
+    if (!keyAssign) {
+      // TODO: kbにもundefined設定できるようにする
+      return this.defineKey(actionKey, "", gpKey);
+    }
+    keyAssign.gp = gpKey;
+  }
+
+  /**
    * キーアサイン状態をJSONオブジェクトにして返す
    */
   toJSON() {
