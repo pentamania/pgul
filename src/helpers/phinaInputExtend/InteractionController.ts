@@ -107,8 +107,24 @@ export class InteractionController<AK extends KeyTag = KeyTag> {
   /**
    * キーアサイン状態をJSONオブジェクトにして返す
    */
-  toJSON(): { [keyName in KeyTag]: keyAssignData } {
-    return Object.fromEntries(this._assignMap);
+  toJSON() {
+    return Object.fromEntries(this._assignMap) as {
+      [keyName in AK]: keyAssignData;
+    };
+  }
+
+  /**
+   * キーアサインMapを返す
+   */
+  getAssignMap() {
+    return this._assignMap;
+  }
+
+  /**
+   * シャロ―クローン（keyAssignDataの参照はそのまま）を返す
+   */
+  cloneAssignMap() {
+    return new Map(this._assignMap);
   }
 
   /**
