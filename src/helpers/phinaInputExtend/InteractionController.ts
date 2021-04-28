@@ -170,6 +170,32 @@ export class InteractionController<AK extends KeyTag = KeyTag> {
   }
 
   /**
+   * [TEMP] キーコードからアクションを取得
+   *
+   * FIXME: 同じキーコードが割り当てられたアクションがあった場合、
+   * 片方しか帰ってこない
+   * 配列にする？
+   *
+   * @param code
+   */
+  getActionTagFromCode(code: KeyCode): AK | undefined {
+    for (const [actionKey, assignData] of this._assignMap.entries()) {
+      if (assignData.kb === code || (assignData.gp && assignData.gp === code)) {
+        return actionKey;
+      }
+    }
+    return undefined;
+  }
+
+  getActionTagFromGamePadCode(code: KeyCode): AK | undefined {
+    for (const [actionKey, assignData] of this._assignMap.entries()) {
+      if (assignData.gp && assignData.gp === code) {
+        return actionKey;
+      }
+    }
+  }
+
+  /**
    * 登録したアクションのキーを押した瞬間
    *
    * @param actionKey
