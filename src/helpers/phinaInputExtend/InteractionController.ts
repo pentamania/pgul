@@ -125,6 +125,13 @@ export class InteractionController<AK extends KeyTag = KeyTag> {
   }
 
   /**
+   * @param json
+   */
+  assignFromJson(json: { [actionTag in AK]: keyAssignData }) {
+    this._assignMap = new Map(Object.entries<keyAssignData>(json) as [AK, any]);
+  }
+
+  /**
    * キーアサイン状態をJSONオブジェクトにして返す
    */
   toJSON() {
