@@ -15,6 +15,12 @@ export type DirectionKey =
   | typeof DOWN_KEY_COMMON
   | typeof LEFT_KEY_COMMON
   | typeof RIGHT_KEY_COMMON;
+export const DIRECTION_KEYS = [
+  UP_KEY_COMMON,
+  DOWN_KEY_COMMON,
+  LEFT_KEY_COMMON,
+  RIGHT_KEY_COMMON,
+] as const;
 
 /**
  * phinaのインタラクション処理を統合処理
@@ -406,5 +412,14 @@ export class InteractionController<AK extends KeyTag = KeyTag> {
 
   get gamepad() {
     return this._app.gamepad;
+  }
+
+  /**
+   * @param keycode
+   * @returns
+   */
+  static isDirectionKeyCode(keycode: KeyCode) {
+    // TODO: number型の場合の処理追加
+    return DIRECTION_KEYS.includes(keycode as DirectionKey);
   }
 }
