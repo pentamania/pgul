@@ -180,7 +180,10 @@ export class InteractionController<AK extends KeyTag = KeyTag> {
    */
   getActionTagFromCode(code: KeyCode): AK | undefined {
     for (const [actionKey, assignData] of this._assignMap.entries()) {
-      if (assignData.kb === code || (assignData.gp && assignData.gp === code)) {
+      if (
+        assignData.kb === code ||
+        (assignData.gp != null && assignData.gp === code)
+      ) {
         return actionKey;
       }
     }
@@ -189,7 +192,7 @@ export class InteractionController<AK extends KeyTag = KeyTag> {
 
   getActionTagFromGamePadCode(code: KeyCode): AK | undefined {
     for (const [actionKey, assignData] of this._assignMap.entries()) {
-      if (assignData.gp && assignData.gp === code) {
+      if (assignData.gp != null && assignData.gp === code) {
         return actionKey;
       }
     }
@@ -206,7 +209,7 @@ export class InteractionController<AK extends KeyTag = KeyTag> {
 
     const isGamepadActive =
       this.gamepadAvailable &&
-      aData.gp &&
+      aData.gp != null &&
       this._app.gamepad!.getKeyDown(aData.gp)
         ? true
         : false;
@@ -242,7 +245,9 @@ export class InteractionController<AK extends KeyTag = KeyTag> {
     if (!aData) return false;
 
     const isGamepadActive =
-      this.gamepadAvailable && aData.gp && this._app.gamepad!.getKey(aData.gp)
+      this.gamepadAvailable &&
+      aData.gp != null &&
+      this._app.gamepad!.getKey(aData.gp)
         ? true
         : false;
     return this._app.keyboard.getKey(aData.kb) || isGamepadActive;
@@ -257,7 +262,9 @@ export class InteractionController<AK extends KeyTag = KeyTag> {
     const aData = this.getKeyAssignData(actionKey);
     if (!aData) return false;
     const isGamepadActive =
-      this.gamepadAvailable && aData.gp && this._app.gamepad!.getKeyUp(aData.gp)
+      this.gamepadAvailable &&
+      aData.gp != null &&
+      this._app.gamepad!.getKeyUp(aData.gp)
         ? true
         : false;
     return this._app.keyboard.getKeyUp(aData.kb) || isGamepadActive;
