@@ -1,6 +1,6 @@
 import { DEFAULT_DOUBLE_INPUT_DELAY_FRAME, LEFT_STICK_ID } from "./const";
 import extendGamePad from "./extendGamePad";
-import { App, keyAssignData, KeyCode } from "./types";
+import { App, GAMEPAD_BUTTON_CODES, keyAssignData, KeyCode } from "./types";
 
 type KeyTag = string | number;
 type KeyAssignMap<T> = Map<T, keyAssignData>;
@@ -214,6 +214,31 @@ export class InteractionController<AK extends KeyTag = KeyTag> {
         ? true
         : false;
     return this._app.keyboard.getKeyDown(aData.kb) || isGamepadActive;
+  }
+
+  // /**
+  //  * 未実装
+  //  */
+  // getAnyKeyDownFromKeyBoard(): KeyCode | undefined {
+  //   // TODO
+  //   return "";
+  // }
+
+  /**
+   * いずれかのゲームパッドボタンのkeydownを検知
+   *
+   * - 同時押しの場合は片方のみ
+   * - ゲームパッドが無効ならundefinedを返す
+   *
+   * @param targetKeyList 対象キー群。未指定のときは方向キー含む全てのボタンが対象
+   * @returns 押したボタンのキーコード
+   */
+  getAnyKeyDownFromGamepad(
+    targetKeyList: KeyCode[] = (GAMEPAD_BUTTON_CODES as unknown) as KeyCode[]
+  ): KeyCode | undefined {
+    if (!this.gamepadAvailable) return undefined;
+    const gp = this._app.gamepad!;
+    return targetKeyList.find((keyCode) => gp.getKeyDown(keyCode));
   }
 
   /**

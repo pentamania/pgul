@@ -3,6 +3,29 @@ import { Vector2 } from "../../Vector2";
 
 export type KeyCode = string | number;
 
+/**
+ * 一般的なゲームパットのボタン数をカバー
+ */
+export const GAMEPAD_BUTTON_CODES = [
+  0,
+  1,
+  2,
+  3,
+  4,
+  5,
+  6,
+  7,
+  8,
+  9,
+  10,
+  11,
+  12,
+  13,
+  14,
+  15,
+  16,
+] as const;
+
 export interface keyAssignData {
   kb: KeyCode;
   gp?: KeyCode;
