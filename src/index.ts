@@ -20,6 +20,7 @@ export * from "./mixins/Menuable";
 export * from "./mixins/RunnerDriven";
 export * from "./mixins/Traceable";
 export * from "./mixins/Revolutional";
+export * from "./mixins/Poolable";
 
 import * as utils from "./utils/index";
 export { utils };
