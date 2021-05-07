@@ -3,6 +3,11 @@ import { Vector2 } from "../../Vector2";
 
 export type KeyCode = string | number;
 
+export interface KeyAssignData {
+  kb: KeyCode;
+  gp?: KeyCode;
+}
+
 /**
  * 一般的なゲームパットのボタン数をカバー
  */
@@ -25,11 +30,6 @@ export const GAMEPAD_BUTTON_CODES = [
   15,
   16,
 ] as const;
-
-export interface keyAssignData {
-  kb: KeyCode;
-  gp?: KeyCode;
-}
 
 /**
  * phina.input.Gamepad (v0.2.2) 想定

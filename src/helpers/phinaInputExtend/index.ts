@@ -1,2 +1,2 @@
 export * from "./InteractionController";
-export { keyAssignData } from "./types";
+export { KeyAssignData } from "./types";

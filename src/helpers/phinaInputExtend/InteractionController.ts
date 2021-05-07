@@ -1,9 +1,9 @@
 import { DEFAULT_DOUBLE_INPUT_DELAY_FRAME, LEFT_STICK_ID } from "./const";
 import extendGamePad from "./extendGamePad";
-import { App, GAMEPAD_BUTTON_CODES, keyAssignData, KeyCode } from "./types";
+import { App, GAMEPAD_BUTTON_CODES, KeyAssignData, KeyCode } from "./types";
 
 type KeyTag = string | number;
-type KeyAssignMap<T> = Map<T, keyAssignData>;
+type KeyAssignMap<T> = Map<T, KeyAssignData>;
 
 // Keyboard & Gamepad common keys
 export const UP_KEY_COMMON = "up";
@@ -127,8 +127,8 @@ export class InteractionController<AK extends KeyTag = KeyTag> {
   /**
    * @param json
    */
-  assignFromJson(json: { [actionTag in AK]: keyAssignData }) {
-    this._assignMap = new Map(Object.entries<keyAssignData>(json) as [AK, any]);
+  assignFromJson(json: { [actionTag in AK]: KeyAssignData }) {
+    this._assignMap = new Map(Object.entries<KeyAssignData>(json) as [AK, any]);
   }
 
   /**
@@ -136,7 +136,7 @@ export class InteractionController<AK extends KeyTag = KeyTag> {
    */
   toJSON() {
     return Object.fromEntries(this._assignMap) as {
-      [keyName in AK]: keyAssignData;
+      [keyName in AK]: KeyAssignData;
     };
   }
 
@@ -160,7 +160,7 @@ export class InteractionController<AK extends KeyTag = KeyTag> {
    * @param actionKey
    * @returns
    */
-  getKeyAssignData(actionKey: AK): keyAssignData | undefined {
+  getKeyAssignData(actionKey: AK): KeyAssignData | undefined {
     const aData = this._assignMap.get(actionKey);
     if (!aData) {
       console.warn(`${actionKey} is not defined.`);
