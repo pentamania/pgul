@@ -12,3 +12,4 @@ export { default as combineGeneratorFunctions } from "./combineGeneratorFunction
 export { default as createStepGenerator } from "./createStepGenerator";
 export { default as formatToPercentage } from "./formatToPercentage";
 export { default as rangedTimes } from "./rangedTimes";
+export { default as calcDividedAngles } from "./calcDividedAngles";
