@@ -61,13 +61,9 @@ export function Menuable<TBase extends GConstructor>(Base: TBase) {
       // ロックされてたらreturn false
       if (nextItem.isLocked) return false;
 
-      this._optionItems.forEach((item, i) => {
-        if (i === itemIndex) {
-          item.focus();
-        } else {
-          item.defocus();
-        }
-      });
+      // Reset focus
+      this._optionItems.forEach((item) => item.defocus());
+      nextItem.focus();
 
       this._currentItemIndex = itemIndex;
       return nextItem;
