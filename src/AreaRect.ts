@@ -87,6 +87,13 @@ export class AreaRect {
     return this._bottom;
   }
 
+  get width() {
+    return this._left - this._right;
+  }
+  get height() {
+    return this._bottom - this._top;
+  }
+
   get outerLeft() {
     return this._left - this._margin;
   }
