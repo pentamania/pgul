@@ -1,7 +1,7 @@
 import { List } from "../List";
 import { Runner, RunnerAction } from "../Runner/index";
 import combineGeneratorFunctions from "../utils/combineGeneratorFunctions";
-import { GConstructor, TwoDimensionalObjectConstructor } from "./common";
+import { GConstructor } from "./common";
 
 type ChildContainable = GConstructor<{
   children?: any[];
@@ -32,9 +32,7 @@ export type RunnerActionBundle = RunnerActionComplex[];
  * Runnerによって駆動するためのメソッドを付与
  * @param Base
  */
-export function RunnerDriven<
-  TBase extends TwoDimensionalObjectConstructor & ChildContainable
->(Base: TBase) {
+export function RunnerDriven<TBase extends ChildContainable>(Base: TBase) {
   return class extends Base {
     _runners: Runner[] = [];
     _actionBundleList?: List<RunnerActionBundle>;
