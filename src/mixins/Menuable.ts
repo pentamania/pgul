@@ -15,6 +15,9 @@ export interface FocusableMenuItem {
   focus: Function;
   defocus: Function;
   execute?: Function;
+
+  /** Turn on when you want to disable selection of this item */
+  isLocked?: boolean;
 }
 
 /**
@@ -43,14 +46,20 @@ export function Menuable<TBase extends GConstructor>(Base: TBase) {
      * 指定インデックスの項目を選択（フォーカス）状態にする
      * （== その他のItemは非フォーカス化）
      *
-     * @param itemIndex 0 ~ 最大インデックスの範囲内に補正されます
+     * @param itemIndex 0 ~ アイテム数の範囲内に補正、0以下の時はループ
+     * @returns 選択したアイテム要素、ロックされてたらfalse
      */
-    selectItem(itemIndex: number) {
+    selectItem(itemIndex: number): FocusableMenuItem | false {
       // indexを 0 ~ 最大インデックスの範囲内に収める
       itemIndex =
         itemIndex < 0
           ? this.lastItemIndex // 0以下の時はループ
           : itemIndex % this.itemNum;
+
+      const nextItem = this._optionItems[itemIndex];
+
+      // ロックされてたらreturn false
+      if (nextItem.isLocked) return false;
 
       this._optionItems.forEach((item, i) => {
         if (i === itemIndex) {
@@ -61,20 +70,27 @@ export function Menuable<TBase extends GConstructor>(Base: TBase) {
       });
 
       this._currentItemIndex = itemIndex;
+      return nextItem;
     }
 
     /**
      * ひとつ前の項目を選択
      */
     selectPrev() {
-      this.selectItem(this._currentItemIndex - 1);
+      let i = -1;
+      while (!this.selectItem(this._currentItemIndex + i)) {
+        --i;
+      }
     }
 
     /**
      * ひとつ後の項目を選択
      */
     selectNext() {
-      this.selectItem(this._currentItemIndex + 1);
+      let i = 1;
+      while (!this.selectItem(this._currentItemIndex + i)) {
+        ++i;
+      }
     }
 
     /**
@@ -84,7 +100,7 @@ export function Menuable<TBase extends GConstructor>(Base: TBase) {
      * @returns 実行結果を返す。何もしなかった場合はfalseを返す（仮）
      */
     runOption(...args: any) {
-      if (this.currentItem.execute) {
+      if (this.currentItem.execute && !this.currentItem.isLocked) {
         return this.currentItem.execute(...args);
       }
       return false;
