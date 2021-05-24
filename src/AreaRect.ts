@@ -74,6 +74,14 @@ export class AreaRect {
   //   );
   // }
 
+  ratioX(n: number) {
+    return this._left + this.width * n;
+  }
+
+  ratioY(n: number) {
+    return this._top + this.height * n;
+  }
+
   get left() {
     return this._left;
   }
@@ -92,6 +100,13 @@ export class AreaRect {
   }
   get height() {
     return this._bottom - this._top;
+  }
+
+  get centerX() {
+    return this.width / 2;
+  }
+  get centerY() {
+    return this.height / 2;
   }
 
   get outerLeft() {
