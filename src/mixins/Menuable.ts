@@ -47,7 +47,9 @@ export function Menuable<TBase extends GConstructor>(Base: TBase) {
      * （== その他のItemは非フォーカス化）
      *
      * @param itemIndex 0 ~ アイテム数の範囲内に補正、0以下の時はループ
-     * @returns 選択したアイテム要素、ロックされてたらfalse
+     * @returns
+     * 選択したアイテム要素を返す。
+     * ただしアイテムが見つからなかったり、ロックされてたらfalseを返す
      */
     selectItem(itemIndex: number): FocusableMenuItem | false {
       // indexを 0 ~ 最大インデックスの範囲内に収める
@@ -57,6 +59,10 @@ export function Menuable<TBase extends GConstructor>(Base: TBase) {
           : itemIndex % this.itemNum;
 
       const nextItem = this._optionItems[itemIndex];
+      if (!nextItem) {
+        // TODO Warn "No item"
+        return false;
+      }
 
       // ロックされてたらreturn false
       if (nextItem.isLocked) return false;
