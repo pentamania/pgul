@@ -67,6 +67,10 @@ export class Pool<T = any> {
     }
   }
 
+  clearPool() {
+    this._pool.length = 0;
+  }
+
   /**
    * オブジェクトが使える状態か評価するための共通関数をセット
    *
@@ -85,5 +89,12 @@ export class Pool<T = any> {
    */
   get commonEvaluator() {
     return this._commonEvaluator.bind(null);
+  }
+
+  /**
+   * Number of objects pooled
+   */
+  get pooledNum() {
+    return this._pool.length;
   }
 }

@@ -73,10 +73,16 @@ export function Poolable<TBase extends GConstructor>(
       return new this();
     }
 
-    // Thinking...
-    // static get pool() {
-    //   return _pool;
-    // }
+    /**
+     * Empty pool
+     */
+    static clearPool() {
+      _pool.clearPool();
+    }
+
+    static get pooledNum() {
+      return _pool.pooledNum;
+    }
   }
 
   // // Not working...
