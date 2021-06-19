@@ -22,6 +22,7 @@ export * from "./mixins/Traceable";
 export * from "./mixins/Revolutional";
 export * from "./mixins/Poolable";
 export * from "./mixins/Chargable";
+export * from "./mixins/Vector2Driven";
 
 import * as utils from "./utils/index";
 export { utils };
