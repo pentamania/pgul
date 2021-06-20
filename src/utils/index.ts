@@ -1,4 +1,3 @@
-// utils.[メソッド名]で使える
 export { default as parseQueryString } from "./parseQueryString";
 export { default as timesMap } from "./timesMap";
 export { default as clamp } from "./clamp";
@@ -13,3 +12,4 @@ export { default as createStepGenerator } from "./createStepGenerator";
 export { default as formatToPercentage } from "./formatToPercentage";
 export { default as rangedTimes } from "./rangedTimes";
 export { default as calcDividedAngles } from "./calcDividedAngles";
+export { default as setWindowFocusCallback } from "./setWindowFocusCallback";
