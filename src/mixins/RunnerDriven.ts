@@ -153,12 +153,12 @@ export function RunnerDriven<TBase extends ChildContainable>(Base: TBase) {
       this._actionBundleList = new List(...actionBundles);
 
       // 最初のアクションセットを設定
-      this.setParallelActionRunners(this._actionBundleList.current, true);
+      this.setActionRunner(...this._actionBundleList.current);
 
       // 全てのrunner処理が死んだら、都度アクションセットを切り替える処理
       this._onRunnerAllDead = () => {
         if (!this._actionBundleList) return;
-        this.setParallelActionRunners(this._actionBundleList.increment());
+        this.setActionRunner(...this._actionBundleList.increment());
       };
     }
 
