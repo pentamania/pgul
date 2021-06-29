@@ -6,21 +6,29 @@ import { GConstructor } from "./common";
  *
  * @example
  * class Actor extends Poolable(class {}) {
- *   x: number = 0;
+ *   name: string = "";
  *   remove() { this.isPoolPickable = true }
  *   resetParam() {
+ *     this.name = "John Doe"
  *     this.isPoolPickable = false
  *   }
  *   static pick: () => Actor;
  * }
  *
- * const actor = Actor.pick(); // Newly created
- * actor.x = 100;
+ * // Newly created
+ * const actor = Actor.pick();
+ * actor.name = "pentamania";
+ *
+ * // Back to pool
  * actor.remove()
  *
- * const actor2 = Actor.pick(); // Pool picked
- * console.log(actor2.x); // 100
+ * // Picked from pool, not newly created
+ * const actor2 = Actor.pick();
  *
+ * // Should be reset
+ * console.log(actor2.name); // "John Doe"
+ *
+ * @param Base
  */
 export function Poolable<TBase extends GConstructor>(
   Base: TBase
