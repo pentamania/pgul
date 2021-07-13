@@ -52,8 +52,6 @@ export function talkBubble(
   const top = y;
   const right = x + width;
   const bottom = y + height;
-  const cx = x + width * 0.5;
-  const cy = y + height * 0.5;
   const rad = cornerRadius;
   const tipPosRatio = Math.min(1, Math.max(0, tailBasePoint));
   tailBottomSize =
@@ -73,8 +71,7 @@ export function talkBubble(
   switch (tailDirection) {
     case "right":
       tipX = right + tipOffset;
-      // tipY = tipCenter + tipDeviation;
-      tipY = cy + tailEndOffset;
+      tipY = tipCenter + tailEndOffset;
 
       ctx.arc(left + rad, top + rad, rad, -PI, -PI_H, false); // 左上
       ctx.arc(right - rad, top + rad, rad, -PI_H, 0, false); // 右上
@@ -87,8 +84,7 @@ export function talkBubble(
 
     case "left":
       tipX = left - tipOffset;
-      // tipY = tipCenter + tipDeviation;
-      tipY = cy + tailEndOffset;
+      tipY = tipCenter + tailEndOffset;
 
       ctx.arc(left + rad, top + rad, rad, -PI, -PI_H, false); // 左上
       ctx.arc(right - rad, top + rad, rad, -PI_H, 0, false); // 右上
@@ -100,8 +96,7 @@ export function talkBubble(
       break;
 
     case "bottom":
-      // tipX = tipCenter + tipDeviation;
-      tipX = cx + tailEndOffset;
+      tipX = tipCenter + tailEndOffset;
       tipY = bottom + tipOffset;
 
       ctx.arc(left + rad, top + rad, rad, -PI, -PI_H, false); // 左上
@@ -115,8 +110,7 @@ export function talkBubble(
 
     // case "top":
     default:
-      // tipX = tipCenter + tipDeviation;
-      tipX = cx + tailEndOffset;
+      tipX = tipCenter + tailEndOffset;
       tipY = top - tipOffset;
 
       ctx.arc(left + rad, top + rad, rad, -PI, -PI_H, false); // 左上
