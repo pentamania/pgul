@@ -46,7 +46,6 @@ export function thornedTalkBubble(
     cps.push({ x: r, y: t + sideThornInterval * (i + 0.5) }); // 右側用
     cpsRev.push({ x: l, y: b - sideThornInterval * (i + 0.5) });
   }
-  ctx.beginPath();
 
   // 上辺
   ctx.moveTo(l, t);
