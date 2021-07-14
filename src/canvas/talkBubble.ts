@@ -60,63 +60,63 @@ export function talkBubble(
       ? width * 0.2
       : height * 0.2);
 
-  const tipCenter =
+  const tailCenter =
     tailDirection === "right" || tailDirection === "left"
       ? top + height * tipPosRatio // y軸上
       : left + width * tipPosRatio; // x軸上
-  const tipSizeHalf = tailBottomSize * 0.5;
-  const tipOffset = tailLength || tailBottomSize;
+  const tailBottomHalf = tailBottomSize * 0.5;
+  tailLength = tailLength || tailBottomSize;
 
-  let tipX, tipY;
+  let tailTipX, tailTipY;
   switch (tailDirection) {
     case "right":
-      tipX = right + tipOffset;
-      tipY = tipCenter + tailEndOffset;
+      tailTipX = right + tailLength;
+      tailTipY = tailCenter + tailEndOffset;
 
       ctx.arc(left + rad, top + rad, rad, -PI, -PI_H, false); // 左上
       ctx.arc(right - rad, top + rad, rad, -PI_H, 0, false); // 右上
-      ctx.lineTo(right, tipCenter - tipSizeHalf);
-      ctx.lineTo(tipX, tipY);
-      ctx.lineTo(right, tipCenter + tipSizeHalf);
+      ctx.lineTo(right, tailCenter - tailBottomHalf);
+      ctx.lineTo(tailTipX, tailTipY);
+      ctx.lineTo(right, tailCenter + tailBottomHalf);
       ctx.arc(right - rad, bottom - rad, rad, 0, PI_H, false); // 右下
       ctx.arc(left + rad, bottom - rad, rad, PI_H, PI, false); // 左下
       break;
 
     case "left":
-      tipX = left - tipOffset;
-      tipY = tipCenter + tailEndOffset;
+      tailTipX = left - tailLength;
+      tailTipY = tailCenter + tailEndOffset;
 
       ctx.arc(left + rad, top + rad, rad, -PI, -PI_H, false); // 左上
       ctx.arc(right - rad, top + rad, rad, -PI_H, 0, false); // 右上
       ctx.arc(right - rad, bottom - rad, rad, 0, PI_H, false); // 右下
       ctx.arc(left + rad, bottom - rad, rad, PI_H, PI, false); // 左下
-      ctx.lineTo(left, tipCenter + tipSizeHalf);
-      ctx.lineTo(tipX, tipY);
-      ctx.lineTo(left, tipCenter - tipSizeHalf);
+      ctx.lineTo(left, tailCenter + tailBottomHalf);
+      ctx.lineTo(tailTipX, tailTipY);
+      ctx.lineTo(left, tailCenter - tailBottomHalf);
       break;
 
     case "bottom":
-      tipX = tipCenter + tailEndOffset;
-      tipY = bottom + tipOffset;
+      tailTipX = tailCenter + tailEndOffset;
+      tailTipY = bottom + tailLength;
 
       ctx.arc(left + rad, top + rad, rad, -PI, -PI_H, false); // 左上
       ctx.arc(right - rad, top + rad, rad, -PI_H, 0, false); // 右上
       ctx.arc(right - rad, bottom - rad, rad, 0, PI_H, false); // 右下
-      ctx.lineTo(tipCenter + tipSizeHalf, bottom);
-      ctx.lineTo(tipX, tipY);
-      ctx.lineTo(tipCenter - tipSizeHalf, bottom);
+      ctx.lineTo(tailCenter + tailBottomHalf, bottom);
+      ctx.lineTo(tailTipX, tailTipY);
+      ctx.lineTo(tailCenter - tailBottomHalf, bottom);
       ctx.arc(left + rad, bottom - rad, rad, PI_H, PI, false); // 左下
       break;
 
     // case "top":
     default:
-      tipX = tipCenter + tailEndOffset;
-      tipY = top - tipOffset;
+      tailTipX = tailCenter + tailEndOffset;
+      tailTipY = top - tailLength;
 
       ctx.arc(left + rad, top + rad, rad, -PI, -PI_H, false); // 左上
-      ctx.lineTo(tipCenter - tipSizeHalf, top);
-      ctx.lineTo(tipX, tipY);
-      ctx.lineTo(tipCenter + tipSizeHalf, top);
+      ctx.lineTo(tailCenter - tailBottomHalf, top);
+      ctx.lineTo(tailTipX, tailTipY);
+      ctx.lineTo(tailCenter + tailBottomHalf, top);
       ctx.arc(right - rad, top + rad, rad, -PI_H, 0, false); // 右上
       ctx.arc(right - rad, bottom - rad, rad, 0, PI_H, false); // 右下
       ctx.arc(left + rad, bottom - rad, rad, PI_H, PI, false); // 左下
