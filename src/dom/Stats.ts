@@ -1,5 +1,6 @@
 type ParticalCSSStyle = Partial<CSSStyleDeclaration>;
 
+const DEFAULT_LINE_HEIGHT = 16;
 const DEFAULT_DOM_STYLE: ParticalCSSStyle = {
   color: "white",
   backgroundColor: "gray",
@@ -14,6 +15,10 @@ const DEFAULT_DOM_STYLE: ParticalCSSStyle = {
   right: "4px",
   padding: "4px",
   zIndex: "2147483647",
+
+  width: "200px",
+  height: "250px",
+  overflow: "auto",
 };
 
 export class Stats {
@@ -23,16 +28,37 @@ export class Stats {
     propName: string | number | symbol;
     label: string;
   }[] = [];
-  private _domElement: HTMLDivElement = document.createElement("div");
+  private _domElement: HTMLDivElement | HTMLCanvasElement;
+  private _canvasContext?: CanvasRenderingContext2D;
   private _text: string = "";
+  private _lineHeight: number = 0;
 
   /**
    * @param updateEveryFrame 毎フレーム更新する
    * @param customStyles
    */
-  constructor(updateEveryFrame = true, customStyles?: ParticalCSSStyle) {
+  constructor(
+    updateEveryFrame = true,
+    customStyles?: ParticalCSSStyle,
+    domType: "div" | "canvas" = "canvas"
+    // domType: "div" | "canvas" = "div"
+  ) {
+    this._domElement =
+      domType === "canvas"
+        ? document.createElement("canvas")
+        : document.createElement("div");
+
     // Apply style
     Object.assign(this._domElement.style, DEFAULT_DOM_STYLE, customStyles);
+    this.lineHieght = DEFAULT_LINE_HEIGHT;
+
+    // Set up canvas context
+    if (this._domElement instanceof HTMLCanvasElement) {
+      const ctx = (this._canvasContext = this._domElement.getContext("2d")!);
+      ctx.font = `${this._domElement.style.fontSize} arial`;
+      ctx.fillStyle = this._domElement.style.color;
+      ctx.textBaseline = "top";
+    }
 
     // 自動表示更新
     if (updateEveryFrame) {
@@ -55,6 +81,7 @@ export class Stats {
       propName: propName,
       label: label,
     });
+    // TODO: Resize height to fit texts?
     return this;
   }
 
@@ -115,9 +142,26 @@ export class Stats {
     }
   }
 
+  set lineHieght(v: number) {
+    this._lineHeight = v;
+    this._domElement.style.lineHeight = v + "px";
+  }
+
   set text(v: string) {
     if (v === this._text) return;
-    this._domElement.innerText = v;
+    if (this._domElement instanceof HTMLCanvasElement) {
+      const ctx = this._canvasContext;
+      if (!ctx) {
+        // TODO: Warn "No canvas context"
+        return;
+      }
+      ctx.clearRect(0, 0, this._domElement.width, this._domElement.height);
+      v.split("\n").forEach((line, i) => {
+        ctx.fillText(line, 0, this._lineHeight * i);
+      });
+    } else {
+      this._domElement.innerText = v;
+    }
     this._text = v;
   }
 
