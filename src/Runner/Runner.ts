@@ -167,6 +167,9 @@ export class Runner<T = any> extends Coroutine {
 
   /**
    * vectorパラメータをセット
+   *
+   * 内部ラジアン値及びスピード値も同時に変更される
+   *
    * @param x 無指定の場合はそのまま
    * @param y 無指定の場合はそのまま
    */
@@ -174,6 +177,7 @@ export class Runner<T = any> extends Coroutine {
     // 例外的に一旦vectorを直接操作 -> 内部ラジアン値更新
     this.vector.set(x, y);
     this._vectorRadian = this.vector.getAngleByRadian();
+    this._speed = this.vector.length;
     return this;
   }
 
