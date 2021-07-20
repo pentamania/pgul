@@ -210,3 +210,9 @@ export function RunnerDriven<TBase extends ChildContainable>(Base: TBase) {
     }
   };
 }
+
+/**
+ * RunnerDriven化class型
+ * 型定義用
+ */
+export class RunnerDrivenClass extends RunnerDriven(class {}) {}
