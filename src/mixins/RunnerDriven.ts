@@ -1,5 +1,10 @@
 import { List } from "../List";
-import { Runner, RunnerAction } from "../Runner/index";
+import {
+  Runner,
+  RunnerAction,
+  TargetDeclaredRunner,
+  TargetDeclaredRunnerAction,
+} from "../Runner/index";
 import combineGeneratorFunctions from "../utils/combineGeneratorFunctions";
 import { GConstructor } from "./common";
 
@@ -10,19 +15,23 @@ type ChildContainable = GConstructor<{
 /**
  * RunnerAction配列
  * 直列あるいは並列アクションを表現
+ *
+ * Runnerのtargetは確定しているものとする
  */
-export type RunnerActionList = RunnerAction[];
+export type RunnerActionList<T = any> = TargetDeclaredRunnerAction<T>[];
 
 /**
  * 複合RunnerAction
  */
-export type RunnerActionComplex = RunnerAction | RunnerActionList;
+export type RunnerActionComplex<T = any> =
+  | TargetDeclaredRunnerAction<T>
+  | RunnerActionList<T>;
 
 /**
  * - 複数のRunnerActionのバンドル
  * - RunnerActionList型を直列か並列処理とするかはメソッドによって異なる
  */
-export type RunnerActionBundle = RunnerActionComplex[];
+export type RunnerActionBundle<T = any> = RunnerActionComplex<T>[];
 
 // enum ActorEvent {
 //   _RunnerAllDead = "__runneralldead__",
@@ -34,7 +43,7 @@ export type RunnerActionBundle = RunnerActionComplex[];
  */
 export function RunnerDriven<TBase extends ChildContainable>(Base: TBase) {
   return class extends Base {
-    _runners: Runner[] = [];
+    _runners: TargetDeclaredRunner[] = [];
     _actionBundleList?: List<RunnerActionBundle>;
 
     /**
@@ -64,13 +73,15 @@ export function RunnerDriven<TBase extends ChildContainable>(Base: TBase) {
     }
 
     /**
-     * ランナーを（初期化した後）追加
+     * Runnerを（初期化した後に）追加
+     *
      * @param runner
      */
     addRunner(runner: Runner) {
+      // runnerはTargetDeclaredRunnerとして扱うため、このsetTargetは大事
       runner.setTarget(this);
       runner.start();
-      this._runners.push(runner);
+      this._runners.push(runner as TargetDeclaredRunner);
       return this;
     }
 
@@ -91,8 +102,10 @@ export function RunnerDriven<TBase extends ChildContainable>(Base: TBase) {
      * @param actions 可変長引数
      * @returns 生成したRunnerを返す
      */
-    setActionRunner(...actions: RunnerActionComplex[]): Runner {
-      const runner = new Runner();
+    setActionRunner(
+      ...actions: RunnerActionComplex<this>[]
+    ): TargetDeclaredRunner<this> {
+      const runner = new Runner<this>();
       actions.forEach((action) => {
         if (Array.isArray(action)) {
           // 並列処理化
@@ -101,11 +114,11 @@ export function RunnerDriven<TBase extends ChildContainable>(Base: TBase) {
           ) as RunnerAction;
           runner.addAction(combined);
         } else {
-          runner.addAction(action);
+          runner.addAction(action as RunnerAction);
         }
       });
       this.addRunner(runner);
-      return runner;
+      return runner as TargetDeclaredRunner;
     }
 
     /**
@@ -125,10 +138,7 @@ export function RunnerDriven<TBase extends ChildContainable>(Base: TBase) {
      * @param actionList 要素がRunnerActionList型の場合、直列処理として扱われる
      * @param reset 既存Runnerを一掃するかどうか。既定はtrue
      */
-    setParallelActionRunners(
-      actionList: RunnerActionBundle,
-      reset = true
-    ): Runner[] {
+    setParallelActionRunners(actionList: RunnerActionBundle, reset = true) {
       if (reset) this.removeAllRunners();
       const runners = actionList.map((a) => {
         // 配列変換
@@ -149,7 +159,7 @@ export function RunnerDriven<TBase extends ChildContainable>(Base: TBase) {
      *
      * @param actionBundles 可変長引数でActionBundleを順番にセット
      */
-    setActionPattern(...actionBundles: RunnerActionBundle[]) {
+    setActionPattern(...actionBundles: RunnerActionBundle<this>[]) {
       this._actionBundleList = new List(...actionBundles);
 
       // 最初のアクションセットを設定

@@ -288,3 +288,17 @@ export class Runner<T = any> extends Coroutine {
 
   static actionDictionary: Map<string, RunnerAction> = new Map();
 }
+
+/**
+ * targetプロパティが確定したRunner
+ */
+export class TargetDeclaredRunner<T = any> extends Runner<T> {
+  declare target: T;
+}
+
+/**
+ * this参照を`TargetDeclaredRunner`としたGeneratorFunctionもどき型
+ */
+export type TargetDeclaredRunnerAction<
+  T = any
+> = ContextBindableGeneratorFunction<TargetDeclaredRunner<T>>;
