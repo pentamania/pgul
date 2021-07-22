@@ -48,12 +48,24 @@ function extendStickTiltDetectFeature(app: App) {
   /* 傾きしきい値の初期化 */
   gamepad.stickDeadZoneThreshold = DEFAULT_GAMEPAD_THRESHOLD;
 
+  /* 過去スティック状態オブジェクト初期化 */
+  gamepad.prevSticks = [];
+  gamepad.sticks.forEach((stk, id) => {
+    gamepad.prevSticks[id] = new Vector2(stk.x, stk.y);
+  });
+
   /* _updateStick拡張オーバライド */
   gamepad._updateStick = function (value, stickId, axisName) {
     if (!this.sticks[stickId]) {
       // ※本来はphina.geom.Vector2
       this.sticks[stickId] = new Vector2(0, 0);
+      this.prevSticks[stickId] = new Vector2(0, 0);
     }
+
+    /* Save prev value */
+    this.prevSticks[stickId][axisName] = this.sticks[stickId][axisName];
+
+    /* Update tilt value */
     this.sticks[stickId][axisName] = value;
 
     /* tilting flag update */
@@ -62,30 +74,43 @@ function extendStickTiltDetectFeature(app: App) {
       const vy = this.sticks[stickId]["y"];
       const threshold = this.stickDeadZoneThreshold;
       if (threshold <= Math.abs(vx) || threshold <= Math.abs(vy)) {
+        // Tilted
         this.currentTilt[stickId] = 1;
       } else {
+        // Neutralized
         this.currentTilt[stickId] = 0;
       }
     }
   };
 
-  /* 毎フレーム傾きフラグ更新処理 */
+  /* 傾きフラグ初期化 */
   gamepad.currentTilt = {};
   gamepad.tilting = {};
   gamepad.tiltLast = {};
   gamepad.tiltDown = {};
+  gamepad.tiltUp = {};
+
+  /* 毎フレーム傾きフラグ更新処理 */
   app.on("enterframe", () => {
     gamepad.sticks.forEach((_stick, id) => {
       gamepad.tiltLast[id] = gamepad.tilting[id];
+
       gamepad.tilting[id] = gamepad.currentTilt[id];
       gamepad.tiltDown[id] = ((gamepad.tilting[id] ^ gamepad.tiltLast[id]) &
         gamepad.tilting[id]) as Bit;
+      gamepad.tiltUp[id] = ((gamepad.tilting[id] ^ gamepad.tiltLast[id]) &
+        gamepad.tiltLast[id]) as Bit;
     });
   });
 
   /* getStickTilt実装 */
   gamepad.getStickTilt = function (stickId) {
     return gamepad.tiltDown[stickId] == 1;
+  };
+
+  /* getStickNeutral実装 */
+  gamepad.getStickNeutral = function (stickId) {
+    return gamepad.tiltUp[stickId] === 1;
   };
 }
 

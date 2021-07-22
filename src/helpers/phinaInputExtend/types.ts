@@ -49,6 +49,11 @@ export interface PhinaGamepad {
   sticks: Vector2[];
 
   /**
+   * 過去のスティック状態を保存
+   */
+  prevSticks: Vector2[];
+
+  /**
    * 本来はphina.geom.Vector2を返却
    */
   getStickDirection: (stickId: number) => Vector2;
@@ -74,11 +79,12 @@ export interface PhinaGamepad {
 
   // 以下独自拡張 ======================
 
-  // 傾き管理フラグマップ群
+  // 方向スティック傾き管理フラグマップ群
   currentTilt: { [stickId: number]: Bit };
   tiltLast: { [stickId: number]: Bit };
   tilting: { [stickId: number]: Bit };
   tiltDown: { [stickId: number]: Bit };
+  tiltUp: { [stickId: number]: Bit };
 
   /**
    * 対応スティックが傾いたフレームだけtrueを返す
@@ -87,9 +93,8 @@ export interface PhinaGamepad {
 
   /**
    * 対応スティックがニュートラル位置に戻ったフレームだけtrueを返す
-   * 未実装
    */
-  // getStickNeutral: (stickId: number) => boolean;
+  getStickNeutral: (stickId: number) => boolean;
 
   /**
    * getStickDirectionでいちいち新規作成せず、
@@ -98,7 +103,9 @@ export interface PhinaGamepad {
   _stickDirection: Vector2;
 
   /**
-   * スティックが傾いたとする範囲
+   * スティックが傾いたとする値
+   *
+   * x、y軸いずれかの傾き値の絶対値がこの値**以上**になったら傾いたと判定
    */
   stickDeadZoneThreshold: number;
 
