@@ -445,6 +445,71 @@ export class InteractionController<AK extends KeyTag = KeyTag> {
     return this._app.keyboard.getKeyDown(LEFT_KEY_COMMON) || isGpKeyDown;
   }
 
+  /** 方向キー上のkeyUp判定 (keyboard/gam両対応) */
+  upKeyUp(): boolean {
+    const isGpKeyUp = (() => {
+      if (this.gamepadAvailable) {
+        const gp = this._app.gamepad!;
+        const stickPrevAngle = gp.prevSticks[LEFT_STICK_ID];
+        return gp.getKeyUp(UP_KEY_COMMON) || stickPrevAngle
+          ? gp.getStickNeutral(LEFT_STICK_ID) &&
+              stickPrevAngle.y <= -gp.stickDeadZoneThreshold
+          : false;
+      } else {
+        return false;
+      }
+    })();
+    return this._app.keyboard.getKeyUp(UP_KEY_COMMON) || isGpKeyUp;
+  }
+
+  downKeyUp(): boolean {
+    const isGpKeyUp = (() => {
+      if (this.gamepadAvailable) {
+        const gp = this._app.gamepad!;
+        const stickPrevAngle = gp.prevSticks[LEFT_STICK_ID];
+        return gp.getKeyUp(DOWN_KEY_COMMON) || stickPrevAngle
+          ? gp.getStickNeutral(LEFT_STICK_ID) &&
+              gp.stickDeadZoneThreshold <= stickPrevAngle.y
+          : false;
+      } else {
+        return false;
+      }
+    })();
+    return this._app.keyboard.getKeyUp(DOWN_KEY_COMMON) || isGpKeyUp;
+  }
+
+  rightKeyUp(): boolean {
+    const isGpKeyUp = (() => {
+      if (this.gamepadAvailable) {
+        const gp = this._app.gamepad!;
+        const stickPrevAngle = gp.prevSticks[LEFT_STICK_ID];
+        return gp.getKeyUp(RIGHT_KEY_COMMON) || stickPrevAngle
+          ? gp.getStickNeutral(LEFT_STICK_ID) &&
+              stickPrevAngle.x <= -gp.stickDeadZoneThreshold
+          : false;
+      } else {
+        return false;
+      }
+    })();
+    return this._app.keyboard.getKeyUp(RIGHT_KEY_COMMON) || isGpKeyUp;
+  }
+
+  leftKeyUp(): boolean {
+    const isGpKeyUp = (() => {
+      if (this.gamepadAvailable) {
+        const gp = this._app.gamepad!;
+        const stickPrevAngle = gp.prevSticks[LEFT_STICK_ID];
+        return gp.getKeyUp(LEFT_KEY_COMMON) || stickPrevAngle
+          ? gp.getStickNeutral(LEFT_STICK_ID) &&
+              gp.stickDeadZoneThreshold <= stickPrevAngle.x
+          : false;
+      } else {
+        return false;
+      }
+    })();
+    return this._app.keyboard.getKeyUp(LEFT_KEY_COMMON) || isGpKeyUp;
+  }
+
   /**
    * ゲームパッドのスティックを傾けたとする範囲
    */
