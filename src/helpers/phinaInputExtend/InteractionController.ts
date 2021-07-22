@@ -203,7 +203,13 @@ export class InteractionController<AK extends KeyTag = KeyTag> {
    *
    * @param actionKey
    */
-  keyDown(actionKey: AK): boolean {
+  keyDown(actionKey: AK | DirectionKey): boolean {
+    // DirectionKey
+    if (actionKey === "up") return this.upKeyDown();
+    if (actionKey === "left") return this.leftKeyDown();
+    if (actionKey === "down") return this.downKeyDown();
+    if (actionKey === "right") return this.rightKeyDown();
+
     const aData = this.getKeyAssignData(actionKey);
     if (!aData) return false;
 
@@ -283,7 +289,13 @@ export class InteractionController<AK extends KeyTag = KeyTag> {
    *
    * @param actionKey
    */
-  keyUp(actionKey: AK): boolean {
+  keyUp(actionKey: AK | DirectionKey): boolean {
+    // DirectionKey
+    if (actionKey === "up") return this.upKeyUp();
+    if (actionKey === "left") return this.leftKeyUp();
+    if (actionKey === "down") return this.downKeyUp();
+    if (actionKey === "right") return this.rightKeyUp();
+
     const aData = this.getKeyAssignData(actionKey);
     if (!aData) return false;
     const isGamepadActive =
