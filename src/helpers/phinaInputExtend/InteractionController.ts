@@ -271,7 +271,13 @@ export class InteractionController<AK extends KeyTag = KeyTag> {
    *
    * @param actionKey
    */
-  keyPress(actionKey: AK): boolean {
+  keyPress(actionKey: AK | DirectionKey): boolean {
+    // DirectionKey
+    if (actionKey === "up") return this.pressUp();
+    if (actionKey === "left") return this.pressLeft();
+    if (actionKey === "down") return this.pressDown();
+    if (actionKey === "right") return this.pressRight();
+
     const aData = this.getKeyAssignData(actionKey);
     if (!aData) return false;
 
