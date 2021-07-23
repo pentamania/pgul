@@ -21,6 +21,8 @@ export const DIRECTION_KEYS = [
   LEFT_KEY_COMMON,
   RIGHT_KEY_COMMON,
 ] as const;
+/** keyUp判定に使う数値： 負数なら何でもよい */
+const KEY_UP_FLG_NUM = -1;
 
 /**
  * phinaのインタラクション処理を統合処理
@@ -34,6 +36,31 @@ export class InteractionController<AK extends KeyTag = KeyTag> {
   private _assignMap: KeyAssignMap<AK> = new Map();
   private _doubleKeySuspendCountMap: Map<AK, number> = new Map();
   private _doubleKeyDownAcceptThreshold: number = DEFAULT_DOUBLE_INPUT_DELAY_FRAME;
+  protected _keyStateMap: Map<AK | DirectionKey, number> = new Map([
+    ["up", 0],
+    ["down", 0],
+    ["right", 0],
+    ["left", 0],
+  ]);
+
+  /**
+   * キーの入力状態に応じてその押下フレーム時間を更新
+   * あるいはリセット
+   *
+   * 入力状態チェックは{@link InteractionController.keyPress}に依存するため、
+   * keyPressの結果に関わる元のphina keyboard/gameappの状態が先に更新されている必要がある
+   */
+  updateKeyState() {
+    this._keyStateMap.forEach((curVal, key) => {
+      if (this.keyPressRaw(key)) {
+        const val = curVal === KEY_UP_FLG_NUM ? 1 : curVal + 1;
+        this._keyStateMap.set(key, val);
+      } else {
+        const val = curVal > 0 ? KEY_UP_FLG_NUM : 0;
+        this._keyStateMap.set(key, val);
+      }
+    });
+  }
 
   setApp(app: App) {
     this._app = app;
@@ -90,6 +117,7 @@ export class InteractionController<AK extends KeyTag = KeyTag> {
       kb: kbKey,
       gp: gpKey,
     });
+    this._keyStateMap.set(actionKey, 0);
   }
 
   /**
@@ -129,6 +157,9 @@ export class InteractionController<AK extends KeyTag = KeyTag> {
    */
   assignFromJson(json: { [actionTag in AK]: KeyAssignData }) {
     this._assignMap = new Map(Object.entries<KeyAssignData>(json) as [AK, any]);
+    this._assignMap.forEach((_data, key) => {
+      this._keyStateMap.set(key, 0);
+    });
   }
 
   /**
@@ -199,11 +230,10 @@ export class InteractionController<AK extends KeyTag = KeyTag> {
   }
 
   /**
-   * 登録したアクションのキーを押した瞬間
-   *
+   * 直接app.keyboard/gamepadのkeyDown状態を参照して判定
    * @param actionKey
    */
-  keyDown(actionKey: AK | DirectionKey): boolean {
+  keyDownRaw(actionKey: AK | DirectionKey): boolean {
     // DirectionKey
     if (actionKey === "up") return this.upKeyDown();
     if (actionKey === "left") return this.leftKeyDown();
@@ -220,6 +250,18 @@ export class InteractionController<AK extends KeyTag = KeyTag> {
         ? true
         : false;
     return this._app.keyboard.getKeyDown(aData.kb) || isGamepadActive;
+  }
+
+  /**
+   * 登録したアクションキーor方向キーの押下したフレームだけtrueとなる処理
+   *
+   * 同フレームにて予め{@link InteractionController.updateKeyState}を実行しておくこと
+   *
+   * @param key
+   */
+  keyDown(key: AK | DirectionKey): boolean {
+    const ks = this._keyStateMap.get(key);
+    return ks ? ks === 1 : false;
   }
 
   // /**
@@ -267,11 +309,10 @@ export class InteractionController<AK extends KeyTag = KeyTag> {
   }
 
   /**
-   * 登録したアクションのキーが入力中
-   *
+   * 元のapp.keyboard/gamepadの状態をみて判定
    * @param actionKey
    */
-  keyPress(actionKey: AK | DirectionKey): boolean {
+  keyPressRaw(actionKey: AK | DirectionKey): boolean {
     // DirectionKey
     if (actionKey === "up") return this.pressUp();
     if (actionKey === "left") return this.pressLeft();
@@ -291,11 +332,22 @@ export class InteractionController<AK extends KeyTag = KeyTag> {
   }
 
   /**
-   * 登録したアクションのキーを上げた瞬間
+   * 登録したアクションのキーが入力中かどうか
    *
+   * 同フレームにて予め{@link InteractionController.updateKeyState}を実行しておくこと
+   *
+   * @param key
+   */
+  keyPress(key: AK | DirectionKey): boolean {
+    const ks = this._keyStateMap.get(key);
+    return ks != null ? ks > 0 : false;
+  }
+
+  /**
+   * 元のapp.keyboard/gamepadの状態をみて判定
    * @param actionKey
    */
-  keyUp(actionKey: AK | DirectionKey): boolean {
+  keyUpRaw(actionKey: AK | DirectionKey): boolean {
     // DirectionKey
     if (actionKey === "up") return this.upKeyUp();
     if (actionKey === "left") return this.leftKeyUp();
@@ -311,6 +363,18 @@ export class InteractionController<AK extends KeyTag = KeyTag> {
         ? true
         : false;
     return this._app.keyboard.getKeyUp(aData.kb) || isGamepadActive;
+  }
+
+  /**
+   * 登録したアクションのキーを上げた瞬間
+   *
+   * 同フレームにて予め{@link InteractionController.updateKeyState}を実行しておくこと
+   *
+   * @param key 方向キー
+   */
+  keyUp(key: AK | DirectionKey): boolean {
+    const ks = this._keyStateMap.get(key);
+    return ks != null ? ks === KEY_UP_FLG_NUM : false;
   }
 
   /**
