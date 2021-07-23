@@ -337,10 +337,11 @@ export class InteractionController<AK extends KeyTag = KeyTag> {
    * 同フレームにて予め{@link InteractionController.updateKeyState}を実行しておくこと
    *
    * @param key
+   * @param threshold 指定した経過フレーム数押下しつづけたかどうかで判定 (default: 0)
    */
-  keyPress(key: AK | DirectionKey): boolean {
+  keyPress(key: AK | DirectionKey, threshold = 0): boolean {
     const ks = this._keyStateMap.get(key);
-    return ks != null ? ks > 0 : false;
+    return ks != null ? ks > threshold : false;
   }
 
   /**
