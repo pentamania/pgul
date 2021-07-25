@@ -4,6 +4,7 @@ import { App, GAMEPAD_BUTTON_CODES, KeyAssignData, KeyCode } from "./types";
 
 type KeyTag = string | number;
 type KeyAssignMap<T> = Map<T, KeyAssignData>;
+export type RecordedKeyLog = [number, number]; // [frame, keyId]
 
 // Keyboard & Gamepad common keys
 export const UP_KEY_COMMON = "up";
@@ -43,22 +44,58 @@ export class InteractionController<AK extends KeyTag = KeyTag> {
     ["left", 0],
   ]);
 
+  /** 入力キー切替のログ */
+  public recordedKeyInputLog: RecordedKeyLog[] = [];
+
   /**
-   * キーの入力状態に応じてその押下フレーム時間を更新
-   * あるいはリセット
+   * 自動操作状態
+   * 具体的には{@link InteractionController.updateKeyState}の振る舞いを変える
+   */
+  public automaticPlay: boolean = false;
+
+  /**
+   * キーの入力状態に応じてその押下フレーム時間を更新orリセット
    *
-   * 入力状態チェックは{@link InteractionController.keyPress}に依存するため、
+   * デフォルトの入力状態チェックは{@link InteractionController.keyPress}に依存するため、
    * keyPressの結果に関わる元のphina keyboard/gameappの状態が先に更新されている必要がある
+   *
+   * 自動プレイ状態状態では
+   * - keyUp状態 -> キー離した状態にリセット
+   * - keyPress/Down状態 -> 押下継続
+   * - 押してない状態 -> 何もしない
+   * を行う
    */
   updateKeyState() {
-    this._keyStateMap.forEach((curVal, key) => {
-      if (this.keyPressRaw(key)) {
-        const val = curVal === KEY_UP_FLG_NUM ? 1 : curVal + 1;
-        this._keyStateMap.set(key, val);
-      } else {
-        const val = curVal > 0 ? KEY_UP_FLG_NUM : 0;
-        this._keyStateMap.set(key, val);
-      }
+    if (this.automaticPlay) {
+      // 自動プレイ状態
+      this._keyStateMap.forEach((curVal, key) => {
+        if (curVal === KEY_UP_FLG_NUM) {
+          // keyUp状態 -> デフォルト状態に
+          this._keyStateMap.set(key, 0);
+        } else if (curVal > 0) {
+          // keyPress/Down状態 -> 押下状態つづける
+          this._keyStateMap.set(key, curVal + 1);
+        }
+      });
+    } else {
+      this._keyStateMap.forEach((curVal, key) => {
+        if (this.keyPressRaw(key)) {
+          const val = curVal === KEY_UP_FLG_NUM ? 1 : curVal + 1;
+          this._keyStateMap.set(key, val);
+        } else {
+          const val = curVal > 0 ? KEY_UP_FLG_NUM : 0;
+          this._keyStateMap.set(key, val);
+        }
+      });
+    }
+  }
+
+  /**
+   * キー状態リセット
+   */
+  resetKeyState() {
+    this._keyStateMap.forEach((_val, key) => {
+      this._keyStateMap.set(key, 0);
     });
   }
 
@@ -591,6 +628,63 @@ export class InteractionController<AK extends KeyTag = KeyTag> {
       }
     })();
     return this._app.keyboard.getKeyUp(LEFT_KEY_COMMON) || isGpKeyUp;
+  }
+
+  /**
+   * 記録したキー入力情報を破棄
+   * リプレイ用
+   */
+  resetRecordedInput(keysToRecord: (AK | DirectionKey)[]) {
+    this.recordedKeyInputLog.length = 0;
+
+    // 初期状態を0フレーム目の入力として記録
+    this._keyStateMap.forEach((v, key) => {
+      if (v > 0) {
+        const keyId = keysToRecord.findIndex((ktr) => ktr === key);
+        if (keyId > -1) {
+          this.recordedKeyInputLog.push([0, keyId]);
+        }
+      }
+    });
+  }
+
+  /**
+   * 変化した入力を記録
+   * リプレイ用
+   * @param keysToRecord
+   * @param frame フレーム値
+   */
+  recordInput(keysToRecord: (AK | DirectionKey)[], frame: number) {
+    keysToRecord.forEach((key, keyId) => {
+      if (this.keyDown(key) || this.keyUp(key)) {
+        this.recordedKeyInputLog.push([frame, keyId]);
+      }
+    });
+  }
+
+  /**
+   * 内部キー状態を変更
+   * 押下 <=> 離すを切り替える
+   *
+   * リプレイなどの自動操作用
+   *
+   * @param key
+   */
+  toggleKeyState(key: AK | DirectionKey) {
+    const keyStateMap = this._keyStateMap;
+    if (!keyStateMap.has(key)) {
+      if (process.env.NODE_ENV === "development") {
+        console.warn(`[pgul]: キー"${key}"は定義されてません`);
+      }
+      return;
+    }
+    if (keyStateMap.get(key)! > 0) {
+      // keyDown -> Up
+      keyStateMap.set(key, KEY_UP_FLG_NUM);
+    } else {
+      // keyUp -> Down
+      keyStateMap.set(key, 1);
+    }
   }
 
   /**
