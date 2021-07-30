@@ -43,6 +43,7 @@
   },
   "devDependencies": {
     "@types/jest": "^26.0.23",
+    "canvas": "^2.8.0",
     "jest": "^27.0.4",
     "prettier": "^2.2.1",
     "rollup": "^2.35.1",
