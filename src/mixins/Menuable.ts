@@ -39,19 +39,16 @@ export function Menuable<TBase extends GConstructor>(Base: TBase) {
       });
 
       // Update focus
-      this.selectItem(this._currentItemIndex);
+      this._selectItem(this._currentItemIndex);
     }
 
     /**
-     * 指定インデックスの項目を選択（フォーカス）状態にする
-     * （== その他のItemは非フォーカス化）
+     * See ${@link Menuable.selectItem}
      *
      * @param itemIndex 0 ~ アイテム数の範囲内に補正、0以下の時はループ
      * @returns
-     * 選択したアイテム要素を返す。
-     * ただしアイテムが見つからなかったり、ロックされてたらfalseを返す
      */
-    selectItem(itemIndex: number): FocusableMenuItem | false {
+    _selectItem(itemIndex: number): FocusableMenuItem | false {
       // indexを 0 ~ 最大インデックスの範囲内に収める
       itemIndex =
         itemIndex < 0
@@ -75,12 +72,50 @@ export function Menuable<TBase extends GConstructor>(Base: TBase) {
       return nextItem;
     }
 
+    _isAllItemLocked(): boolean {
+      // lock状態になってない奴が一つも見つかなければtrue
+      return this._optionItems.find((item) => !item.isLocked) === undefined;
+    }
+
+    /**
+     * 指定インデックスの項目を選択（フォーカス）状態にする
+     * （== その他のItemは非フォーカス化）
+     *
+     * @param index
+     * index Item ; 0 ~ アイテム数の範囲内に補正、0以下の時はループ
+     * @param recursiveSelect
+     * Increment index and execute method
+     * until selectable (unlocked) item is selected
+     * (default: false)
+     * @returns
+     * Selected item, or `false` if it fails.
+     * 選択したアイテム要素を返す。
+     * ただしアイテムが見つからなかったり、ロックされてたらfalseを返す
+     */
+    selectItem(index: number, recursiveSelect: boolean = false) {
+      if (recursiveSelect) {
+        if (this._isAllItemLocked()) {
+          // TODO: Warn "At least one item should be unlocked"
+          return false;
+        }
+        while (!this._selectItem(index)) {
+          index++;
+        }
+      }
+      return this._selectItem(index);
+    }
+
     /**
      * ひとつ前の項目を選択
+     * If the prev item is locked, one
      */
     selectPrev() {
+      if (this._isAllItemLocked()) {
+        // TODO: Warn "At least one item should be unlocked"
+        return false;
+      }
       let i = -1;
-      while (!this.selectItem(this._currentItemIndex + i)) {
+      while (!this._selectItem(this._currentItemIndex + i)) {
         --i;
       }
     }
@@ -89,8 +124,12 @@ export function Menuable<TBase extends GConstructor>(Base: TBase) {
      * ひとつ後の項目を選択
      */
     selectNext() {
+      if (this._isAllItemLocked()) {
+        // TODO: Warn "At least one item should be unlocked"
+        return false;
+      }
       let i = 1;
-      while (!this.selectItem(this._currentItemIndex + i)) {
+      while (!this._selectItem(this._currentItemIndex + i)) {
         ++i;
       }
     }
