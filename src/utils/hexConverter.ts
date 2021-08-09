@@ -1,15 +1,19 @@
 /**
+ * [en]
+ * Convert hex-string to number
+ *
+ * [jp]
  * ヘックス文字列を16進数に変換
  *
- * - 「#」つきでもOK
- * - すでにnumberの場合はそのまま引数を返す
- *
  * @example
- * toHexNumber("ff00ff") // => 16711935 (0xff00ff)
- * toHexNumber("#ff00ff") // => 16711935 (0xff00ff)
- * toHexNumber(0xff00ff) // => 16711935 (0xff00ff)
+ * // All returns same value: 16711935 (0xff00ff)
+ * toHexNumber("ff00ff")
+ * toHexNumber("#ff00ff")
+ * toHexNumber(0xff00ff)
  *
- * @param str
+ * @param strOrNum
+ * - string, hashed string -> to hex number,
+ * - number -> Do nothing
  */
 export function toHexNumber(strOrNum: string | number): number {
   if (typeof strOrNum === "string") {
@@ -22,15 +26,19 @@ export function toHexNumber(strOrNum: string | number): number {
 }
 
 /**
- * 16進数numberをヘックス文字列に変換
+ * [en]
+ * Convert number to 6 char hex string
+ *
+ * [jp]
+ * 16進数numberを6文字ヘックス文字列に変換
  *
  * @example
  * numToHexString(255) -> "0000ff"
  * numToHexString(255, true) -> "#0000ff"
  *
  * @param num
- * @param isHashed Add "#" on head
- * @returns
+ * @param isHashed Add "#" on head (default: false)
+ * @returns Hex string
  */
 export function numToHexString(num: number, isHashed: boolean = false) {
   let s = num.toString(16);
