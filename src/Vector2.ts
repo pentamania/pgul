@@ -32,6 +32,13 @@ export class Vector2 {
     return this.rotate(toRadian(angleDegree), pivotX, pivotY);
   }
 
+  /**
+   * @param wallNormalVec
+   */
+  reflectAngle(wallNormalVec: LooseVector2) {
+    this.setFromRadian(Vector2.reflectedAngle(this, wallNormalVec));
+  }
+
   normalize(): this {
     const len = this.length;
     if (len) {
@@ -127,4 +134,53 @@ export class Vector2 {
   static distanceSquared(rhs: LooseVector2, lhs: LooseVector2) {
     return Math.pow(rhs.x - lhs.x, 2) + Math.pow(rhs.y - lhs.y, 2);
   }
+
+  /**
+   * 内積
+   * @param a
+   * @param b
+   * @returns
+   */
+  static dot(a: LooseVector2, b: LooseVector2) {
+    return a.x * b.x + a.y * b.y;
+  }
+
+  /**
+   * R = F + 2(−F⋅N) * N
+   * R: Reflect vector, F: Force input vector, N: Normal vector
+   * @see https://qiita.com/edo_m18/items/b145f2f5d2d05f0f29c9
+   *
+   * @param d Src direction vector (No mutation)
+   * @param n Wall normal vector  (No mutation)
+   * @param vec Vector2 to store the value (Mutated)
+   * @returns Vector2
+   */
+  static reflectVector(
+    d: LooseVector2,
+    n: LooseVector2,
+    vec: Vector2 = new Vector2()
+  ): Vector2 {
+    // Calc: 2 * (−F⋅N)
+    const a = 2 * -this.dot(d, n);
+    vec.set(
+      d.x + a * n.x, // x
+      d.y + a * n.y // y
+    );
+    return vec;
+  }
+
+  /**
+   * @param d Src direction vector (No mutation)
+   * @param n Wall normal vector (No mutation)
+   * @returns Reflected vector's angle by radian
+   */
+  static reflectedAngle(d: LooseVector2, n: LooseVector2): number {
+    return this.reflectVector(d, n, innerSharedVec).getAngleByRadian();
+  }
+
+  static reflectedAngleByDegree(d: LooseVector2, n: LooseVector2): number {
+    return this.reflectVector(d, n, innerSharedVec).getAngleByDegree();
+  }
 }
+
+const innerSharedVec: Vector2 = new Vector2();
