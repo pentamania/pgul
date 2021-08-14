@@ -54,7 +54,7 @@ const FAKE_EMPTY_ARRAY: never[] = [];
  * queueRunner.step()
  */
 export class TaskQueue {
-  private _taskContext: any | null; // actionのthisとなる
+  private _taskContext: any | null = null; // actionのthisとなる
   private _tasksInProgress: Generator[] = [];
   private _queueProgressGenerator: Generator<
     number,
@@ -67,9 +67,9 @@ export class TaskQueue {
    * @param queueTaskList キュータスクリスト
    * @param actionContext action実行時のthis参照となるオブジェクト
    */
-  constructor(queueTaskList: SerialQueueTask[], actionContext: any = null) {
-    this.setSerialTaskList(queueTaskList);
-    this._taskContext = actionContext;
+  constructor(actionContext?: any, queueTaskList?: SerialQueueTask[]) {
+    if (actionContext) this._taskContext = actionContext;
+    if (queueTaskList) this.setSerialTaskList(queueTaskList);
   }
 
   /**
