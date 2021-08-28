@@ -134,6 +134,13 @@ export class TaskQueue {
     return this._tasksInProgress.splice(index, 1);
   }
 
+  /**
+   * 進行中のタスクを全て除去
+   */
+  public clearQueue() {
+    this._tasksInProgress.length = 0;
+  }
+
   setSerialTaskList(queueTaskList: SerialQueueTask[]) {
     this._currentTaskList = queueTaskList;
     // IIFEジェネレーター
