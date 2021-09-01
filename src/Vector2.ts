@@ -18,6 +18,15 @@ export class Vector2 {
     return this;
   }
 
+  /**
+   * ベクトルを反転する
+   *
+   * Inverse vector
+   */
+  inverse() {
+    return this.mul(-1);
+  }
+
   rotate(angleRadian: number, pivotX: number = 0, pivotY: number = 0) {
     const fromPivotX = this._x - pivotX;
     const fromPivotY = this._y - pivotY;
