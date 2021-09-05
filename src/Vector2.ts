@@ -190,6 +190,16 @@ export class Vector2 {
   static reflectedAngleByDegree(d: LooseVector2, n: LooseVector2): number {
     return this.reflectVector(d, n, innerSharedVec).getAngleByDegree();
   }
+
+  /**
+   * 角度（度数）からベクトルを生成
+   *
+   * @param degree
+   * @param length Length of vector default:1
+   */
+  static createFromDegree(degree: number, length?: number) {
+    return new Vector2(0, 0).setFromDegree(degree, length);
+  }
 }
 
 const innerSharedVec: Vector2 = new Vector2();
