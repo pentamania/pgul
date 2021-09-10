@@ -50,7 +50,7 @@ export class Vector2 {
 
   normalize(): this {
     const len = this.length;
-    if (len) {
+    if (len !== 0) {
       this._x /= len;
       this._y /= len;
     }
