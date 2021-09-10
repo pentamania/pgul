@@ -57,6 +57,20 @@ export class Vector2 {
     return this;
   }
 
+  /**
+   * [en] Sets the length of vector
+   *
+   * [jp] ベクトル長を設定
+   *
+   * @param len
+   */
+  setLength(len: number) {
+    const rad = this.getAngleByRadian();
+    this._x = Math.cos(rad) * len;
+    this._y = Math.sin(rad) * len;
+    return this;
+  }
+
   clone(vectorRef?: Vector2) {
     if (!vectorRef) vectorRef = new Vector2();
     vectorRef.x = this._x;
@@ -114,6 +128,9 @@ export class Vector2 {
 
   get length() {
     return Math.sqrt(Math.pow(this._x, 2) + Math.pow(this._y, 2));
+  }
+  set length(v) {
+    this.setLength(v);
   }
 
   get lengthSquared() {
