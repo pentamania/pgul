@@ -42,7 +42,7 @@ export type RunnerActionBundle<T = any> = RunnerActionComplex<T>[];
  * @param Base
  */
 export function RunnerDriven<TBase extends ChildContainable>(Base: TBase) {
-  return class extends Base {
+  return class RunnerDriven extends Base {
     _runners: TargetDeclaredRunner[] = [];
     _actionBundleList?: List<RunnerActionBundle>;
 
@@ -108,17 +108,104 @@ export function RunnerDriven<TBase extends ChildContainable>(Base: TBase) {
       const runner = new Runner<this>();
       actions.forEach((action) => {
         if (Array.isArray(action)) {
-          // 並列処理化
-          const combined = combineGeneratorFunctions.bind(runner)(
-            ...(action as GeneratorFunction[])
-          ) as RunnerAction;
-          runner.addAction(combined);
+          // 並列処理アクションを結合
+          runner.addAction(
+            RunnerDriven.combineRunnerActionList(action, runner)
+          );
         } else {
           runner.addAction(action as RunnerAction);
         }
       });
       this.addRunner(runner);
       return runner as TargetDeclaredRunner;
+    }
+
+    /**
+     * 並列処理されるRunnerを設定する
+     *
+     * @example
+     * // Each thread runs simultaniously
+     * actor.setParallelActionRunner(
+     *   [
+     *     action1, // thread_1
+     *     [action2_1, action2_2], // thread_2 (serial: 2_1 -> 2_2)
+     *     [
+     *        action3_1,
+     *        [action3_2_1, action3_2_2] // combined to parallel action
+     *     ], // thread_3
+     *     action4, // thread_4
+     *   ],
+     *   {endType: "any"} // Kill action when any thread is over
+     * )
+     *
+     * @param runnerActions
+     * @param options action options
+     * @returns {@link Runner} instance
+     */
+    setParallelActionRunner(
+      // runnerActions: RunnerActionComplex<this>[],
+      runnerActions: (
+        | RunnerActionComplex<this>
+        | RunnerActionComplex<this>[]
+      )[],
+      options: { endType: "any" | "all" } = { endType: "all" }
+    ) {
+      let allGens: Generator[] = [];
+      const runner = new Runner<this>() as TargetDeclaredRunner;
+
+      runnerActions.forEach((rnrAct) => {
+        if (Array.isArray(rnrAct)) {
+          // is serial action -> convert to serial Generator
+          const genList = (rnrAct as RunnerActionComplex<this>[]).map(
+            (actCpx) => {
+              if (Array.isArray(actCpx)) {
+                // is RunnerActionList type: Combine to single RunnerAction (is parallel)
+                return RunnerDriven.combineRunnerActionList(
+                  actCpx,
+                  runner
+                ).bind(runner)();
+              } else {
+                // is RunnerAction type
+                return actCpx.bind(runner)();
+              }
+            }
+          );
+
+          const serialGen = (function* () {
+            for (let g of genList) yield* g;
+          })();
+          allGens.push(serialGen);
+        } else {
+          // is parallel action
+          allGens.push(rnrAct.bind(runner)());
+        }
+      });
+
+      let integratedRunnerAction: RunnerAction;
+      if (options.endType === "any") {
+        // 一つでもジェネレータが死んだら終了
+        integratedRunnerAction = function* () {
+          let endFlg = false;
+          while (!endFlg) {
+            allGens.forEach((gen) => {
+              if (gen.next().done) endFlg = true;
+            });
+            yield;
+          }
+        };
+      } else {
+        // 全てのジェネレータが死んだら終了
+        integratedRunnerAction = function* () {
+          while (allGens.length) {
+            allGens = allGens.filter((gen) => !gen.next().done);
+            yield;
+          }
+        };
+      }
+
+      runner.addAction(integratedRunnerAction);
+      this.addRunner(runner);
+      return runner;
     }
 
     /**
@@ -217,6 +304,25 @@ export function RunnerDriven<TBase extends ChildContainable>(Base: TBase) {
           if (ch.resumeRunners) ch.resumeRunners();
         });
       }
+    }
+
+    /**
+     * Combine RunnerActionList to one RunnerAction
+     * @private
+     *
+     * @param actions
+     * RunnerActions to combine.
+     * These actions will run parallel
+     * @param runnerRef
+     * Runner instance to bind "this" of actions
+     */
+    static combineRunnerActionList(
+      actions: RunnerActionList,
+      runnerRef: Runner
+    ): RunnerAction {
+      return combineGeneratorFunctions.bind(runnerRef)(
+        ...(actions as GeneratorFunction[])
+      ) as RunnerAction;
     }
   };
 }
