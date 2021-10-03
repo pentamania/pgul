@@ -255,7 +255,11 @@ export function RunnerDriven<TBase extends ChildContainable>(Base: TBase) {
       // 全てのrunner処理が死んだら、都度アクションセットを切り替える処理
       this._onRunnerAllDead = () => {
         if (!this._actionBundleList) return;
+
         this.setActionRunner(...this._actionBundleList.increment());
+
+        // Update runners once for smooth action junction
+        this.updateRunners();
       };
     }
 
