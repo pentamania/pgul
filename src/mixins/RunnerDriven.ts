@@ -33,10 +33,6 @@ export type RunnerActionComplex<T = any> =
  */
 export type RunnerActionBundle<T = any> = RunnerActionComplex<T>[];
 
-// enum ActorEvent {
-//   _RunnerAllDead = "__runneralldead__",
-// }
-
 /**
  * Runnerによって駆動するためのメソッドを付与
  * @param Base
@@ -67,7 +63,6 @@ export function RunnerDriven<TBase extends ChildContainable>(Base: TBase) {
         if (!this._runners.length) {
           // 全てのrunnerがremove
           if (this._onRunnerAllDead) this._onRunnerAllDead();
-          // this.emit(ActorEvent._RunnerAllDead);
         }
       }
     }
@@ -143,7 +138,6 @@ export function RunnerDriven<TBase extends ChildContainable>(Base: TBase) {
      * @returns {@link Runner} instance
      */
     setParallelActionRunner(
-      // runnerActions: RunnerActionComplex<this>[],
       runnerActions: (
         | RunnerActionComplex<this>
         | RunnerActionComplex<this>[]
@@ -231,7 +225,6 @@ export function RunnerDriven<TBase extends ChildContainable>(Base: TBase) {
         // 配列変換
         a = Array.isArray(a) ? a : [a];
         const runner = this.setActionRunner(...a);
-        // runner.setLoop(true);
         return runner;
       });
       return runners;
