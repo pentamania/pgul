@@ -65,7 +65,7 @@ export class Runner<T = any> extends Coroutine {
    * vectorプロパティは保護されてます。
    * 取得する場合は`getVector`メソッドを使用のこと
    */
-  protected vector: Readonly<Vector2> = new Vector2(1, 0);
+  protected vector: Readonly<Vector2> = new Vector2(0, 0);
 
   /**
    * Runner対象オブジェクト
