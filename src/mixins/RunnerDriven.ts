@@ -225,7 +225,7 @@ export function RunnerDriven<TBase extends ChildContainable>(Base: TBase) {
      * @param actionList 要素がRunnerActionList型の場合、直列処理として扱われる
      * @param reset 既存Runnerを一掃するかどうか。既定はtrue
      */
-    setParallelActionRunners(actionList: RunnerActionBundle, reset = true) {
+    setMultiActionRunners(actionList: RunnerActionBundle, reset = true) {
       if (reset) this.removeAllRunners();
       const runners = actionList.map((a) => {
         // 配列変換
