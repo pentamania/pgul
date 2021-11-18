@@ -43,8 +43,8 @@ export function RunnerDriven<TBase extends ChildContainable>(Base: TBase) {
     _actionBundleList?: List<RunnerActionBundle>;
 
     /**
-     * updateRunnersにてrunnerが全removeした際に実行
-     * setActionPattern用
+     * Run when all runners were removed in {@link RunnerDrivenClass.updateRunners}
+     * Use in {@link RunnerDrivenClass.setActionPattern} to shift action-bundles
      * 更新・解除を都度忘れないこと
      */
     _onRunnerAllDead?: () => void;
@@ -61,13 +61,17 @@ export function RunnerDriven<TBase extends ChildContainable>(Base: TBase) {
           }
         }
         if (!this._runners.length) {
-          // 全てのrunnerがremove
+          // All runner removed
           if (this._onRunnerAllDead) this._onRunnerAllDead();
         }
       }
     }
 
     /**
+     * [en]
+     * Add (initialized) Runner
+     *
+     * [jp]
      * Runnerを（初期化した後に）追加
      *
      * @param runner
@@ -116,26 +120,36 @@ export function RunnerDriven<TBase extends ChildContainable>(Base: TBase) {
     }
 
     /**
-     * 並列処理されるRunnerを設定する
+     * [en]
+     * Sets Runner which runs actions parallel
+     *
+     * [jp]
+     * アクションを並列処理するRunnerを設定する
      *
      * @example
      * // Each thread runs simultaniously
      * actor.setParallelActionRunner(
      *   [
-     *     action1, // thread_1
-     *     [action2_1, action2_2], // thread_2 (serial: 2_1 -> 2_2)
+     *     // Thread_1
+     *     action1,
+     *
+     *     // Thread_2: serial
+     *     //  2_1 -> 2_2)
+     *     [action2_1, action2_2],
+     *
+     *     // Thread_3: serial+parallel
+     *     // action3_1 -> (action3_2_1 + action3_2_2)
      *     [
      *        action3_1,
-     *        [action3_2_1, action3_2_2] // combined to parallel action
-     *     ], // thread_3
-     *     action4, // thread_4
+     *        [action3_2_1, action3_2_2]
+     *     ],
      *   ],
-     *   {endType: "any"} // Kill action when any thread is over
+     *   { endType: "any" } // Kills whole action when any of the thread is over
      * )
      *
      * @param runnerActions
      * @param options action options
-     * @returns {@link Runner} instance
+     * @returns Runner instance
      */
     setParallelActionRunner(
       runnerActions: (
@@ -203,9 +217,12 @@ export function RunnerDriven<TBase extends ChildContainable>(Base: TBase) {
     }
 
     /**
-     * 並列処理される複数のRunnerを設定する
+     * [jp]
+     * 並列処理される複数のRunnerを設定,
      * 設定分だけのRunner配列を返す
-     * 本体がうろうろしながら＋画面中に弾をあちこち出す、みたいな複雑なパターンを一括設定する際に有効
+     *
+     * 本体がうろうろしながら＋画面中に弾をあちこち出す、
+     * みたいな複雑なパターンを一括設定する際に有効
      *
      * {@link setActionRunner}と似た引数を受けるが、直列・並列の扱いが逆
      *
@@ -272,8 +289,10 @@ export function RunnerDriven<TBase extends ChildContainable>(Base: TBase) {
      */
     removeAllRunners() {
       this._runners.length = 0;
-      // actionPatternサイクルで不具合が発生するので_onRunnerAllDeadはクリアしない
+
+      // actionPatternサイクルで不具合が発生するので_onRunnerAllDeadは初期化しないこと
       // this._onRunnerAllDead = undefined;
+
       return this;
     }
 
