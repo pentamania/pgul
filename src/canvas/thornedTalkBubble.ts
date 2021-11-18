@@ -50,7 +50,7 @@ export function thornedTalkBubble(
   // 上辺
   ctx.moveTo(l, t);
   for (let i = 0; i < thornNum; i++) {
-    var sx = l + i * vertThornInterval;
+    const sx = l + i * vertThornInterval;
     ctx.lineTo(sx + vertThornInterval * 0.25, t);
     ctx.lineTo(sx + vertThornInterval * 0.25 * 2, t - vertThornHeight);
     ctx.lineTo(sx + vertThornInterval * 0.25 * 3, t);
@@ -77,11 +77,11 @@ export function thornedTalkBubble(
       ); // 二段目以降
     }
   }
-  ctx.quadraticCurveTo(r, b, r + cornerGapX, b + cornerGapY); //下
 
   // 下辺
+  ctx.quadraticCurveTo(r, b, r + cornerGapX, b + cornerGapY); //下
   for (let i = thornNum - 1; 0 <= i; i--) {
-    var sx = l + i * vertThornInterval;
+    const sx = l + i * vertThornInterval;
     ctx.lineTo(sx + vertThornInterval * 0.25 * 3, b);
     ctx.lineTo(sx + vertThornInterval * 0.25 * 2, b + vertThornHeight);
     ctx.lineTo(sx + vertThornInterval * 0.25, b);
