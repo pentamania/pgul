@@ -1,6 +1,24 @@
 /**
- * トゲ付きフキダシのパスを描画
- * WIP
+ * [en]
+ * Canvas 2D API extension to add a thorned talk bubble to the current path
+ *
+ * [jp]
+ * トゲ付きフキダシのパスを描画するCanvas2D API拡張
+ *
+ * @example
+ * const ctx = canvas.getContext("2d")
+ * ctx.beginPath();
+ * pgul.canvasHelper.thornedTalkBubble.call(ctx, 10, 10, 100, 80, 12, 14, 8 ,12);
+ * ctx.closePath();
+ *
+ * @param x The x-axis coordinate of the bubble's starting point
+ * @param y The y-axis coordinate of the bubble's starting point
+ * @param width The width of bubble (including thorns)
+ * @param height The height of bubble (including thorns)
+ * @param verticalThornInterval The interval of vertical thorn
+ * @param sideThornInterval The interval of side/horizontal thorn
+ * @param verticalThornSize The size of vertical thorn
+ * @param sideThornSize The size of side/horizontal thorn
  */
 export function thornedTalkBubble(
   this: CanvasRenderingContext2D,
@@ -74,7 +92,7 @@ export function thornedTalkBubble(
         cps[i].y,
         r + sideThornWidth,
         t + (i + 1) * sideThornInterval
-      ); // 二段目以降
+      );
     }
   }
 
