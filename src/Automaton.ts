@@ -1,7 +1,7 @@
 /**
  * 各状態の振る舞いを関数で指定
  */
-export interface StateBehaviour<T = any> {
+export interface StateBehaviour<T, SL> {
   /**
    * 状態遷移した際に一度だけ行う処理
    * - thisの参照は設定したターゲット
@@ -15,7 +15,7 @@ export interface StateBehaviour<T = any> {
    * - {@link Automaton#update}経由で引数を渡すことも可能
    * - 状態ラベルをreturnするとその状態に移行（ただし同じ状態ラベルの時はそのまま）
    */
-  update?: (this: T, ...arg: any) => any;
+  update?: (this: T, ...arg: any) => SL | void;
 
   // Thinking....
   // exit?: (this: T, ...arg: any) => any;
@@ -32,7 +32,7 @@ export interface StateBehaviour<T = any> {
  *
  */
 export class Automaton<TT = any, SL = any> {
-  protected _stateBehaviorMap: Map<SL, StateBehaviour>;
+  protected _stateBehaviorMap: Map<SL, StateBehaviour<TT, SL>>;
   protected _currentStateLabel?: SL;
   target: TT;
 
@@ -103,7 +103,10 @@ export class Automaton<TT = any, SL = any> {
    * @param stateLabel ステートを示すラベル
    * @param stateBehaviorObject ステート振る舞いオブジェクト
    */
-  registerState(stateLabel: SL, stateBehaviorObject: StateBehaviour<TT>): this {
+  registerState(
+    stateLabel: SL,
+    stateBehaviorObject: StateBehaviour<TT, SL>
+  ): this {
     this._stateBehaviorMap.set(stateLabel, stateBehaviorObject);
     return this;
   }
