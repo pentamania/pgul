@@ -1,5 +1,6 @@
 import { LooseVector2 } from "./utilTypes";
 import clamp from "./utils/clamp";
+import { Vector2 } from "./Vector2";
 
 export class AreaRect {
   private _top: number;
@@ -80,6 +81,35 @@ export class AreaRect {
 
   ratioY(n: number) {
     return this._top + this.height * n;
+  }
+
+  /**
+   * [en]
+   * Calculate left/right/top/bottom and line intercepting points
+   *
+   * [jp]
+   * 直線式と矩形の上下左右交点4点を取得
+   *
+   * @param lineSlope 傾き
+   * @param lineYIntercept 切片
+   * @returns Vector2 Map
+   */
+  calcLineInterceptPoints(lineSlope: number, lineYIntercept: number) {
+    // Define x/y calculation func
+    // TODO :lineSlopeが0のときゼロ除算になるのを避ける
+    const getY = (x: number) => lineSlope * x + lineYIntercept;
+    const getX = (y: number) => (y - lineYIntercept) / lineSlope;
+
+    const top = new Vector2(getX(this.top), this.top);
+    const right = new Vector2(this.right, getY(this.right));
+    const bottom = new Vector2(getX(this.bottom), this.bottom);
+    const left = new Vector2(this.left, getY(this.left));
+    return {
+      top,
+      right,
+      bottom,
+      left,
+    };
   }
 
   get left() {
