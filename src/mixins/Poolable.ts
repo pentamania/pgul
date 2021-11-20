@@ -12,7 +12,7 @@ import { GConstructor } from "./common";
  *     this.name = "John Doe"
  *     this.isPoolPickable = false
  *   }
- *   static pick: () => Actor;
+ *   declare static pick: () => Actor;
  * }
  *
  * // Newly created
@@ -66,7 +66,7 @@ export function Poolable<TBase extends GConstructor>(
      *
      * @returns Instance of Mixin-ed class
      */
-    static pick(..._args: any) {
+    static pick(..._args: any): PoolableClass {
       let instance = _pool.pick(this.checkAvailable);
       if (!instance) {
         instance = new this();
