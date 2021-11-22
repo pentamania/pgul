@@ -8,6 +8,7 @@ export { default as stringToEnum } from "./stringToEnum";
 export { default as objectKeysToEnum } from "./keysToEnum";
 export { default as zeroFillNum } from "./zeroFillNum";
 export { default as combineGeneratorFunctions } from "./combineGeneratorFunctions";
+export { default as combineGeneratorFunctionsLinear } from "./combineGeneratorFunctionsLinear";
 export { default as createStepGenerator } from "./createStepGenerator";
 export { default as formatToPercentage } from "./formatToPercentage";
 export { default as rangedTimes } from "./rangedTimes";
