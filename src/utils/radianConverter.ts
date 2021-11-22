@@ -37,11 +37,13 @@ export function toRadianFromIntTable(deg: number): number | undefined {
  * ラジアン値をY軸反転する
  *
  * @example
- * flipRadianVertical(0) // => 3.14..
+ * const deg225Rad = Math.PI * 1.25
+ * flipRadianVertical(deg225Rad) // => 1.75π  (deg225 -> deg315)
+ * flipRadianVertical(deg225Rad, false) // => -0.25π (deg225 -> -deg45)
  *
  * @param rad
  * @param positize 負数だった場合、一周して正に修正 default: true
- * @returns
+ * @returns 計算精度の問題上、厳密な値にはならないことに注意
  */
 export function flipRadianVertical(rad: number, positize: boolean = true) {
   let flippedRad = Math.atan2(Math.sin(rad), -Math.cos(rad));
@@ -55,11 +57,12 @@ export function flipRadianVertical(rad: number, positize: boolean = true) {
  * ラジアン値をX軸反転する
  *
  * @example
- * flipRadianVertical(90) // => 0
+ * flipRadianHorizontal(Math.PI/2) // => 1.5π (deg90 -> deg270)
+ * flipRadianHorizontal(Math.PI/2, false) // => -0.5π (deg90 -> -deg90)
  *
  * @param rad
- * @param positize 負数だった場合、一周して正に修正 default: true
- * @returns
+ * @param positize 負数だった場合、一周して正に修正
+ * @returns 計算精度の問題上、厳密な値にはならないことに注意
  */
 export function flipRadianHorizontal(rad: number, positize: boolean = true) {
   let flippedRad = Math.atan2(-Math.sin(rad), Math.cos(rad));
