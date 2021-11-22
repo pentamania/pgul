@@ -67,3 +67,28 @@ export function flipRadianHorizontal(rad: number, positize: boolean = true) {
 
   return flippedRad;
 }
+
+/**
+ * Normalize radian value within -π ~ π
+ *
+ * @param rad
+ * @returns
+ */
+export function normalizeRadian(rad: number) {
+  return Math.atan2(Math.sin(rad), Math.cos(rad));
+}
+
+/**
+ * Normalize degree value within -180 ~ 180
+ *
+ * @example
+ * normalizeDegree(360) // => 0
+ * normalizeDegree(270) // => -90
+ * normalizeDegree(540) // => 180
+ *
+ * @param rad
+ * @returns
+ */
+export function normalizeDegree(deg: number) {
+  return toDegree(normalizeRadian(toRadian(deg)));
+}

@@ -1,8 +1,11 @@
-import { flipRadianVertical, toRadian } from "../../src/utils/radianConverter";
+import {
+  flipRadianVertical,
+  normalizeDegree,
+  toRadian,
+} from "../../src/utils/radianConverter";
+const toleratedFloatDigits = 5;
 
 describe("radianConverter#flipRadianVertical", () => {
-  const toleratedFloatDigits = 5;
-
   test("Basic: deg 0 be deg 180", () => {
     expect(flipRadianVertical(0)).toBeCloseTo(
       toRadian(180),
@@ -63,5 +66,19 @@ describe("radianConverter#flipRadianVertical", () => {
       toRadian(-135),
       toleratedFloatDigits
     );
+  });
+});
+
+describe("radianConverter#normalizeDegree", () => {
+  test("Deg 360 to be 0", () => {
+    expect(normalizeDegree(360)).toBeCloseTo(0, toleratedFloatDigits);
+  });
+
+  test("Deg 270 to be -90", () => {
+    expect(normalizeDegree(270)).toBeCloseTo(-90, toleratedFloatDigits);
+  });
+
+  test("Deg 540 to be 180", () => {
+    expect(normalizeDegree(540)).toBeCloseTo(180, toleratedFloatDigits);
   });
 });
