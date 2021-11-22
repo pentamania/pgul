@@ -1,7 +1,12 @@
 const MAX = -1 >>> 0;
 
 /**
- * @class Random
+ * [en]
+ * Random Generator controllable with seed
+ *
+ * [jp]
+ * シード値設定可能なランダム値生成クラス
+ *
  * @see https://sbfl.net/blog/2017/06/01/javascript-reproducible-random/
  */
 export class Random {
@@ -10,12 +15,16 @@ export class Random {
   private z!: number;
   private w!: number;
 
+  /**
+   * @param seed default: Data.now
+   */
   constructor(seed: number = Date.now()) {
     this.resetSeed(seed);
   }
 
   /**
    * 初期化＋初期シード値セット
+   *
    * @param v
    */
   resetSeed(v: number) {
@@ -26,8 +35,7 @@ export class Random {
   }
 
   /**
-   * メイン処理
-   * XorShiftで次のランダム値を返す
+   * XorShiftでパラメータ更新＋次のランダム値を返す
    */
   next() {
     let t;
@@ -41,7 +49,8 @@ export class Random {
 
   /**
    * シード値がある以外、Math.randomと一緒
-   * @returns 0 ~ 1
+   *
+   * @returns float ranging from 0 to 1
    */
   random() {
     return Random.normalize(this.next());
@@ -49,12 +58,23 @@ export class Random {
 
   /**
    * 任意の範囲の整数を得る
+   *
    * @param min {number}
    * @param max {number}
    */
   randInt(min: number, max: number) {
     const r = Math.abs(this.next());
     return min + (r % (max + 1 - min));
+  }
+
+  /**
+   * 任意の範囲の浮動小数点を得る
+   *
+   * @param min {number}
+   * @param max {number}
+   */
+  randFloat(min: number, max: number) {
+    return min + this.random() * (max - min);
   }
 
   set seed(v) {
@@ -66,6 +86,7 @@ export class Random {
 
   /**
    * 0 ~ 1の間の数字にクランプ
+   *
    * @param n
    */
   static normalize(n: number) {
