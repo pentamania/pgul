@@ -1,5 +1,6 @@
 import clamp from "./utils/clamp";
 
+// Helper vars, funcs
 const oneThird = 1 / 3;
 const oneSixth = 1 / 6;
 const half = 0.5;
@@ -14,7 +15,8 @@ function hue2rgb(p: number, q: number, t: number) {
 }
 
 /**
- * HSL値を保持して
+ * HSL色処理ヘルパークラス
+ * HSL値を保持し、RGBに変換などする
  */
 export class HslColorHelper {
   /** hue: 0 ~ 1  */
@@ -25,9 +27,9 @@ export class HslColorHelper {
   _l: number;
 
   /**
-   * @param h
-   * @param s
-   * @param l
+   * @param {number} [h=0]
+   * @param {number} [s=0.5]
+   * @param {number} [l=0.5]
    */
   constructor(h: number = 0, s: number = 0.5, l: number = 0.5) {
     this._h = h;
