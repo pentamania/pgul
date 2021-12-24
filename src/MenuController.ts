@@ -90,6 +90,7 @@ export class MenuController<ML = any> {
   /**
    * 直前のメニューに戻る
    *
+   * @param resetCurrent Whether to reset current menu item selection
    * @returns 前メニューの有無をBooleanで返す
    */
   backToPrevMenu(resetCurrent: boolean = false): boolean {
@@ -103,15 +104,16 @@ export class MenuController<ML = any> {
   }
 
   /**
-   * メニュー履歴をクリア
+   * メニュー遷移履歴をクリア
    */
   clearHistory() {
     this._prevMenuStack.length = 0;
   }
 
   /**
-   * 選択中の項目オブジェクトを実行.
-   * ラベル文字列を返した場合、対応するメニューをアクティブ化
+   * 選択中の項目を実行.
+   *
+   * 実行結果がラベル文字列を返した場合、対応するメニューをアクティブ化
    *
    * @returns 実行結果を返す
    */
@@ -125,9 +127,8 @@ export class MenuController<ML = any> {
   }
 
   /**
-   * ひとつ前の項目を選択
-   *
-   * @returns
+   * 現在のメニューの一つ前の項目を選択
+   * ＆その参照を返す（存在すれば）
    */
   selectPrevOption() {
     if (!this.currentMenu) {
@@ -138,9 +139,8 @@ export class MenuController<ML = any> {
   }
 
   /**
-   * ひとつ後の項目を選択
-   *
-   * @returns
+   * 現在のメニューの一つ後の項目を選択
+   * ＆その参照を返す（存在すれば）
    */
   selectNextOption() {
     if (!this.currentMenu) {
@@ -150,6 +150,7 @@ export class MenuController<ML = any> {
     return this.currentMenu.selectNext();
   }
 
+  /** 現在のメニュー参照 */
   get currentMenu() {
     return this._currentMenu;
   }
