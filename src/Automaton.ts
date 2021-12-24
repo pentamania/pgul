@@ -5,14 +5,14 @@ export interface StateBehaviour<T, SL> {
   /**
    * 状態遷移した際に一度だけ行う処理
    * - thisの参照は設定したターゲット
-   * - {@link Automaton#update}経由で引数を渡すことも可能
+   * - {@link Automaton.update}経由で引数を渡すことも可能
    */
   enter: (this: T, ...arg: any) => any;
 
   /**
    * その状態中、毎フレーム行う処理
    * - thisの参照は設定したターゲット
-   * - {@link Automaton#update}経由で引数を渡すことも可能
+   * - {@link Automaton.update}経由で引数を渡すことも可能
    * - 状態ラベルをreturnするとその状態に移行（ただし同じ状態ラベルの時はそのまま）
    */
   update?: (this: T, ...arg: any) => SL | void;
