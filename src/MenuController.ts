@@ -147,4 +147,9 @@ export class MenuController<ML = any> {
   get currentMenu() {
     return this._currentMenu;
   }
+
+  /** 直前のメニュー参照を取得 */
+  get previousMenu(): Menu | undefined {
+    return this._prevMenuStack[this._prevMenuStack.length - 1];
+  }
 }
