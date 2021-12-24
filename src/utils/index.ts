@@ -16,3 +16,4 @@ export { default as calcDividedAngles } from "./calcDividedAngles";
 export { default as setWindowFocusCallback } from "./setWindowFocusCallback";
 export { default as periodChunkToDots } from "./periodChunkToDots";
 export { default as splitTextByLetterNum } from "./splitTextByLetterNum";
+export { default as sliceGrid } from "./sliceGrid";
