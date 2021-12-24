@@ -1,7 +1,10 @@
 // export interface LooseObject {
 //   [ke: string]: any;
 // }
-export type LooseObject = Record<string | number, any>;
+export type LooseObject = Record<string | number | symbol, any>;
+
+/** @alias LooseObject */
+export type KeyValuePairs = Record<string | number | symbol, any>;
 
 export type LooseVector2 = { x: number; y: number; [key: string]: any };
 
