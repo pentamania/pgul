@@ -161,4 +161,13 @@ export class HslColorHelper {
 
     return new HslColorHelper(h, s, l);
   }
+
+  /**
+   * Convert hue value from degree(0 ~ 360) to 0 ~ 0.1
+   *
+   * @param v
+   */
+  static normalizeHue(v: number) {
+    return v / 360;
+  }
 }
