@@ -70,15 +70,21 @@ export class MenuController<ML = any> {
 
   /**
    * アクティブにしたいメニューをlabel指定
+   *
+   * @param label
+   * @param resetState
    */
-  setActiveMenu(label: ML) {
+  setActiveMenu(label: ML, resetState: boolean = false) {
     if (this._currentMenu) {
-      // 現在のメニューをスタック記録
+      // 現在のメニューをスタック保存
       this._prevMenuStack.push(this._currentMenu);
     }
 
     let nextMenu = this.getMenu(label);
-    if (nextMenu) this._setActiveMenu(nextMenu);
+    if (nextMenu) {
+      this._setActiveMenu(nextMenu);
+      if (resetState) nextMenu.selectItem(0);
+    }
   }
 
   /**
