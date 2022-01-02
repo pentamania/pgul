@@ -3,7 +3,7 @@ export * from "./Timer";
 export * from "./Random";
 export * from "./Vector2";
 export * from "./Coroutine";
-export * from "./Runner/index";
+export * from "./runner/index";
 export * from "./TaskQueue";
 export * from "./AreaRect";
 export * from "./Pool";
