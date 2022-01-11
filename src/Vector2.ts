@@ -84,6 +84,12 @@ export class Vector2 {
     return this;
   }
 
+  copyFrom(v: LooseVector2) {
+    this._x = v.x;
+    this._y = v.y;
+    return this;
+  }
+
   setFromRadian(rad: number, len: number = 1) {
     this._x = Math.cos(rad) * len;
     this._y = Math.sin(rad) * len;
