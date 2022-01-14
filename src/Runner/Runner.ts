@@ -227,7 +227,8 @@ export class Runner<T = any> extends Coroutine {
    * 進行方向（vector方向）をセット（度数単位）
    * @param degree 度数単位
    */
-  setDirection(degree: number) {
+  setDirection(degree: number, speed?: number) {
+    if (speed != null) this.setSpeed(speed);
     return this.setDirectionByRadian(toRadian(degree));
   }
 
