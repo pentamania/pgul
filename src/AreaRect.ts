@@ -132,6 +132,11 @@ export class AreaRect {
     return this._bottom - this._top;
   }
 
+  /** 対角線長さ */
+  get diagonalLength() {
+    return Math.sqrt(Math.pow(this.width, 2) + Math.pow(this.height, 2));
+  }
+
   get centerX() {
     return this.width / 2;
   }
