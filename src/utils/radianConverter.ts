@@ -5,6 +5,9 @@ const RAD_TO_DEG = 180 / Math.PI;
 
 export const RAD360 = Math.PI * 2;
 
+/** @alias RAD360 */
+export const PI2 = RAD360;
+
 export function toRadian(deg: number) {
   return deg * DEG_TO_RAD;
 }
