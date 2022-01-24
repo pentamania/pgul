@@ -1,5 +1,5 @@
 import { Pool } from "../Pool";
-import { GConstructor } from "./common";
+import { GConstructor } from "../utilTypes";
 
 /**
  * オブジェクトプーリング機能を付与する

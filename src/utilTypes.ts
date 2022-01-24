@@ -8,6 +8,13 @@ export type KeyValuePairs = Record<string | number | symbol, any>;
 
 export type LooseVector2 = { x: number; y: number; [key: string]: any };
 
+/** @alias LooseVector2 */
+export interface TwoDimensionalObject {
+  x: number;
+  y: number;
+  [k: string]: any;
+}
+
 export type LooseFunction = (...args: any) => any;
 
 /**
@@ -24,3 +31,22 @@ export interface EventListenable {
   on: (eventType: string, handler: LooseFunction) => any;
   off: (eventType: string, handler: LooseFunction) => any;
 }
+
+/**
+ * 汎用コンストラクタ定義
+ *
+ * ミックスイン後のクラス型を定義
+ * @see https://www.typescriptlang.org/docs/handbook/mixins.html#constrained-mixins
+ *
+ * @example
+ * type Positionable = GConstructor<{ setPos: (x: number, y: number) => void }>;
+ */
+export type GConstructor<T = {}> = new (...args: any[]) => T;
+
+/**
+ * プロパティとしてx, yを持った2Dコンストラクタ型
+ */
+export type TwoDimensionalObjectConstructor = GConstructor<{
+  x: number;
+  y: number;
+}>;

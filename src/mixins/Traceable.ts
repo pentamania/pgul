@@ -3,7 +3,7 @@ import { Vector2 } from "../Vector2";
 import {
   TwoDimensionalObject,
   TwoDimensionalObjectConstructor,
-} from "./common";
+} from "../utilTypes";
 
 const DEFAULT_TRACE_LIST_SIZE = 8;
 

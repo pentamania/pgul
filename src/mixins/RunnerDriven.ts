@@ -6,7 +6,7 @@ import {
   TargetDeclaredRunnerAction,
 } from "../runner/index";
 import combineGeneratorFunctions from "../utils/combineGeneratorFunctions";
-import { GConstructor } from "./common";
+import { GConstructor } from "../utilTypes";
 
 type ChildContainable = GConstructor<{
   children?: any[];

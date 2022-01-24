@@ -1,4 +1,4 @@
-import { GConstructor } from "./common";
+import { GConstructor } from "../utilTypes";
 
 export function Chargable<TBase extends GConstructor>(Base: TBase) {
   return class Chargable extends Base {

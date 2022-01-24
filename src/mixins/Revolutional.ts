@@ -2,7 +2,7 @@ import { clamp, toRadian } from "../utils/index";
 import {
   TwoDimensionalObject,
   TwoDimensionalObjectConstructor,
-} from "./common";
+} from "../utilTypes";
 
 // Params
 const DEFAULT_REVOLUTION_VELOCITY_THRESHOLD = toRadian(2);
