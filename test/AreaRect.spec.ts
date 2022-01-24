@@ -1,4 +1,38 @@
 import { AreaRect } from "../src/AreaRect";
+type Coord = [number, number];
+
+describe("AreaRect: Test bounds", () => {
+  const rect = new AreaRect(0, 0, 100, 200);
+  let coord: Coord;
+
+  // Out of Bound
+  test("Should coord [50, 50] not be out of bound", () => {
+    coord = [50, 50];
+    expect(rect.outOfRect(...coord)).toBe(false);
+  });
+  test("Boundary test: Should coord [100, 200] not be out of bound", () => {
+    coord = [100, 200];
+    expect(rect.outOfRect(...coord)).toBe(false);
+  });
+  test("Should coord [-2, 0] be out of bound", () => {
+    coord = [-2, 0];
+    expect(rect.outOfRect(...coord)).toBe(true);
+  });
+
+  // Within Bound
+  test("Should coord [50, 50] be within bound", () => {
+    coord = [50, 50];
+    expect(rect.withinBound(...coord)).toBe(true);
+  });
+  test("Boundary test: Should coord [100, 200] be within bound", () => {
+    coord = [100, 200];
+    expect(rect.withinBound(...coord)).toBe(true);
+  });
+  test("Should coord [-2, 0] not be within bound", () => {
+    coord = [-2, 0];
+    expect(rect.withinBound(...coord)).toBe(false);
+  });
+});
 
 describe("AreaRect#calcLineInterceptPoints", () => {
   describe("Rect coord [0, 0, 100, 200] vs Line y=0.5x+1", () => {
