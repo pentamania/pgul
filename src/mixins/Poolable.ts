@@ -37,10 +37,14 @@ export function Poolable<TBase extends GConstructor>(
   const _pool = new Pool<PoolableClass>();
 
   class PoolableClass extends Base {
-    /** 使える状態にあるかどうかのデフォルトフラグ */
+    /**
+     * [jp]
+     * 使える状態にあるかどうかのデフォルトフラグ
+     */
     isPoolPickable: boolean = true;
 
     /**
+     * [jp]
      * プールからpick後に実行する初期化処理
      * 必要に応じて定義する
      *
@@ -49,6 +53,7 @@ export function Poolable<TBase extends GConstructor>(
     resetParam?(..._args: any): any;
 
     /**
+     * [jp]
      * 使用可能（プールからpick可能）かどうか判定
      * 必要に応じてオーバーライド
      *
@@ -60,9 +65,14 @@ export function Poolable<TBase extends GConstructor>(
     }
 
     /**
-     * プールから引き出す
-     * 足りない場合は都度instance化して補充され、
+     * [jp]
+     * プールからインスタンスを引き出す
+     *
+     * 足りない場合は都度instance化して補充、
      * 必ずインスタンスを返す
+     *
+     * クラスに`resetParam`が定義されている場合は返却前に実行される
+     * pickに渡された引数はそのままresetParamにも渡される
      *
      * @returns Instance of Mixin-ed class
      */
@@ -88,6 +98,9 @@ export function Poolable<TBase extends GConstructor>(
       _pool.clearPool();
     }
 
+    /**
+     * プール数
+     */
     static get pooledNum() {
       return _pool.pooledNum;
     }
