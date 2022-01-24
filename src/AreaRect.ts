@@ -48,6 +48,14 @@ export class AreaRect {
     return this.outOfRect(element.x, element.y);
   }
 
+  withinBound(x: number, y: number): boolean {
+    return !this.outOfRect(x, y);
+  }
+
+  elementWithinBound(element: LooseVector2): boolean {
+    return this.withinBound(element.x, element.y);
+  }
+
   /**
    * マージン範囲を含めた矩形の外かどうか
    * @param x
