@@ -62,6 +62,7 @@ export class TaskQueue {
     unknown
   > | null = null;
   private _currentTaskList?: SerialQueueTask[];
+  protected active = true;
 
   /**
    * @param queueTaskList キュータスクリスト
@@ -77,6 +78,8 @@ export class TaskQueue {
    * next? tick?にする？
    */
   step() {
+    if (!this.active) return;
+
     // 大本のQueue進める
     if (this._queueProgressGenerator) {
       const queueResult = this._queueProgressGenerator.next();
@@ -172,6 +175,14 @@ export class TaskQueue {
         yield currentQueueIndex;
       }
     }.bind(this)();
+  }
+
+  resume() {
+    this.active = true;
+  }
+
+  pause() {
+    this.active = false;
   }
 
   get isAlive() {
