@@ -37,6 +37,8 @@ export class InteractionController<AK extends KeyTag = KeyTag> {
   private _assignMap: KeyAssignMap<AK> = new Map();
   private _doubleKeySuspendCountMap: Map<AK, number> = new Map();
   private _doubleKeyDownAcceptThreshold: number = DEFAULT_DOUBLE_INPUT_DELAY_FRAME;
+
+  /** キーラベル=> 押下フレーム数 のMap */
   protected _keyStateMap: Map<AK | DirectionKey, number> = new Map([
     ["up", 0],
     ["down", 0],
@@ -369,12 +371,16 @@ export class InteractionController<AK extends KeyTag = KeyTag> {
   }
 
   /**
-   * 登録したアクションのキーが入力中かどうか
+   * 指定したアクションキーが入力中かどうか
    *
    * 同フレームにて予め{@link InteractionController.updateKeyState}を実行しておくこと
    *
    * @param key
-   * @param threshold 指定した経過フレーム数押下しつづけたかどうかで判定 (default: 0)
+   * 未登録の場合はfalseを返す
+   *
+   * @param threshold
+   * 指定した経過フレーム数押下しつづけたかどうかで判定 (default: 0)
+   * キーの長押し判定に使用
    */
   keyPress(key: AK | DirectionKey, threshold = 0): boolean {
     const ks = this._keyStateMap.get(key);
@@ -418,6 +424,10 @@ export class InteractionController<AK extends KeyTag = KeyTag> {
   /**
    * ↑入力かどうか
    *
+   * - ゲームパット・キーボード両方をチェック
+   * - ゲームパットについては十字キー押下とアナログスティック傾きもチェックし、
+   * どちらかがtrueなら入力しているとみなす
+   *
    * @example
    * update() {
    *   if (controller.pressUp()) {
@@ -443,6 +453,7 @@ export class InteractionController<AK extends KeyTag = KeyTag> {
 
   /**
    * ↓入力中かどうか
+   * 詳細は{@link InteractionController.pressUp}を参照
    *
    * @returns 入力中はtrueを返す
    */
@@ -461,6 +472,10 @@ export class InteractionController<AK extends KeyTag = KeyTag> {
     // return (kb.getKey('down') || gp.getKey(DOWN_KEY) || gpAngle.y > GAMEPAD_THRESHOLD)
   }
 
+  /**
+   * ←入力中かどうか
+   * 詳細は{@link InteractionController.pressUp}を参照
+   */
   pressLeft() {
     const isGpPressed = (() => {
       if (this.gamepadAvailable) {
@@ -475,6 +490,10 @@ export class InteractionController<AK extends KeyTag = KeyTag> {
     return this._app.keyboard.getKey(LEFT_KEY_COMMON) || isGpPressed;
   }
 
+  /**
+   * →入力中かどうか
+   * 詳細は{@link InteractionController.pressUp}を参照
+   */
   pressRight() {
     const isGpPressed = (() => {
       if (this.gamepadAvailable) {
@@ -509,7 +528,7 @@ export class InteractionController<AK extends KeyTag = KeyTag> {
   }
 
   /**
-   * 下キーのkeydown
+   * ↓キーのkeydown
    */
   downKeyDown() {
     const isGpKeyDown = (() => {
@@ -651,6 +670,7 @@ export class InteractionController<AK extends KeyTag = KeyTag> {
   /**
    * 変化した入力を記録
    * リプレイ用
+   *
    * @param keysToRecord
    * @param frame フレーム値
    */
