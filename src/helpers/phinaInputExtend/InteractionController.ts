@@ -297,10 +297,11 @@ export class InteractionController<AK extends KeyTag = KeyTag> {
    * 同フレームにて予め{@link InteractionController.updateKeyState}を実行しておくこと
    *
    * @param key
+   * @param border 判定押下フレーム値を変更する場合に指定 (default:1)
    */
-  keyDown(key: AK | DirectionKey): boolean {
+  keyDown(key: AK | DirectionKey, border: number = 1): boolean {
     const ks = this._keyStateMap.get(key);
-    return ks ? ks === 1 : false;
+    return ks ? ks === border : false;
   }
 
   // /**
