@@ -274,6 +274,18 @@ export function RunnerDriven<TBase extends ChildContainable>(Base: TBase) {
     }
 
     /**
+     * @alias setActionPattern
+     * See {@link RunnerDrivenClass.prototype.setActionPattern}
+     *
+     * @param params
+     */
+    setActionSequence(
+      ...params: Parameters<typeof RunnerDrivenClass.prototype.setActionPattern>
+    ): void {
+      return this.setActionPattern(...params);
+    }
+
+    /**
      * 指定runnerを除去
      * @param removedRunner
      */
