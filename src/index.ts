@@ -14,6 +14,8 @@ export * from "./Debugger";
 export * from "./MenuController";
 export * from "./ColorHelper";
 
+export * from "./angular/index";
+
 export * from "./dom/Stats";
 
 export * from "./mixins/Menuable";
