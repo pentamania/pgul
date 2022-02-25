@@ -87,6 +87,13 @@ export function Poolable<TBase extends GConstructor>(
       return instance;
     }
 
+    /**
+     * インスタンスを生成してプールする
+     */
+    static pool() {
+      _pool.push(new this());
+    }
+
     static createInstance() {
       return new this();
     }
