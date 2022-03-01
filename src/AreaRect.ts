@@ -8,22 +8,19 @@ export class AreaRect {
   private _right: number;
   private _bottom: number;
   private _margin: number;
-  private _padding: number;
 
   constructor(
     left: number,
     top: number,
     right: number,
     bottom: number,
-    margin = 0,
-    padding = 0
+    margin = 0
   ) {
     this._left = left;
     this._top = top;
     this._right = right;
     this._bottom = bottom;
     this._margin = margin;
-    this._padding = padding;
   }
 
   /**
