@@ -1,6 +1,6 @@
 import clamp from "./utils/clamp";
 
-// Helper vars, funcs
+// Helper vars & funcs
 const oneThird = 1 / 3;
 const oneSixth = 1 / 6;
 const half = 0.5;
@@ -13,6 +13,8 @@ function hue2rgb(p: number, q: number, t: number) {
   if (t < twoThird) return p + (q - p) * (twoThird - t) * 6;
   return p;
 }
+
+export type ColorCodeTupple = [number, number, number];
 
 /**
  * HSL色処理ヘルパークラス
@@ -109,7 +111,7 @@ export class HslColorHelper {
    * @param s 0 ~ 1
    * @param l 0 ~ 1
    */
-  static hslToRgb(h: number, s: number, l: number): [number, number, number] {
+  static hslToRgb(h: number, s: number, l: number): ColorCodeTupple {
     let r, g, b;
     if (s === 0) {
       // 白黒
@@ -125,15 +127,15 @@ export class HslColorHelper {
   }
 
   /**
-   * RGBから生成
+   * RGB数値（10進数, 0 ~ 255）からインスタンス生成
    * @see https://stackoverflow.com/a/9493060
    *
-   * @param r
-   * @param g
-   * @param b
-   * @returns
+   * @param r Normalized to 0 ~ 255
+   * @param g Normalized to 0 ~ 255
+   * @param b Normalized to 0 ~ 255
+   * @returns HslColorHelper instance
    */
-  static fromRgb(r: number, g: number, b: number) {
+  static fromRgb(r: number, g: number, b: number): HslColorHelper {
     (r /= 255), (g /= 255), (b /= 255);
     const max = Math.max(r, g, b);
     const min = Math.min(r, g, b);
@@ -162,6 +164,57 @@ export class HslColorHelper {
     }
 
     return new HslColorHelper(h, s, l);
+  }
+
+  /**
+   * RGB文字列をパースし、[r, g, b]型の数値（10進数）配列を返す
+   * ハッシュ（"#"）つきでもOK
+   *
+   * @example
+   * HslColorHelper.parseRgbString("#ff00fe"); // [255, 0, 254]
+   *
+   * @param rgbStr
+   * @returns HslColorHelper instance
+   */
+  static parseRgbString(rgbStr: string): ColorCodeTupple {
+    if (rgbStr[0] === "#") rgbStr = rgbStr.slice(1);
+    const res: ColorCodeTupple = [0, 0, 0];
+    for (let i = 0; i < res.length; i++) {
+      const j = i * 2;
+      const v = rgbStr.slice(j, j + 2);
+      res[i] = parseInt(v, 16);
+    }
+    return res;
+  }
+
+  /**
+   * RGB文字列からインスタンス生成
+   *
+   * @example
+   * const color = HslColorHelper.fromRgbString("ff0000")
+   * console.log(color.h === 0); // Red
+   *
+   * @param rgbStr
+   * @returns HslColorHelper instance
+   */
+  static fromRgbString(rgbStr: string): HslColorHelper {
+    return HslColorHelper.fromRgb(...HslColorHelper.parseRgbString(rgbStr));
+  }
+
+  /**
+   * RGB数値(10進数)からインスタンス生成
+   *
+   * @example
+   * const color = HslColorHelper.fromRgbHex(16777215); // #ffffff
+   * console.log(color.l === 1);
+   *
+   * @param rgbStr
+   * @returns HslColorHelper instance
+   */
+  static fromRgbHex(rgbHex: number): HslColorHelper {
+    return HslColorHelper.fromRgb(
+      ...HslColorHelper.parseRgbString(rgbHex.toString(16))
+    );
   }
 
   /**
