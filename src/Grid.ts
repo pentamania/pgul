@@ -45,6 +45,40 @@ export class GridHelper {
     this._col = col || this._col;
   }
 
+  /**
+   * Set grid by grid width & height
+   *
+   * @param colWidth Column width
+   * @param rowHeight Row height: colWidth will be used when undefined
+   * @param toIntMethod Set Math methods to convert to int
+   */
+  setGridFromSize(
+    colWidth: number,
+    rowHeight: number = colWidth,
+    toIntMethod?: "ceil" | "floor" | "round"
+  ) {
+    this._col = this._width / colWidth;
+    this._row = this._height / rowHeight;
+    if (toIntMethod) {
+      let func;
+      switch (toIntMethod) {
+        case "ceil":
+          func = Math.ceil;
+          break;
+        case "floor":
+          func = Math.floor;
+          break;
+        case "round":
+          func = Math.round;
+          break;
+      }
+      if (func) {
+        this._col = func(this._col);
+        this._row = func(this._row);
+      }
+    }
+  }
+
   spanX(n: number) {
     return (this._width / this._row) * n;
   }
