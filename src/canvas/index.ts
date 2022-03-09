@@ -6,3 +6,4 @@ export * from "./imageBlending";
 export * from "./talkBubble";
 export * from "./thornedTalkBubble";
 export * from "./trapezoid";
+export * from "./glitch";
