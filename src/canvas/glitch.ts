@@ -1,29 +1,33 @@
 import { Random } from "../Random";
-import { clearCanvas, copyImageSize } from "./utils";
+import { clearCanvas, copyImageSize, copyImageToCanvas } from "./utils";
 
 const sharedRng = new Random();
+const bufferCanvas = document.createElement("canvas");
 
 /**
- * テクスチャをぐちゃぐちゃにする
+ * Glitch canvas image
  *
- * @param srcImage
- * @param chipSize chip粒度ピクセル数 0は無効
- * @param seed int ランダムシード：結果を固定したい場合に指定
- * @param discreteFreq int 歯抜けの頻度、高いほど頻度低
- * @param destCanvas
- * @returns destCanvas
+ * @example
+ * const ctx = canvasWithSomethingRendered.getContext("2d")
+ * pgul.canvasHelper.glitch.call(ctx, 16, 1, 4)
+ *
+ * @example Context2D prototype extension
+ * // TODO
+ *
+ * @param chipSize
+ * @param seed Random seed
+ * @param discreteFreq
+ * @param srcImage Use itself if undefined
  */
-export function glitchImage(
-  srcImage: HTMLImageElement | HTMLCanvasElement,
-  chipSize: number = 16,
+export function glitch(
+  this: CanvasRenderingContext2D,
+  chipSize: number,
   seed: number = Date.now(),
   discreteFreq?: number,
-  destCanvas: HTMLCanvasElement = document.createElement("canvas")
-): HTMLCanvasElement {
-  // canvas & ctx setup
-  const ctx = destCanvas.getContext("2d");
-  if (!ctx) return destCanvas;
-  copyImageSize(srcImage, destCanvas);
+  srcImage: HTMLImageElement | HTMLCanvasElement = this.canvas
+) {
+  // Copy image to buffer
+  copyImageToCanvas(bufferCanvas, srcImage, true);
 
   // Param
   sharedRng.resetSeed(seed);
@@ -31,7 +35,6 @@ export function glitchImage(
   const col = Math.floor(srcImage.width / chipSize);
 
   // Draw
-  clearCanvas(destCanvas);
   for (let y = 0; y < row; y++) {
     for (let x = 0; x < col; x++) {
       // たまに歯抜け
@@ -41,8 +44,8 @@ export function glitchImage(
       const sy = sharedRng.randInt(0, row - 1) * chipSize;
       const left = x * chipSize;
       const top = y * chipSize;
-      ctx.drawImage(
-        srcImage,
+      this.drawImage(
+        bufferCanvas,
         sx,
         sy,
         chipSize,
@@ -54,6 +57,37 @@ export function glitchImage(
       );
     }
   }
+}
+
+/**
+ * テクスチャをぐちゃぐちゃにする
+ *
+ * @example
+ * pgul.canvasHelper.glitchImage(srcImage, 8, glitchSeed)
+ *
+ * @param srcImage Source image, won't be modified
+ * @param chipSize Int chip粒度ピクセル数 0は無効
+ * @param seed Int ランダムシード：結果を固定したい場合に指定
+ * @param discreteFreq Int 歯抜けの頻度、高いほど頻度低
+ * @param destCanvas Newly created if undefined
+ * @returns Canvas with glitched image
+ */
+export function glitchImage(
+  srcImage: HTMLImageElement | HTMLCanvasElement,
+  chipSize: number = 16,
+  seed?: number,
+  discreteFreq?: number,
+  destCanvas: HTMLCanvasElement = document.createElement("canvas")
+): HTMLCanvasElement {
+  const ctx = destCanvas.getContext("2d");
+  if (!ctx) return destCanvas;
+
+  // destCanvas resize
+  copyImageSize(srcImage, destCanvas);
+
+  // Draw
+  clearCanvas(destCanvas);
+  glitch.call(ctx, chipSize, seed, discreteFreq, srcImage);
 
   return destCanvas;
 }
