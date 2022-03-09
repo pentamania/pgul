@@ -87,6 +87,25 @@ export class GridHelper {
     return (this._height / this._col) * n;
   }
 
+  /**
+   * Do something for each grid
+   *
+   * @param cb Callback
+   */
+  gridForEach(
+    cb: (x: number, y: number, colIndex: number, rowIndex: number) => any
+  ) {
+    let gridWidth = this._width / this._col;
+    let gridHeight = this._height / this._row;
+
+    for (let ri = 0; ri < this._row; ri++) {
+      const y = gridHeight * ri;
+      for (let ci = 0; ci < this._col; ci++) {
+        cb(gridWidth * ci, y, ci, ri);
+      }
+    }
+  }
+
   get w() {
     return this._width;
   }
