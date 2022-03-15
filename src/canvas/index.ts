@@ -7,3 +7,4 @@ export * from "./talkBubble";
 export * from "./thornedTalkBubble";
 export * from "./trapezoid";
 export * from "./glitch";
+export * from "./sakuraPetal";
