@@ -29,3 +29,8 @@ export type BlendMode =
 
 export const SharedCanvas = document.createElement("canvas");
 export const SharedContext = SharedCanvas.getContext("2d")!;
+/**
+ * CanvasRenderingContext2D.font default value
+ * Maybe "10px sans-serif"
+ */
+export const builtInDefaultFontPropValue = SharedContext.font;
