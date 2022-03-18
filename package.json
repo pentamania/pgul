@@ -12,8 +12,9 @@
     "types"
   ],
   "scripts": {
-    "build": "rollup -c",
-    "dev": "rollup -c -w",
+    "build": "npm run clean && rollup -c",
+    "dev": "npm run clean && rollup -c -w",
+    "clean": "rimraf dist",
     "format": "prettier --write src/**/*.ts",
     "format:check": "prettier --check src/**/*.ts",
     "typecheck": "tsc -p . --noEmit",
@@ -47,6 +48,7 @@
     "canvas": "^2.8.0",
     "jest": "^27.0.4",
     "prettier": "^2.2.1",
+    "rimraf": "^3.0.2",
     "rollup": "^2.35.1",
     "rollup-plugin-terser": "^7.0.2",
     "rollup-plugin-typescript2": "^0.29.0",
