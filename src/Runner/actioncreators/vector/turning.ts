@@ -51,17 +51,17 @@ export function createVectorTurnByAction(
 /**
  * Turn vector angle every step
  *
- * @param unitTuringAngleRadian
+ * @param stepAngleRadian
  * @param duration
  */
-export function createVectorConstantTurningAction(
-  unitTuringAngleRadian: number,
+export function createVectorStepTurningAction(
+  stepAngleRadian: number,
   duration: number
 ): RunnerAction {
   return function* () {
     let _currentCount = 0;
     while (_currentCount < duration) {
-      this.rotateVector(unitTuringAngleRadian);
+      this.rotateVector(stepAngleRadian);
       yield _currentCount++;
     }
   };
