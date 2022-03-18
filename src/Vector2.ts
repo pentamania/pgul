@@ -178,6 +178,15 @@ export class Vector2 {
   }
 
   /**
+   * 外積
+   * @param a
+   * @param b
+   */
+  static cross(a: LooseVector2, b: LooseVector2) {
+    return a.x * b.y - a.y * b.x;
+  }
+
+  /**
    * R = F + 2(−F⋅N) * N
    * R: Reflect vector, F: Force input vector, N: Normal vector
    * @see https://qiita.com/edo_m18/items/b145f2f5d2d05f0f29c9
