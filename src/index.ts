@@ -32,6 +32,9 @@ export { utils };
 import * as canvasHelper from "./canvas/index";
 export { canvasHelper };
 
+import * as cssUtils from "./css/index";
+export { cssUtils };
+
 export * from "./utilTypes";
 
 // helper系
