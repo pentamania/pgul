@@ -1,5 +1,5 @@
 import { RunnerDriven } from "../../src/mixins/RunnerDriven";
-import { Runner } from "../../src/Runner/index";
+import { Runner } from "../../src/runner/index";
 
 class RunnerDrivenObj2D extends RunnerDriven(
   class {
