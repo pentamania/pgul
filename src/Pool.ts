@@ -5,14 +5,14 @@ const defaultEvaluator: Evaluator = (obj: any) => {
 };
 
 /**
- * 配列拡張でプーリング機能
+ * Arrayをラップ拡張し、プーリング機能を追加したクラス
  */
 export class Pool<T = any> {
   private _pool: T[] = [];
   private _commonEvaluator: Evaluator = defaultEvaluator.bind(null);
 
   /**
-   * プーリングする
+   * 指定オブジェクトをプールする
    *
    * @returns プール後の配列長（length）
    */
@@ -67,6 +67,9 @@ export class Pool<T = any> {
     }
   }
 
+  /**
+   * プール中身を全削除
+   */
   clearPool() {
     this._pool.length = 0;
   }
@@ -84,8 +87,6 @@ export class Pool<T = any> {
    * オブジェクトが使える状態か評価するための関数をクローンして返す
    *
    * デフォルトではオブジェクトにparentプロパティが存在するかで確認する
-   *
-   * @param func
    */
   get commonEvaluator() {
     return this._commonEvaluator.bind(null);
