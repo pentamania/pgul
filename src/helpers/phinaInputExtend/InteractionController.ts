@@ -47,7 +47,7 @@ export class InteractionController<AK extends KeyTag = KeyTag> {
   ]);
 
   /** 入力キー切替のログ */
-  public recordedKeyInputLog: RecordedKeyLog[] = [];
+  public readonly recordedKeyInputLog: RecordedKeyLog[] = [];
 
   /**
    * 自動操作状態
@@ -67,7 +67,7 @@ export class InteractionController<AK extends KeyTag = KeyTag> {
    * - 押してない状態 -> 何もしない
    * を行う
    */
-  updateKeyState() {
+  public updateKeyState() {
     if (this.automaticPlay) {
       // 自動プレイ状態
       this._keyStateMap.forEach((curVal, key) => {
@@ -95,13 +95,13 @@ export class InteractionController<AK extends KeyTag = KeyTag> {
   /**
    * キー状態リセット
    */
-  resetKeyState() {
+  public resetKeyState() {
     this._keyStateMap.forEach((_val, key) => {
       this._keyStateMap.set(key, 0);
     });
   }
 
-  setApp(app: App) {
+  public setApp(app: App) {
     this._app = app;
     extendGamePad(app);
   }
@@ -111,7 +111,7 @@ export class InteractionController<AK extends KeyTag = KeyTag> {
    * setApp後であること
    * TODO： 方向キーにも反応させる
    */
-  enableDoubleKeyInput() {
+  public enableDoubleKeyInput() {
     if (!this._app) {
       console.error("appを先にセットする必要があります");
       return;
@@ -151,7 +151,7 @@ export class InteractionController<AK extends KeyTag = KeyTag> {
    * @param kbKey
    * @param gpKey
    */
-  defineKey(actionKey: AK, kbKey: KeyCode, gpKey?: KeyCode): void {
+  public defineKey(actionKey: AK, kbKey: KeyCode, gpKey?: KeyCode): void {
     this._assignMap.set(actionKey, {
       kb: kbKey,
       gp: gpKey,
@@ -168,7 +168,7 @@ export class InteractionController<AK extends KeyTag = KeyTag> {
    * @param gpKey
    * @returns
    */
-  assignKey(actionKey: AK, kbKey: KeyCode, gpKey?: KeyCode): void {
+  public assignKey(actionKey: AK, kbKey: KeyCode, gpKey?: KeyCode): void {
     const keyAssign = this._assignMap.get(actionKey);
     if (!keyAssign) {
       return this.defineKey(actionKey, kbKey, gpKey);
@@ -182,7 +182,7 @@ export class InteractionController<AK extends KeyTag = KeyTag> {
    * @param gpKey
    * @returns
    */
-  assignGamepadKey(actionKey: AK, gpKey: KeyCode) {
+  public assignGamepadKey(actionKey: AK, gpKey: KeyCode) {
     const keyAssign = this._assignMap.get(actionKey);
     if (!keyAssign) {
       // TODO: kbにもundefined設定できるようにする
@@ -194,7 +194,7 @@ export class InteractionController<AK extends KeyTag = KeyTag> {
   /**
    * @param json
    */
-  assignFromJson(json: { [actionTag in AK]: KeyAssignData }) {
+  public assignFromJson(json: { [actionTag in AK]: KeyAssignData }) {
     this._assignMap = new Map(Object.entries<KeyAssignData>(json) as [AK, any]);
     this._assignMap.forEach((_data, key) => {
       this._keyStateMap.set(key, 0);
@@ -204,7 +204,7 @@ export class InteractionController<AK extends KeyTag = KeyTag> {
   /**
    * キーアサイン状態をJSONオブジェクトにして返す
    */
-  toJSON() {
+  public toJSON() {
     return Object.fromEntries(this._assignMap) as {
       [keyName in AK]: KeyAssignData;
     };
@@ -213,14 +213,14 @@ export class InteractionController<AK extends KeyTag = KeyTag> {
   /**
    * キーアサインMapを返す
    */
-  getAssignMap() {
+  public getAssignMap() {
     return this._assignMap;
   }
 
   /**
    * シャロ―クローン（keyAssignDataの参照はそのまま）を返す
    */
-  cloneAssignMap() {
+  public cloneAssignMap() {
     return new Map(this._assignMap);
   }
 
@@ -230,7 +230,7 @@ export class InteractionController<AK extends KeyTag = KeyTag> {
    * @param actionKey
    * @returns
    */
-  getKeyAssignData(actionKey: AK): KeyAssignData | undefined {
+  public getKeyAssignData(actionKey: AK): KeyAssignData | undefined {
     const aData = this._assignMap.get(actionKey);
     if (!aData) {
       console.warn(`${actionKey} is not defined.`);
@@ -248,7 +248,7 @@ export class InteractionController<AK extends KeyTag = KeyTag> {
    *
    * @param code
    */
-  getActionTagFromCode(code: KeyCode): AK | undefined {
+  public getActionTagFromCode(code: KeyCode): AK | undefined {
     for (const [actionKey, assignData] of this._assignMap.entries()) {
       if (
         assignData.kb === code ||
@@ -260,7 +260,7 @@ export class InteractionController<AK extends KeyTag = KeyTag> {
     return undefined;
   }
 
-  getActionTagFromGamePadCode(code: KeyCode): AK | undefined {
+  public getActionTagFromGamePadCode(code: KeyCode): AK | undefined {
     for (const [actionKey, assignData] of this._assignMap.entries()) {
       if (assignData.gp != null && assignData.gp === code) {
         return actionKey;
@@ -272,7 +272,7 @@ export class InteractionController<AK extends KeyTag = KeyTag> {
    * 直接app.keyboard/gamepadのkeyDown状態を参照して判定
    * @param actionKey
    */
-  keyDownRaw(actionKey: AK | DirectionKey): boolean {
+  public keyDownRaw(actionKey: AK | DirectionKey): boolean {
     // DirectionKey
     if (actionKey === "up") return this.upKeyDown();
     if (actionKey === "left") return this.leftKeyDown();
@@ -299,7 +299,7 @@ export class InteractionController<AK extends KeyTag = KeyTag> {
    * @param key
    * @param border 判定押下フレーム値を変更する場合に指定 (default:1)
    */
-  keyDown(key: AK | DirectionKey, border: number = 1): boolean {
+  public keyDown(key: AK | DirectionKey, border: number = 1): boolean {
     const ks = this._keyStateMap.get(key);
     return ks ? ks === border : false;
   }
@@ -321,7 +321,7 @@ export class InteractionController<AK extends KeyTag = KeyTag> {
    * @param targetKeyList 対象キー群。未指定のときは方向キー含む全てのボタンが対象
    * @returns 押したボタンのキーコード
    */
-  getAnyKeyDownFromGamepad(
+  public getAnyKeyDownFromGamepad(
     targetKeyList: KeyCode[] = (GAMEPAD_BUTTON_CODES as unknown) as KeyCode[]
   ): KeyCode | undefined {
     if (!this.gamepadAvailable) return undefined;
@@ -333,7 +333,7 @@ export class InteractionController<AK extends KeyTag = KeyTag> {
    * 二連続keydownを検知
    * enableDoubleKeyInputしてないときはシングル入力扱い
    */
-  doubleKeyDown(actionKey: AK): boolean {
+  public doubleKeyDown(actionKey: AK): boolean {
     // 猶予時間以内、かつシングル入力時のフレームでないこと
     const sus = this._doubleKeySuspendCountMap.get(actionKey);
     const withinTime =
@@ -352,7 +352,7 @@ export class InteractionController<AK extends KeyTag = KeyTag> {
    * 元のapp.keyboard/gamepadの状態をみて判定
    * @param actionKey
    */
-  keyPressRaw(actionKey: AK | DirectionKey): boolean {
+  public keyPressRaw(actionKey: AK | DirectionKey): boolean {
     // DirectionKey
     if (actionKey === "up") return this.pressUp();
     if (actionKey === "left") return this.pressLeft();
@@ -383,7 +383,7 @@ export class InteractionController<AK extends KeyTag = KeyTag> {
    * 指定した経過フレーム数押下しつづけたかどうかで判定 (default: 0)
    * キーの長押し判定に使用
    */
-  keyPress(key: AK | DirectionKey, threshold = 0): boolean {
+  public keyPress(key: AK | DirectionKey, threshold = 0): boolean {
     const ks = this._keyStateMap.get(key);
     return ks != null ? ks > threshold : false;
   }
@@ -392,7 +392,7 @@ export class InteractionController<AK extends KeyTag = KeyTag> {
    * 元のapp.keyboard/gamepadの状態をみて判定
    * @param actionKey
    */
-  keyUpRaw(actionKey: AK | DirectionKey): boolean {
+  public keyUpRaw(actionKey: AK | DirectionKey): boolean {
     // DirectionKey
     if (actionKey === "up") return this.upKeyUp();
     if (actionKey === "left") return this.leftKeyUp();
@@ -417,7 +417,7 @@ export class InteractionController<AK extends KeyTag = KeyTag> {
    *
    * @param key 方向キー
    */
-  keyUp(key: AK | DirectionKey): boolean {
+  public keyUp(key: AK | DirectionKey): boolean {
     const ks = this._keyStateMap.get(key);
     return ks != null ? ks === KEY_UP_FLG_NUM : false;
   }
@@ -438,7 +438,7 @@ export class InteractionController<AK extends KeyTag = KeyTag> {
    *
    * @returns 入力中はtrueを返す
    */
-  pressUp(): boolean {
+  public pressUp(): boolean {
     const isGpPressed = (() => {
       if (this.gamepadAvailable) {
         const gpAngle = this._app.gamepad!.getStickDirection(LEFT_STICK_ID);
@@ -458,7 +458,7 @@ export class InteractionController<AK extends KeyTag = KeyTag> {
    *
    * @returns 入力中はtrueを返す
    */
-  pressDown(): boolean {
+  public pressDown(): boolean {
     const isGpPressed = (() => {
       if (this.gamepadAvailable) {
         const gpAngle = this._app.gamepad!.getStickDirection(LEFT_STICK_ID);
@@ -477,7 +477,7 @@ export class InteractionController<AK extends KeyTag = KeyTag> {
    * ←入力中かどうか
    * 詳細は{@link InteractionController.pressUp}を参照
    */
-  pressLeft() {
+  public pressLeft() {
     const isGpPressed = (() => {
       if (this.gamepadAvailable) {
         const gpAngle = this._app.gamepad!.getStickDirection(LEFT_STICK_ID);
@@ -495,7 +495,7 @@ export class InteractionController<AK extends KeyTag = KeyTag> {
    * →入力中かどうか
    * 詳細は{@link InteractionController.pressUp}を参照
    */
-  pressRight() {
+  public pressRight() {
     const isGpPressed = (() => {
       if (this.gamepadAvailable) {
         const gpAngle = this._app.gamepad!.getStickDirection(LEFT_STICK_ID);
@@ -512,7 +512,7 @@ export class InteractionController<AK extends KeyTag = KeyTag> {
   /**
    * ↑キーのkeydown
    */
-  upKeyDown() {
+  public upKeyDown() {
     const isGpKeyDown = (() => {
       if (this.gamepadAvailable) {
         const gp = this._app.gamepad!;
@@ -531,7 +531,7 @@ export class InteractionController<AK extends KeyTag = KeyTag> {
   /**
    * ↓キーのkeydown
    */
-  downKeyDown() {
+  public downKeyDown() {
     const isGpKeyDown = (() => {
       if (this.gamepadAvailable) {
         const gp = this._app.gamepad!;
@@ -550,7 +550,7 @@ export class InteractionController<AK extends KeyTag = KeyTag> {
   /**
    * →キーのkeydown
    */
-  rightKeyDown() {
+  public rightKeyDown() {
     const isGpKeyDown = (() => {
       if (this.gamepadAvailable) {
         const gp = this._app.gamepad!;
@@ -569,7 +569,7 @@ export class InteractionController<AK extends KeyTag = KeyTag> {
   /**
    * ←キーのkeydown
    */
-  leftKeyDown() {
+  public leftKeyDown() {
     const isGpKeyDown = (() => {
       if (this.gamepadAvailable) {
         const gp = this._app.gamepad!;
@@ -586,7 +586,7 @@ export class InteractionController<AK extends KeyTag = KeyTag> {
   }
 
   /** 方向キー上のkeyUp判定 (keyboard/gam両対応) */
-  upKeyUp(): boolean {
+  public upKeyUp(): boolean {
     const isGpKeyUp = (() => {
       if (this.gamepadAvailable) {
         const gp = this._app.gamepad!;
@@ -602,7 +602,7 @@ export class InteractionController<AK extends KeyTag = KeyTag> {
     return this._app.keyboard.getKeyUp(UP_KEY_COMMON) || isGpKeyUp;
   }
 
-  downKeyUp(): boolean {
+  public downKeyUp(): boolean {
     const isGpKeyUp = (() => {
       if (this.gamepadAvailable) {
         const gp = this._app.gamepad!;
@@ -618,7 +618,7 @@ export class InteractionController<AK extends KeyTag = KeyTag> {
     return this._app.keyboard.getKeyUp(DOWN_KEY_COMMON) || isGpKeyUp;
   }
 
-  rightKeyUp(): boolean {
+  public rightKeyUp(): boolean {
     const isGpKeyUp = (() => {
       if (this.gamepadAvailable) {
         const gp = this._app.gamepad!;
@@ -634,7 +634,7 @@ export class InteractionController<AK extends KeyTag = KeyTag> {
     return this._app.keyboard.getKeyUp(RIGHT_KEY_COMMON) || isGpKeyUp;
   }
 
-  leftKeyUp(): boolean {
+  public leftKeyUp(): boolean {
     const isGpKeyUp = (() => {
       if (this.gamepadAvailable) {
         const gp = this._app.gamepad!;
@@ -654,7 +654,7 @@ export class InteractionController<AK extends KeyTag = KeyTag> {
    * 記録したキー入力情報を破棄
    * リプレイ用
    */
-  resetRecordedInput(keysToRecord: (AK | DirectionKey)[]) {
+  public resetRecordedInput(keysToRecord: (AK | DirectionKey)[]) {
     this.recordedKeyInputLog.length = 0;
 
     // 初期状態を0フレーム目の入力として記録
@@ -675,7 +675,7 @@ export class InteractionController<AK extends KeyTag = KeyTag> {
    * @param keysToRecord
    * @param frame フレーム値
    */
-  recordInput(keysToRecord: (AK | DirectionKey)[], frame: number) {
+  public recordInput(keysToRecord: (AK | DirectionKey)[], frame: number) {
     keysToRecord.forEach((key, keyId) => {
       if (this.keyDown(key) || this.keyUp(key)) {
         this.recordedKeyInputLog.push([frame, keyId]);
@@ -691,7 +691,7 @@ export class InteractionController<AK extends KeyTag = KeyTag> {
    *
    * @param key
    */
-  toggleKeyState(key: AK | DirectionKey) {
+  public toggleKeyState(key: AK | DirectionKey) {
     const keyStateMap = this._keyStateMap;
     if (!keyStateMap.has(key)) {
       if (process.env.NODE_ENV === "development") {
