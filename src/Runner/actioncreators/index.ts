@@ -1,5 +1,6 @@
 export * from "./geom/forwarding";
 export * from "./geom/reflecting";
+export * from "./geom/waving";
 
 export * from "./misc/waiting";
 
