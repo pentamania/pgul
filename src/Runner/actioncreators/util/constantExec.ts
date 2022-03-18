@@ -66,11 +66,22 @@ export function createConstantFuncRunningAction<RT = any>(
 }
 
 /**
- * 定期的に指定アクションを実行する処理
+ * 定期的に指定RunnerActionを生成・内部実行するRunnerActionを生成
  *
  * @example
- * // TODO
+ * // 16step毎に指定アクション（寿命24step）を発生を試みる処理を100step持続する
+ * // 0 -> 24+16 -> 24+16 + 24+16 -> ....の間隔で指定アクション生成
+ * // つまり: 0~24 -> 40~64 -> 80~100(途中まで) のタイミングでGen実行
+ * createConstantActionRunningAction(16, function*() {
+ *   let _cnt = 0;
+ *   while(_cnt < 24) {
+ *     // Do something
+ *     yield _cnt++;
+ *   }
+ * }, 100)
  *
+ * @param actionRunningInterval
+ * @param runnerAction
  * @param duration
  */
 export function createConstantActionRunningAction<RT = any>(
