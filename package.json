@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "description": "pentamania's game util library",
   "main": "dist/pgul.js",
-  "module": "lib/pgul.esm.js",
+  "module": "dist/pgul.esm.js",
   "types": "src/index.ts",
   "files": [
     "src",
