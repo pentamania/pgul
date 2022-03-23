@@ -8,7 +8,6 @@ import { Runner, RunnerAction, TargetDeclaredRunnerAction } from "../../Runner";
  * @returns
  */
 export function createEachFrameAction<RT = any>(
-  // @prettier-ignore
   cb: (cnt: number, runner: Runner<RT>) => any,
   duration: number = Infinity
 ): RunnerAction<RT> {
@@ -19,6 +18,16 @@ export function createEachFrameAction<RT = any>(
       yield _currentCount++;
     }
   };
+}
+
+/**
+ * @alias {@link createEachFrameAction}
+ */
+export function createEachStepAction<RT = any>(
+  cb: (cnt: number, runner: Runner<RT>) => any,
+  duration?: number
+): RunnerAction<RT> {
+  return createEachFrameAction(cb, duration);
 }
 
 /**
