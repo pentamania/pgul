@@ -4,7 +4,7 @@ import {
   RunnerAction,
   TargetDeclaredRunner,
   TargetDeclaredRunnerAction,
-} from "../runner/index";
+} from "./index";
 import combineGeneratorFunctions from "../utils/combineGeneratorFunctions";
 import { GConstructor } from "../utilTypes";
 

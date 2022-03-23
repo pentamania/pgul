@@ -21,7 +21,6 @@ export * from "./dom/Stats";
 export * from "./gui/index";
 
 export * from "./mixins/Menuable";
-export * from "./mixins/RunnerDriven";
 export * from "./mixins/Traceable";
 export * from "./mixins/Revolutional";
 export * from "./mixins/Poolable";

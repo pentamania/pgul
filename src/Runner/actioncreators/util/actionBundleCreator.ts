@@ -1,7 +1,4 @@
-import {
-  RunnerActionBundle,
-  RunnerActionComplex,
-} from "../../../mixins/RunnerDriven";
+import { RunnerActionBundle, RunnerActionComplex } from "../../RunnerDriven";
 
 type ActionCreatorWithDurationArg = (duration: number) => RunnerActionComplex;
 
