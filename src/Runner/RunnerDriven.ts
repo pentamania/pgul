@@ -1,12 +1,12 @@
 import { List } from "../List";
-import {
-  Runner,
-  RunnerAction,
-  TargetDeclaredRunner,
-  TargetDeclaredRunnerAction,
-} from "./index";
 import combineGeneratorFunctions from "../utils/combineGeneratorFunctions";
 import { GConstructor } from "../utilTypes";
+import {
+  TargetDeclaredRunnerAction,
+  TargetDeclaredRunner,
+  Runner,
+  RunnerAction,
+} from "./Runner";
 
 type ChildContainable = GConstructor<{
   children?: any[];
