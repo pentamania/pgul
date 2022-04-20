@@ -18,16 +18,21 @@ const bufferCanvas = document.createElement("canvas");
  * @param seed Random seed
  * @param discreteFreq
  * @param srcImage Use itself if undefined
+ * @param overrideDraw
  */
 export function glitch(
   this: CanvasRenderingContext2D,
   chipSize: number,
   seed: number = Date.now(),
   discreteFreq?: number,
-  srcImage: HTMLImageElement | HTMLCanvasElement = this.canvas
+  srcImage: HTMLImageElement | HTMLCanvasElement = this.canvas,
+  overrideDraw: boolean = true
 ) {
   // Copy image to buffer
   copyImageToCanvas(bufferCanvas, srcImage, true);
+
+  // 元の画像を上書きする
+  if (!overrideDraw) clearCanvas(this.canvas);
 
   // Param
   sharedRng.resetSeed(seed);
