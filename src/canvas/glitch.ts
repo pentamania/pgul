@@ -38,8 +38,8 @@ export function glitch(
 
   // Param
   sharedRng.resetSeed(seed);
-  const row = Math.floor(srcImage.height / chipSize);
-  const col = Math.floor(srcImage.width / chipSize);
+  const row = Math.ceil(srcImage.height / chipSize);
+  const col = Math.ceil(srcImage.width / chipSize);
 
   // Draw
   for (let y = 0; y < row; y++) {
