@@ -17,6 +17,8 @@ const bufferCanvas = document.createElement("canvas");
  * @param chipSize
  * @param seed Random seed
  * @param discreteFreq
+ * Skips rendering with probability of 1/[specified value].
+ * Effective when value is over 0 (i.e. negative value is skipped)
  * @param srcImage Use itself if undefined
  * @param overrideDraw
  */
@@ -42,8 +44,13 @@ export function glitch(
   // Draw
   for (let y = 0; y < row; y++) {
     for (let x = 0; x < col; x++) {
-      // たまに歯抜け
-      if (discreteFreq && sharedRng.randInt(0, discreteFreq) === 0) continue;
+      // たまに歯抜け（描画をスキップ）
+      if (
+        discreteFreq &&
+        discreteFreq > 0 &&
+        sharedRng.randInt(0, discreteFreq) === 0
+      )
+        continue;
 
       const sx = sharedRng.randInt(0, col - 1) * chipSize;
       const sy = sharedRng.randInt(0, row - 1) * chipSize;
