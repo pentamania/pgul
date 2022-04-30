@@ -1,8 +1,9 @@
 import { Random } from "../Random";
-import { clearCanvas, copyImageSize, copyImageToCanvas } from "./utils";
+import { clearCanvas, copyImageSize } from "./utils";
 
 const sharedRng = new Random();
 const bufferCanvas = document.createElement("canvas");
+const bufferCtx = bufferCanvas.getContext("2d")!;
 
 /**
  * Glitch canvas image
@@ -30,16 +31,23 @@ export function glitch(
   srcImage: HTMLImageElement | HTMLCanvasElement = this.canvas,
   overrideDraw: boolean = true
 ) {
-  // Copy image to buffer
-  copyImageToCanvas(bufferCanvas, srcImage, true);
+  sharedRng.resetSeed(seed);
+
+  // Calc row/col num
+  const row = Math.ceil(srcImage.height / chipSize);
+  const col = Math.ceil(srcImage.width / chipSize);
+
+  // Resize canvas
+  bufferCanvas.width = (col + 1) * chipSize;
+  bufferCanvas.height = (row + 1) * chipSize;
+
+  // Draw image to buffer
+  clearCanvas(bufferCanvas);
+  bufferCtx.fillStyle = bufferCtx.createPattern(srcImage, "repeat")!;
+  bufferCtx.fillRect(0, 0, bufferCanvas.width, bufferCanvas.height);
 
   // 元の画像を上書きする
   if (!overrideDraw) clearCanvas(this.canvas);
-
-  // Param
-  sharedRng.resetSeed(seed);
-  const row = Math.ceil(srcImage.height / chipSize);
-  const col = Math.ceil(srcImage.width / chipSize);
 
   // Draw
   for (let y = 0; y < row; y++) {
