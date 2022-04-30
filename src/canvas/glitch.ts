@@ -21,7 +21,7 @@ const bufferCtx = bufferCanvas.getContext("2d")!;
  * Skips rendering with probability of 1/[specified value].
  * Effective when value is over 0 (i.e. negative value is skipped)
  * @param srcImage Use itself if undefined
- * @param overrideDraw
+ * @param override
  */
 export function glitch(
   this: CanvasRenderingContext2D,
@@ -29,7 +29,7 @@ export function glitch(
   seed: number = Date.now(),
   discreteFreq?: number,
   srcImage: HTMLImageElement | HTMLCanvasElement = this.canvas,
-  overrideDraw: boolean = true
+  override: boolean = false
 ) {
   sharedRng.resetSeed(seed);
 
@@ -46,8 +46,8 @@ export function glitch(
   bufferCtx.fillStyle = bufferCtx.createPattern(srcImage, "repeat")!;
   bufferCtx.fillRect(0, 0, bufferCanvas.width, bufferCanvas.height);
 
-  // 元の画像を上書きする
-  if (!overrideDraw) clearCanvas(this.canvas);
+  // overrideフラグが立ってない限り、キャンバス消去
+  if (override !== true) clearCanvas(this.canvas);
 
   // Draw
   for (let y = 0; y < row; y++) {
