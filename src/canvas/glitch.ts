@@ -1,5 +1,5 @@
 import { Random } from "../Random";
-import { clearCanvas, copyImageSize } from "./utils";
+import { clearCanvas, getOriginalSize } from "./utils";
 
 const sharedRng = new Random();
 const bufferCanvas = document.createElement("canvas");
@@ -33,11 +33,12 @@ export function glitch(
 ) {
   sharedRng.resetSeed(seed);
 
-  // Calc row/col num
-  const row = Math.ceil(srcImage.height / chipSize);
-  const col = Math.ceil(srcImage.width / chipSize);
+  // Calc row/col num from src-image
+  const [imgWidth, imgHeight] = getOriginalSize(srcImage);
+  const row = Math.ceil(imgHeight / chipSize);
+  const col = Math.ceil(imgWidth / chipSize);
 
-  // Resize canvas
+  // Resize buffer-canvas
   bufferCanvas.width = (col + 1) * chipSize;
   bufferCanvas.height = (row + 1) * chipSize;
 
@@ -103,7 +104,9 @@ export function glitchImage(
   if (!ctx) return destCanvas;
 
   // destCanvas resize
-  copyImageSize(srcImage, destCanvas);
+  const [srcWidth, srcHeight] = getOriginalSize(srcImage);
+  destCanvas.width = srcWidth;
+  destCanvas.height = srcHeight;
 
   // Draw
   clearCanvas(destCanvas);

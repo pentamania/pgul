@@ -1,4 +1,18 @@
 /**
+ * image/canvas画像の元サイズを取得
+ *
+ * @param img
+ * @returns [width, height]
+ */
+export function getOriginalSize(
+  img: HTMLImageElement | HTMLCanvasElement
+): [number, number] {
+  return img instanceof HTMLImageElement
+    ? [img.naturalWidth, img.naturalHeight]
+    : [img.width, img.height];
+}
+
+/**
  * サイズコピー
  *
  * @param src
