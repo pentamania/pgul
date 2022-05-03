@@ -70,14 +70,17 @@ export class List<T = any> {
    * 内部インデックス値を設定しつつ、対応する要素を返す
    * 範囲外のインデックス値はセットできず、undefinedを返す
    *
-   * @param i
+   * @param i index
+   *
+   * @returns
+   * [jp] インデックスに対応する要素。セットできなかったら場合はundefined
    */
-  setIndex(i: number) {
+  setIndex(i: number): T | undefined {
     if (i < 0 || this.lastIndex < i) {
       // TODO：デバッグビルド時にエラー出す
       return undefined;
     }
-    this._setIndexAndReturnValue(i);
+    return this._setIndexAndReturnValue(i);
   }
 
   /**
