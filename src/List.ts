@@ -114,6 +114,20 @@ export class List<T = any> {
   }
 
   /**
+   * 内部ポインタインデックス値がリスト先頭にあるかどうか
+   */
+  isPointerAtFirst(): boolean {
+    return this._index === 0;
+  }
+
+  /**
+   * 内部ポインタインデックス値がリスト終端にあるかどうか
+   */
+  isPointerAtLast(): boolean {
+    return this._index === this.lastIndex;
+  }
+
+  /**
    * リストサイズ値を取得
    *
    * @returns サイズ値、未設定のときはundefined
