@@ -5,7 +5,7 @@ import { Random } from "./Random";
  */
 export class List<T = any> {
   protected _list: T[];
-  protected _index = 0;
+  private _pointerIndex = 0;
   protected _random?: Random;
   protected _limitSize?: number;
 
@@ -62,8 +62,8 @@ export class List<T = any> {
    * @param i
    */
   protected _setIndexAndReturnValue(i: number): T {
-    this._index = i;
-    return this._list[this._index];
+    this._pointerIndex = i;
+    return this._list[this._pointerIndex];
   }
 
   /**
@@ -91,7 +91,7 @@ export class List<T = any> {
    * falseの場合、オーバーしそうになったら最大インデックスで固定
    */
   increment(loop = true): T {
-    let nextIndex = this._index + 1;
+    let nextIndex = this._pointerIndex + 1;
     if (this.lastIndex < nextIndex) {
       nextIndex = loop ? 0 : this.lastIndex;
     }
@@ -106,7 +106,7 @@ export class List<T = any> {
    * falseの場合、オーバーしそうになったら0で固定
    */
   decrement(loop = true): T {
-    let nextIndex = this._index - 1;
+    let nextIndex = this._pointerIndex - 1;
     if (nextIndex < 0) {
       nextIndex = loop ? this.lastIndex : 0;
     }
@@ -117,14 +117,14 @@ export class List<T = any> {
    * 内部ポインタインデックス値がリスト先頭にあるかどうか
    */
   isPointerAtFirst(): boolean {
-    return this._index === 0;
+    return this._pointerIndex === 0;
   }
 
   /**
    * 内部ポインタインデックス値がリスト終端にあるかどうか
    */
   isPointerAtLast(): boolean {
-    return this._index === this.lastIndex;
+    return this._pointerIndex === this.lastIndex;
   }
 
   /**
@@ -185,14 +185,14 @@ export class List<T = any> {
    * 現在の内部インデックス値
    */
   get currentIndex() {
-    return this._index;
+    return this._pointerIndex;
   }
 
   /**
    * 現在の内部インデックス値に対応する要素を返す
    */
   get current() {
-    return this._list[this._index];
+    return this._list[this._pointerIndex];
   }
 
   /**
