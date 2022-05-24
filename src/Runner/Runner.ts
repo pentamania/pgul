@@ -224,22 +224,34 @@ export class Runner<T = any> extends Coroutine {
   }
 
   /**
+   * 進行方向（vector方向）をセット（ラジアン単位）
+   * @alias {@link setDirectionByRadian}
+   *
+   * @param radian
+   */
+  setVectorAngle(radian: number) {
+    this._vectorRadian = radian;
+    this.vector.setFromRadian(this._vectorRadian, this._speed);
+    return this;
+  }
+
+  /**
    * 進行方向（vector方向）をセット（度数単位）
    * @param degree 度数単位
    */
   setDirection(degree: number, speed?: number) {
     if (speed != null) this.setSpeed(speed);
-    return this.setDirectionByRadian(toRadian(degree));
+    return this.setVectorAngle(toRadian(degree));
   }
 
   /**
-   * 進行方向（vector方向）をセット（ラジアン値）
+   * 進行方向（vector方向）をセット（ラジアン単位）
+   * @alias {@link setVectorAngle}
+   *
    * @param radian
    */
   setDirectionByRadian(radian: number) {
-    this._vectorRadian = radian;
-    this.vector.setFromRadian(this._vectorRadian, this._speed);
-    return this;
+    return this.setVectorAngle(radian);
   }
 
   /**
