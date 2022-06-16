@@ -16,9 +16,11 @@ export function toDegree(rad: number) {
   return rad * RAD_TO_DEG;
 }
 
-export const DEG_TO_RAD_TABLE = timesMap(360, (i) => {
-  return toRadian(i);
-});
+export const DEG_TO_RAD_TABLE = Object.freeze(
+  timesMap(360, (i) => {
+    return toRadian(i);
+  })
+);
 export const RAD_LEFT = DEG_TO_RAD_TABLE[0];
 export const RAD_DOWN = DEG_TO_RAD_TABLE[90];
 export const RAD_RIGHT = DEG_TO_RAD_TABLE[180];
