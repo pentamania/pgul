@@ -7,7 +7,6 @@
   "types": "src/index.ts",
   "files": [
     "src",
-    "lib",
     "dist",
     "types"
   ],
