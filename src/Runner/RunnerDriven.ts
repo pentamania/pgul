@@ -85,6 +85,10 @@ export function RunnerDriven<TBase extends ChildContainable>(Base: TBase) {
     }
 
     /**
+     * [en]
+     * DESC
+     *
+     * [jp]
      * 指定したアクションを組み込んだrunnerを追加
      *
      * アクションは直列処理される。
@@ -92,7 +96,7 @@ export function RunnerDriven<TBase extends ChildContainable>(Base: TBase) {
      *
      * @example
      * // 以下のアクションを直列処理
-     * actor.setActionRunner(
+     * actor.addActionRunner(
      *   act1,
      *   [act2_1, act2_2], // act2_1とact2_2は同時（並列）処理,
      *   act3
@@ -101,7 +105,7 @@ export function RunnerDriven<TBase extends ChildContainable>(Base: TBase) {
      * @param actions 可変長引数
      * @returns 生成したRunnerを返す
      */
-    setActionRunner(
+    addActionRunner(
       ...actions: RunnerActionComplex<this>[]
     ): TargetDeclaredRunner<this> {
       const runner = new Runner<this>();
@@ -117,6 +121,16 @@ export function RunnerDriven<TBase extends ChildContainable>(Base: TBase) {
       });
       this.addRunner(runner);
       return runner as TargetDeclaredRunner;
+    }
+
+    /**
+     * @alias addActionRunner
+     * @param actions
+     */
+    setActionRunner(
+      ...actions: RunnerActionComplex<this>[]
+    ): TargetDeclaredRunner<this> {
+      return this.addActionRunner(...actions);
     }
 
     /**
@@ -241,7 +255,7 @@ export function RunnerDriven<TBase extends ChildContainable>(Base: TBase) {
       const runners = actionList.map((a) => {
         // 配列変換
         a = Array.isArray(a) ? a : [a];
-        const runner = this.setActionRunner(...a);
+        const runner = this.addActionRunner(...a);
         return runner;
       });
       return runners;
@@ -260,13 +274,13 @@ export function RunnerDriven<TBase extends ChildContainable>(Base: TBase) {
       this._actionBundleList = new List(...actionBundles);
 
       // 最初のアクションセットを設定
-      this.setActionRunner(...this._actionBundleList.current);
+      this.addActionRunner(...this._actionBundleList.current);
 
       // 全てのrunner処理が死んだら、都度アクションセットを切り替える処理
       this._onRunnerAllDead = () => {
         if (!this._actionBundleList) return;
 
-        this.setActionRunner(...this._actionBundleList.increment());
+        this.addActionRunner(...this._actionBundleList.increment());
 
         // Update runners once for smooth action junction
         this.updateRunners();
