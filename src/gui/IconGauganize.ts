@@ -56,5 +56,9 @@ export function IconGauganize<TBase extends GConstructor>(Base: TBase) {
     set value(v) {
       this.setValue(v);
     }
+
+    get icons() {
+      return this._iconObjects;
+    }
   };
 }
