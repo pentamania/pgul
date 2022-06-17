@@ -110,6 +110,17 @@ export class Coroutine {
   }
 
   /**
+   * [jp]
+   * 稼働中の内部ジェネレータがあるかどうかを返す
+   *
+   * [en]
+   * Returns true when inner-generator doesn't exists
+   */
+  get dead(): boolean {
+    return this._generator == null;
+  }
+
+  /**
    * @readonly
    * 稼働状態を返す。
    * falseの際はstepを実行しても進まない
