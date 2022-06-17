@@ -2,24 +2,7 @@ import typescript from "rollup-plugin-typescript2";
 import { terser } from "rollup-plugin-terser";
 
 const NS = "pgul";
-
-/* plugin options */
-const plugins = [
-  typescript({
-    lib: ["es5", "es6", "dom"],
-    target: "es5",
-  }),
-];
-const plugins_min = plugins.concat([
-  terser({
-    compress: {
-      pure_getters: true,
-      unsafe: true,
-      unsafe_comps: true,
-      warnings: false,
-    },
-  }),
-]);
+const noDeclarationFiles = { compilerOptions: { declaration: false } };
 
 export default [
   // iife ver.
@@ -31,7 +14,12 @@ export default [
       sourcemap: true,
       format: "iife",
     },
-    plugins: plugins,
+    plugins: [
+      typescript({
+        tsconfigOverride: noDeclarationFiles,
+        target: "es5",
+      }),
+    ],
   },
 
   // iife-min ver.
@@ -43,7 +31,20 @@ export default [
       format: "iife",
       sourcemap: true,
     },
-    plugins: plugins_min,
+    plugins: [
+      typescript({
+        tsconfigOverride: noDeclarationFiles,
+        target: "es5",
+      }),
+      terser({
+        compress: {
+          pure_getters: true,
+          unsafe: true,
+          unsafe_comps: true,
+          warnings: false,
+        },
+      }),
+    ],
   },
 
   // esm ver.
@@ -53,6 +54,10 @@ export default [
       file: "dist/pgul.esm.js",
       format: "esm",
     },
-    plugins: plugins,
+    plugins: [
+      typescript({
+        useTsconfigDeclarationDir: true,
+      }),
+    ],
   },
 ];
