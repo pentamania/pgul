@@ -22,14 +22,50 @@ export interface StateBehaviour<T, SL> {
 }
 
 /**
+ * [jp]
  * FSMの概念を実装したクラス。
  * @see http://www.lancarse.co.jp/blog/?p=1039
  *
  * あらかじめセットしたstateオブジェクトに応じてtargetに特定の振る舞いをさせる
  *
  * @example
- * TODO
+ * const sprite = new YourAnimationPlayableSprite()
  *
+ * const automaton = new Automaton();
+ *
+ * // Add state: Default
+ * automaton.registerState("Default", {
+ *   enter() {
+ *     sprite.playAnimation("Default");
+ *   },
+ *   update() {
+ *     if (0 < sprite.vector.x) return "MoveRight";
+ *     if (sprite.vector.x < 0) return "MoveLeft";
+ *   },
+ * });
+ *
+ * // Add state: Moving left
+ * automaton.registerState("MoveLeft", {
+ *   enter() {
+ *     sprite.playAnimation("MoveLeft");
+ *   },
+ *   update() {
+ *     if (sprite.vector.x === 0) return "Default";
+ *   },
+ * });
+ *
+ * // Add state: Moving right
+ * automaton.registerState("MoveRight", {
+ *   enter() {
+ *     sprite.playAnimation("MoveRight");
+ *   },
+ *   update() {
+ *     if (sprite.vector.x === 0) return "Default";
+ *   },
+ * });
+ *
+ * // Set default state
+ * automaton.setState("Default");
  */
 export class Automaton<TT = any, SL = any> {
   protected _stateBehaviorMap: Map<SL, StateBehaviour<TT, SL>>;
