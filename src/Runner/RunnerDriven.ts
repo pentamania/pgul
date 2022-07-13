@@ -300,6 +300,17 @@ export function RunnerDriven<TBase extends ChildContainable>(Base: TBase) {
     }
 
     /**
+     * [jp]
+     * setActionSequence(setActionPattern)で設定したシーケンス・仕込みを解除
+     * removeAllRunnersも同時に実行
+     */
+    clearActionSequence() {
+      this.removeAllRunners();
+      this._actionBundleList?.clear();
+      this._onRunnerAllDead = undefined;
+    }
+
+    /**
      * 指定runnerを除去
      * @param removedRunner
      */
