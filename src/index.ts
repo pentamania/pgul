@@ -37,6 +37,8 @@ export { cssUtils };
 
 export * from "./utilTypes";
 
+export * from "./loaders/fontLoader";
+
 // helper系
 // import * as phinaHelper from './helpers/phina'
 
