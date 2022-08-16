@@ -293,9 +293,7 @@ export function RunnerDriven<TBase extends ChildContainable>(Base: TBase) {
      *
      * @param params
      */
-    setActionSequence(
-      ...params: Parameters<typeof RunnerDrivenClass.prototype.setActionPattern>
-    ): void {
+    setActionSequence(...params: RunnerActionBundle<this>[]) {
       return this.setActionPattern(...params);
     }
 
