@@ -7,7 +7,10 @@
  * @param num
  * @param figures
  */
-export default function zeroFillNum(num: number, figures: number): string {
+export default function zeroFillNum(
+  num: number | string,
+  figures: number
+): string {
   let str = String(num);
   while (str.length < figures) {
     str = "0" + str;
