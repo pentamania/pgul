@@ -27,6 +27,8 @@ export type ContextBindableGeneratorFunction<CTX = any> = (
 
 export type Bit = 0 | 1;
 
+export type DecimalNumber = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
+
 export interface EventListenable {
   on: (eventType: string, handler: LooseFunction) => any;
   off: (eventType: string, handler: LooseFunction) => any;
