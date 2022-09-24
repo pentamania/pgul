@@ -19,3 +19,4 @@ export { default as splitTextByLetterNum } from "./splitTextByLetterNum";
 export { default as sliceGrid } from "./sliceGrid";
 export { convertPromiseToGenerator } from "./promiseToGenerator";
 export { default as frac } from "./frac";
+export * from "./timeFormatConverter";
