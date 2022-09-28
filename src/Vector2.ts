@@ -224,7 +224,17 @@ export class Vector2 {
   }
 
   /**
-   * 角度（度数）からベクトルを生成
+   * 角度（ラジアン）からVector2を生成
+   *
+   * @param radian
+   * @param length
+   */
+  static createFromRadian(radian: number, length?: number) {
+    return new Vector2(0, 0).setFromRadian(radian, length);
+  }
+
+  /**
+   * 角度（度数）からVector2を生成
    *
    * @param degree
    * @param length Length of vector default:1
