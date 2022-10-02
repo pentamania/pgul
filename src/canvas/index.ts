@@ -11,3 +11,4 @@ export * from "./sakuraPetal";
 export * from "./flower";
 export * from "./textHelper";
 export * from "./crisscross";
+export * from "./rainbow";
