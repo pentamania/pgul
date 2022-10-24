@@ -1,4 +1,9 @@
-import { KEY_DOWN_FLG_NUM, KEY_UP_FLG_NUM } from "./common";
+import {
+  KEY_DOWN_FLG_NUM,
+  KEY_UP_FLG_NUM,
+  toggleKeyStateFrame,
+  updateStateFrame,
+} from "./common";
 import { KbCode, Keyboard } from "./Keyboard";
 
 /**
@@ -12,28 +17,29 @@ export class StatedKeyboard extends Keyboard {
   /** <キー => 押下フレーム数> のMap */
   private _stateMap: Map<KbCode, number> = new Map();
 
-  public updateKeyStates() {
+  /**
+   * keyState更新
+   * 基本的に毎フレーム実行
+   *
+   * @param autoPlayMode
+   * See {@link updateStateFrame}
+   */
+  public updateKeyStates(autoPlayMode = false) {
     Object.entries(this.keyMap).forEach(([key, pressed]) => {
-      const k = key as KbCode;
-      const lastVal = this._stateMap.get(k);
-      if (pressed) {
-        if (lastVal === KEY_UP_FLG_NUM) {
-          // keyUp -> keyDown状態へ
-          this._stateMap.set(k, KEY_DOWN_FLG_NUM);
-        } else {
-          // keypress加算
-          this._stateMap.set(k, (lastVal || 0) + 1);
-        }
-      } else {
-        if (lastVal != null && 0 < lastVal) {
-          // keyDown/Press -> KeyUp状態へ
-          this._stateMap.set(k, KEY_UP_FLG_NUM);
-        } else {
-          // ニュートラルへ
-          this._stateMap.set(k, 0);
-        }
-      }
+      if (!this._stateMap.has(key as KbCode))
+        this._stateMap.set(key as KbCode, 0);
+      updateStateFrame(this._stateMap, key as KbCode, pressed, autoPlayMode);
     });
+  }
+
+  /**
+   * 内部キー状態を変更
+   * See {@link toggleKeyStateFrame}
+   *
+   * @param key
+   */
+  public toggleKeyState(key: KbCode) {
+    toggleKeyStateFrame(this._stateMap, key);
   }
 
   /**

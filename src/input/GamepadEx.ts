@@ -1,4 +1,9 @@
-import { KEY_DOWN_FLG_NUM, KEY_UP_FLG_NUM } from "./common";
+import {
+  KEY_DOWN_FLG_NUM,
+  KEY_UP_FLG_NUM,
+  toggleKeyStateFrame,
+  updateStateFrame,
+} from "./common";
 import { getGamepad, getStickY, getStickX } from "./gamepadHelpers";
 
 const DEFAULT_DEFAULT_STICK_TILT_THRESHOLD = 0.3;
@@ -59,28 +64,24 @@ export class GamepadExtension {
   /**
    * buttonsのState更新
    * 基本的に毎フレーム実行
+   *
+   * @param autoPlayMode
+   * See {@link updateStateFrame}
    */
-  public updateButtonStates() {
+  public updateButtonStates(autoPlayMode = false) {
     getGamepad(this._gpIndex)?.buttons.forEach((btn, i) => {
-      const lastVal = this._stateMap.get(i)!;
-      if (btn.pressed) {
-        if (lastVal === KEY_UP_FLG_NUM) {
-          // keyUp -> keyDown状態へ
-          this._stateMap.set(i, KEY_DOWN_FLG_NUM);
-        } else {
-          // keypress加算
-          this._stateMap.set(i, lastVal + 1);
-        }
-      } else {
-        if (0 < lastVal) {
-          // keyDown/Press -> KeyUp状態へ
-          this._stateMap.set(i, KEY_UP_FLG_NUM);
-        } else {
-          // ニュートラルへ
-          this._stateMap.set(i, 0);
-        }
-      }
+      updateStateFrame(this._stateMap, i, btn.pressed, autoPlayMode);
     });
+  }
+
+  /**
+   * 内部キー状態を変更
+   * See {@link toggleKeyStateFrame}
+   *
+   * @param buttonId
+   */
+  public toggleButtonState(buttonId: number) {
+    toggleKeyStateFrame(this._stateMap, buttonId);
   }
 
   // Buttons
