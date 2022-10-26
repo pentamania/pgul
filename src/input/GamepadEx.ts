@@ -4,9 +4,20 @@ import {
   toggleKeyStateFrame,
   updateStateFrame,
 } from "./common";
+import {
+  Direction,
+  DirectionKeys,
+  D_DOWN,
+  D_LEFT,
+  D_RIGHT,
+  D_UP,
+} from "./Directions";
 import { getGamepad, getStickY, getStickX } from "./gamepadHelpers";
 
 const DEFAULT_DEFAULT_STICK_TILT_THRESHOLD = 0.3;
+export type GpButtonId = number;
+
+export type GpCodeAll = Direction | GpButtonId;
 
 /**
  * Gamepad機能強化ラッパー
@@ -20,8 +31,13 @@ export class GamepadExtension {
   /** スティック傾き処理におけるデフォルト値 */
   defaultStickTiltThreshold: number = DEFAULT_DEFAULT_STICK_TILT_THRESHOLD;
 
-  /** Map<gpbuttonIndex, framePressCount> */
-  private _stateMap: Map<number, number> = new Map();
+  /** Map<gpbuttonIndex|DirectionKey, framePressCount> */
+  private _stateMap: Map<GpCodeAll, number> = new Map([
+    [D_UP, 0],
+    [D_DOWN, 0],
+    [D_LEFT, 0],
+    [D_RIGHT, 0],
+  ]);
 
   constructor(gpIndex?: number) {
     this.initialize(gpIndex);
@@ -62,6 +78,17 @@ export class GamepadExtension {
   }
 
   /**
+   * 全ての入力処理用Stateを更新
+   * 基本的に毎フレーム実行
+   *
+   * @param autoPlayMode
+   */
+  public updateStates(autoPlayMode?: boolean) {
+    this.updateButtonStates(autoPlayMode);
+    this.updateDirectionStates(autoPlayMode);
+  }
+
+  /**
    * buttonsのState更新
    * 基本的に毎フレーム実行
    *
@@ -75,28 +102,56 @@ export class GamepadExtension {
   }
 
   /**
+   * 方向処理追加
+   * 基本的に毎フレーム実行
+   *
+   * @param autoPlayMode
+   * See {@link updateStateFrame}
+   */
+  public updateDirectionStates(autoPlayMode = false) {
+    DirectionKeys.forEach((dir) => {
+      let pressed = false;
+      switch (dir) {
+        case "up":
+          pressed = this.getStickUp() || this.getUpButtonPress();
+          break;
+        case "down":
+          pressed = this.getStickDown() || this.getDownButtonPress();
+          break;
+        case "left":
+          pressed = this.getStickLeft() || this.getLeftButtonPress();
+          break;
+        case "right":
+          pressed = this.getStickRight() || this.getRightButtonPress();
+          break;
+      }
+      updateStateFrame(this._stateMap, dir, pressed, autoPlayMode);
+    });
+  }
+
+  /**
    * 内部キー状態を変更
    * See {@link toggleKeyStateFrame}
    *
    * @param buttonId
    */
-  public toggleButtonState(buttonId: number) {
+  public toggleButtonState(buttonId: GpCodeAll) {
     toggleKeyStateFrame(this._stateMap, buttonId);
   }
 
   // Buttons
-  getButtonPress(buttonId: number, threshold = 0): boolean {
-    const v = this._stateMap.get(buttonId);
+  getButtonPress(key: GpCodeAll, threshold = 0): boolean {
+    const v = this._stateMap.get(key);
     return v != null && v > threshold;
   }
 
-  getButtonDown(buttonId: number): boolean {
-    const v = this._stateMap.get(buttonId);
+  getButtonDown(key: GpCodeAll): boolean {
+    const v = this._stateMap.get(key);
     return v != null && v === KEY_DOWN_FLG_NUM;
   }
 
-  getButtonUp(buttonId: number): boolean {
-    const v = this._stateMap.get(buttonId);
+  getButtonUp(key: GpCodeAll): boolean {
+    const v = this._stateMap.get(key);
     return v != null && v === KEY_UP_FLG_NUM;
   }
 
