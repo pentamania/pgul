@@ -63,6 +63,6 @@ export function toggleKeyStateFrame<T>(mapRef: Map<T, number>, key: T) {
     mapRef.set(key, KEY_UP_FLG_NUM);
   } else {
     // neutral/keyUp -> Down
-    mapRef.set(key, 1);
+    mapRef.set(key, KEY_DOWN_FLG_NUM);
   }
 }
