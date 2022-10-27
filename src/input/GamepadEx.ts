@@ -146,9 +146,9 @@ export class GamepadExtension {
     return v != null && v > threshold;
   }
 
-  getButtonDown(key: GpCodeAll): boolean {
+  getButtonDown(key: GpCodeAll, border: number = KEY_DOWN_FLG_NUM): boolean {
     const v = this._stateMap.get(key);
-    return v != null && v === KEY_DOWN_FLG_NUM;
+    return v != null && v === border;
   }
 
   getButtonUp(key: GpCodeAll): boolean {

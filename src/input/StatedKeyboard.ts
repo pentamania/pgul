@@ -57,9 +57,9 @@ export class StatedKeyboard extends Keyboard {
     return v != null && v > threshold;
   }
 
-  public getKeyDown(key: KbCode): boolean {
+  public getKeyDown(key: KbCode, border: number = KEY_DOWN_FLG_NUM): boolean {
     const v = this._stateMap.get(key);
-    return v != null && v === KEY_DOWN_FLG_NUM;
+    return v != null && v === border;
   }
 
   public getKeyUp(key: KbCode): boolean {
