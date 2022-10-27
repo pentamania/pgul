@@ -1,7 +1,4 @@
-import * as KeyCode from "keycode-js";
-
-/** KeyboardEvent.code Union type */
-export type KbCode = typeof KeyCode[keyof typeof KeyCode]; // valueof
+import { KbCode } from "./KbCode";
 
 /**
  * Keyboard

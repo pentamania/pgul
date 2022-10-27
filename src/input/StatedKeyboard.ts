@@ -4,7 +4,8 @@ import {
   toggleKeyStateFrame,
   updateStateFrame,
 } from "./common";
-import { KbCode, Keyboard } from "./Keyboard";
+import { KbCode } from "./KbCode";
+import { Keyboard } from "./Keyboard";
 
 /**
  * keyDown/keyUp処理などの状態による
