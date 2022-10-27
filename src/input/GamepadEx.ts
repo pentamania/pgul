@@ -97,6 +97,7 @@ export class GamepadExtension {
    */
   public updateButtonStates(autoPlayMode = false) {
     getGamepad(this._gpIndex)?.buttons.forEach((btn, i) => {
+      if (!this._stateMap.has(i)) this._stateMap.set(i, 0);
       updateStateFrame(this._stateMap, i, btn.pressed, autoPlayMode);
     });
   }
