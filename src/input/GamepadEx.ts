@@ -203,16 +203,20 @@ export class GamepadExtension {
   }
 
   /**
-   * [jp]
-   * Gamepadいずれかのボタンの押下検知
+   * Gamepadいずれかのボタンのkeydown検知
    * (同時押ししているときは最もindexの若いボタンのみ)
    *
    * @returns
-   * gamepadが無い、あるいは何のボタンを押下してないときは-1を返却
+   * 見つかったGamepadId or undefined
    */
-  public findPressedButtonIndex(): number {
-    const gp = getGamepad(this._gpIndex);
-    if (!gp) return -1;
-    return gp.buttons.findIndex((btn) => btn.pressed);
+  public getAnyButtonDown(): GpButtonId | undefined {
+    let btnId: GpButtonId | undefined;
+    getGamepad(this._gpIndex)?.buttons.some((_btn, id) => {
+      if (this.getButtonDown(id)) {
+        btnId = id;
+        return true;
+      }
+    });
+    return btnId;
   }
 }
