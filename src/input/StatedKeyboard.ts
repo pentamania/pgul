@@ -19,6 +19,21 @@ export class StatedKeyboard extends Keyboard {
   private _stateMap: Map<KbCode, number> = new Map();
 
   /**
+   * keyMap側で指定キーコードを定義する.
+   * （定義されていないと{@link updateKeyStates}での処理対象とならない）
+   *
+   * ユーザーキー操作でも動的に定義されるが、それを待たずに設定したい場合に使用する
+   *
+   * @param codes
+   */
+  initializeKeyMap(...codes: KbCode[]) {
+    codes.forEach((code) => {
+      this.keyMap[code] = false;
+      this._stateMap.set(code, 0); // 念のため
+    });
+  }
+
+  /**
    * keyState更新
    * 基本的に毎フレーム実行
    *
