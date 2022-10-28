@@ -20,6 +20,8 @@ export * from "./dom/Stats";
 
 export * from "./gui/index";
 
+export * from "./input/index";
+
 export * from "./mixins/Menuable";
 export * from "./mixins/Traceable";
 export * from "./mixins/Poolable";
