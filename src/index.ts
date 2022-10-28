@@ -41,9 +41,6 @@ export * from "./utilTypes";
 
 export * from "./loaders/fontLoader";
 
-// helper系
-// import * as phinaHelper from './helpers/phina'
-
 // export { default as getDistanceSquared } from "./utils/getDistanceSquared";
 // export { default as stringToEnum } from "./utils/stringToEnum";
 // export { default as zeroFillNum } from "./utils/zeroFillNum";
