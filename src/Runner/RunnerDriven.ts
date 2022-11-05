@@ -1,6 +1,7 @@
 import { List } from "../List";
 import combineGeneratorFunctions from "../utils/combineGeneratorFunctions";
 import { GConstructor } from "../utilTypes";
+import { Vector2 } from "../Vector2";
 import {
   TargetDeclaredRunnerAction,
   TargetDeclaredRunner,
@@ -355,6 +356,23 @@ export function RunnerDriven<TBase extends ChildContainable>(Base: TBase) {
           if (ch.resumeRunners) ch.resumeRunners();
         });
       }
+    }
+
+    /**
+     * [jp]
+     * runnerのvector合計値を返す
+     *
+     * @param vectorRef
+     * [jp]
+     * 計算値を格納するVector
+     * 無指定のときは新規作成
+     */
+    public getRunnerCombinedVector(vectorRef: Vector2 = new Vector2(0, 0)) {
+      this._runners.forEach((runner) => {
+        vectorRef.x += runner.vx;
+        vectorRef.y += runner.vy;
+      });
+      return vectorRef;
     }
 
     /**
