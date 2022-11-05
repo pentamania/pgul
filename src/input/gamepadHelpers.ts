@@ -95,3 +95,55 @@ export const GAMEPAD_COMMON_BUTTON_CODES = [
   15,
   16,
 ] as const;
+
+/**
+ * Gamepadの接続・切断を監視
+ *
+ * @example
+ * const { gamepadHelper } = pgul;
+ *
+ * const moni = new gamepadHelper.GamepadMonitor();
+ * moni.onConnect = (gp) => {
+ *   console.log("connected:", gp.id);
+ * };
+ * moni.onDisConnect = (gp) => {
+ *   console.log("disconnectedted:", gp.id);
+ * };
+ */
+export class GamepadMonitor {
+  private _activated = false;
+
+  private _onConnectListener: (e: GamepadEvent) => any = (e) => {
+    this.onConnect(e.gamepad);
+  };
+
+  private _onDisConnectListener: (e: GamepadEvent) => any = (e) => {
+    this.onDisConnect(e.gamepad);
+  };
+
+  constructor() {
+    this.activate();
+  }
+
+  activate() {
+    if (this._activated) return;
+    window.addEventListener("gamepadconnected", this._onConnectListener);
+    window.addEventListener("gamepaddisconnected", this._onDisConnectListener);
+    this._activated = true;
+  }
+
+  kill() {
+    window.removeEventListener("gamepadconnected", this._onConnectListener);
+    window.removeEventListener(
+      "gamepaddisconnected",
+      this._onDisConnectListener
+    );
+    this._activated = false;
+  }
+
+  /** @virtual */
+  onConnect(_gamepad: Gamepad) {}
+
+  /** @virtual */
+  onDisConnect(_gamepad: Gamepad) {}
+}
