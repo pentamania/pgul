@@ -1,4 +1,4 @@
-import { RunnerAction } from "../../Runner";
+import { Runner, RunnerAction } from "../../Runner";
 
 /**
  * 何もしない
@@ -10,5 +10,15 @@ export function createWaitingAction(duration: number = Infinity): RunnerAction {
     while (_currentCount < duration) {
       yield _currentCount++;
     }
+  };
+}
+
+/**
+ * 指定したRunnerの活動停止を待つ
+ * @param runner
+ */
+export function createRunnerEndWaitingAction(runner: Runner): RunnerAction {
+  return function* () {
+    while (!runner.dead) yield;
   };
 }
