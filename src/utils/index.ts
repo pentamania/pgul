@@ -20,3 +20,5 @@ export { default as sliceGrid } from "./sliceGrid";
 export { convertPromiseToGenerator } from "./promiseToGenerator";
 export { default as frac } from "./frac";
 export * from "./timeFormatConverter";
+export * from "./addAccessor";
+export * from "./addMethod";
