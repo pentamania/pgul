@@ -1,15 +1,24 @@
 import { SharedContext } from "./common";
 
 /**
- * @param range
+ * [en]
+ * DESC TODO
+ *
+ * [jp]
+ * 水平方向のモノトーングラデーションを生成
+ *
+ * @param width
+ * @param height
  * @param color
+ * @param fromLeft
+ * @returns CanvasGradient
  */
 export function createHorizontalMonoGradation(
   width: number,
   height: number,
   color: string,
   fromLeft: boolean = true
-) {
+): CanvasGradient {
   const ctx = SharedContext;
   const y = height / 2;
   const grad = ctx.createLinearGradient(0, y, width, y);
@@ -21,7 +30,12 @@ export function createHorizontalMonoGradation(
 }
 
 /**
+ * [en]
+ * Create CanvasGradient with monotone gradation.
+ *
+ * [jp]
  * 単色のシンプルな円形グラデーションを作成
+ *
  * @param radius 半径
  * @param color 色
  */
