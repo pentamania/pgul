@@ -22,3 +22,4 @@ export { default as frac } from "./frac";
 export * from "./timeFormatConverter";
 export * from "./addAccessor";
 export * from "./addMethod";
+export * from "./isGenerator";
