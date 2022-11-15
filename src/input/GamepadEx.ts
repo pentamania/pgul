@@ -183,23 +183,34 @@ export class GamepadExtension {
     return gp != null && tiltThreshold < getStickX(gp);
   }
 
-  // Direction buttons?
+  // Direction buttons
+  public dPadUpId: number = DpadLayoutMap["default"].DPAD_UP;
+  public dPadDownId: number = DpadLayoutMap["default"].DPAD_DOWN;
+  public dPadLeftId: number = DpadLayoutMap["default"].DPAD_LEFT;
+  public dPadRightId: number = DpadLayoutMap["default"].DPAD_RIGHT;
 
-  /** 未実装 Not implemented */
+  /** Is Up button pressed */
   getUpButtonPress(): boolean {
-    return false;
+    const gp = getGamepad(this._gpIndex);
+    return gp != null && gp.buttons[this.dPadUpId]?.pressed === true;
   }
-  /** 未実装 Not implemented */
+
+  /** Is Down button pressed */
   getDownButtonPress(): boolean {
-    return false;
+    const gp = getGamepad(this._gpIndex);
+    return gp != null && gp.buttons[this.dPadDownId]?.pressed === true;
   }
-  /** 未実装 Not implemented */
+
+  /** Is Left button pressed */
   getLeftButtonPress(): boolean {
-    return false;
+    const gp = getGamepad(this._gpIndex);
+    return gp != null && gp.buttons[this.dPadLeftId]?.pressed === true;
   }
-  /** 未実装 Not implemented */
+
+  /** Is Right button pressed */
   getRightButtonPress(): boolean {
-    return false;
+    const gp = getGamepad(this._gpIndex);
+    return gp != null && gp.buttons[this.dPadRightId]?.pressed === true;
   }
 
   /**
@@ -220,3 +231,21 @@ export class GamepadExtension {
     return btnId;
   }
 }
+
+// Ref: https://github.com/samiare/Controller.js/tree/master/source/layouts
+const DpadLayoutMap = {
+  // Xbox Controllers
+  default: {
+    DPAD_UP: 11,
+    DPAD_DOWN: 12,
+    DPAD_LEFT: 13,
+    DPAD_RIGHT: 14,
+  },
+  // label temporary
+  ps: {
+    DPAD_UP: 12,
+    DPAD_DOWN: 13,
+    DPAD_LEFT: 14,
+    DPAD_RIGHT: 15,
+  },
+};
