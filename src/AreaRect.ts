@@ -34,11 +34,18 @@ export class AreaRect {
 
   /**
    * 座標がエリア枠内にあるかどうか
+   *
    * @param x
    * @param y
+   * @param offset
    */
-  outOfRect(x: number, y: number): boolean {
-    return x < this.left || this.right < x || y < this.top || this.bottom < y;
+  outOfRect(x: number, y: number, offset: number = 0): boolean {
+    return (
+      x < this.left - offset ||
+      this.right + offset < x ||
+      y < this.top - offset ||
+      this.bottom + offset < y
+    );
   }
 
   elementOutofRect(element: LooseVector2) {
