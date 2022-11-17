@@ -19,12 +19,13 @@ abstract class Menu extends Menuable(
 ) {}
 
 /**
+ * [jp]
  * メニュー管理クラス
  *
  * メニューコンポーネントは三つの段階に分かれる
- * - Item：Menuの子に当たる概念
+ * - Controller: 複数のMenuを切替・管理する（本クラス）
  * - Menu：メニュー本体
- * - Controller: 複数のMenuを切替・管理する
+ * - Item：項目。Menuの子に当たる概念
  *
  * @example
  * // TODO
@@ -88,6 +89,7 @@ export class MenuController<ML = any> {
   }
 
   /**
+   * [jp]
    * 直前のメニューに戻る
    *
    * @param resetCurrent Whether to reset current menu item selection
@@ -104,6 +106,7 @@ export class MenuController<ML = any> {
   }
 
   /**
+   * [jp]
    * メニュー遷移履歴をクリア
    */
   clearHistory() {
@@ -111,11 +114,15 @@ export class MenuController<ML = any> {
   }
 
   /**
+   * [jp]
    * 選択中の項目を実行.
+   * (currentMenuのrunOptionを実行 -> 選択中Itemのexecuteメソッドを実行)
    *
+   * currentMenuが存在しない、 選択中Itemのexecuteが定義されてない場合は何もしない
+   *
+   * @returns
+   * 実行結果を返す
    * 実行結果がラベル文字列を返した場合、対応するメニューをアクティブ化
-   *
-   * @returns 実行結果を返す
    */
   runOption(...args: Parameters<typeof Menu.prototype.runOption>) {
     if (!this.currentMenu) return;
@@ -127,6 +134,7 @@ export class MenuController<ML = any> {
   }
 
   /**
+   * [jp]
    * 現在のメニューの一つ前の項目を選択
    * ＆その参照を返す（存在すれば）
    */
@@ -139,6 +147,7 @@ export class MenuController<ML = any> {
   }
 
   /**
+   * [jp]
    * 現在のメニューの一つ後の項目を選択
    * ＆その参照を返す（存在すれば）
    */
