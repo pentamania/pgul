@@ -1,4 +1,4 @@
-import timesMap from "./timesMap";
+import timesMap from "../utils/timesMap";
 
 const DEG_TO_RAD = Math.PI / 180;
 const RAD_TO_DEG = 180 / Math.PI;

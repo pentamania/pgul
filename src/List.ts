@@ -1,4 +1,4 @@
-import { Random } from "./Random";
+import { Random } from "./math/Random";
 
 /**
  * 配列をゲーム向けに使いやすくするためのクラス

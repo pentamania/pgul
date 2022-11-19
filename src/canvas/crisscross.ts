@@ -1,4 +1,4 @@
-import { DEG_TO_RAD_TABLE } from "../utils/radianConverter";
+import { DEG_TO_RAD_TABLE } from "../math/radianConverter";
 
 const DEFAULT_SIDE_INDENT = 0.2;
 const SIDES = 4;

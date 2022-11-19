@@ -1,4 +1,4 @@
-import { toRadian } from "../utils/radianConverter";
+import { toRadian } from "../math/radianConverter";
 import { SharedContext } from "./common";
 
 const DEFAULT_PATTERN_SIZE = 16;

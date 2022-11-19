@@ -1,4 +1,4 @@
-import { flipRadianVertical } from "../../../utils/radianConverter";
+import { flipRadianVertical } from "../../../math/radianConverter";
 import { RunnerAction } from "../../Runner";
 import { createVectorTurnToAction } from "./turning";
 

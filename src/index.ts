@@ -1,14 +1,9 @@
 export * from "./List";
-export * from "./Random";
-export * from "./Vector2";
 export * from "./runner";
 export * from "./TaskQueue";
-export * from "./AreaRect";
-export * from "./utils/radianConverter";
-export * from "./ColorHelper";
 export * from "./extra";
 
-export * from "./math/index";
+export * from "./math";
 
 export * from "./dom/Stats";
 
@@ -17,9 +12,6 @@ export * from "./gui/index";
 export * from "./input/index";
 
 export * from "./pooling";
-
-export * from "./mixins/Traceable";
-export * from "./mixins/Vector2Driven";
 
 import * as utils from "./utils/index";
 export { utils };

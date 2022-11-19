@@ -1,4 +1,4 @@
-import { toRadian } from "../../../utils/radianConverter";
+import { toRadian } from "../../../math/radianConverter";
 import { RunnerAction } from "../../Runner";
 import { createVectorTurnToAction } from "./turning";
 

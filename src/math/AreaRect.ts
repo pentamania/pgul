@@ -1,5 +1,5 @@
-import { LooseVector2 } from "./utilTypes";
-import clamp from "./utils/clamp";
+import { LooseVector2 } from "../utilTypes";
+import clamp from "../utils/clamp";
 import { Vector2 } from "./Vector2";
 
 export class AreaRect {

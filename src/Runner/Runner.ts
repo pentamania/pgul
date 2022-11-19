@@ -1,6 +1,6 @@
 import { Coroutine } from "./Coroutine";
-import { Vector2 } from "../Vector2";
-import { toDegree, toRadian } from "../utils/radianConverter";
+import { Vector2 } from "../math/Vector2";
+import { toDegree, toRadian } from "../math/radianConverter";
 import { ContextBindableGeneratorFunction } from "../utilTypes";
 
 /**

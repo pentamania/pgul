@@ -1,4 +1,4 @@
-import { PI2 } from "../utils/radianConverter";
+import { PI2 } from "./radianConverter";
 
 const DEFAULT_FREQ = 100;
 

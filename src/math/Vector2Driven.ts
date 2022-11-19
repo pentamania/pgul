@@ -1,5 +1,5 @@
 import clamp from "../utils/clamp";
-import { Vector2 } from "../Vector2";
+import { Vector2 } from "./Vector2";
 import { TwoDimensionalObjectConstructor } from "../utilTypes";
 
 const DEFAULT_FRICTION = 0.9;

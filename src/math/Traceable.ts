@@ -1,5 +1,5 @@
 import { List } from "../List";
-import { Vector2 } from "../Vector2";
+import { Vector2 } from "./Vector2";
 import {
   TwoDimensionalObject,
   TwoDimensionalObjectConstructor,

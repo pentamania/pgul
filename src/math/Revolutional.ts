@@ -1,8 +1,9 @@
-import { clamp, toRadian } from "../utils/index";
+import { clamp } from "../utils";
 import {
   TwoDimensionalObject,
   TwoDimensionalObjectConstructor,
 } from "../utilTypes";
+import { toRadian } from "./radianConverter";
 
 // Params
 const DEFAULT_REVOLUTION_VELOCITY_THRESHOLD = toRadian(2);

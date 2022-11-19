@@ -1,4 +1,4 @@
-import { Random } from "../Random";
+import { Random } from "../math/Random";
 import { clearCanvas, getOriginalSize } from "./utils";
 
 const sharedRng = new Random();
