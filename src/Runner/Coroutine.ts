@@ -1,4 +1,4 @@
-import { ContextBindableGeneratorFunction } from "./utilTypes";
+import { ContextBindableGeneratorFunction } from "../utilTypes";
 
 export interface CoroutineTask<CTX = any> {
   action: ContextBindableGeneratorFunction<CTX>;
