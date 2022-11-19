@@ -1,4 +1,4 @@
-import { Poolable } from "../../src/mixins/Poolable";
+import { Poolable } from "../../src/pooling/Poolable";
 
 describe("Poolable", () => {
   // Sample class
