@@ -1,4 +1,4 @@
-import { Menuable } from "./mixins/Menuable";
+import { Menuable } from "./Menuable";
 
 /** Menuable拡張クラス型 */
 abstract class Menu extends Menuable(

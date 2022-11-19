@@ -9,7 +9,6 @@ export * from "./AreaRect";
 export * from "./Automaton";
 export * from "./utils/radianConverter";
 export * from "./Debugger";
-export * from "./MenuController";
 export * from "./ColorHelper";
 
 export * from "./angular/index";
@@ -22,7 +21,6 @@ export * from "./input/index";
 
 export * from "./pooling";
 
-export * from "./mixins/Menuable";
 export * from "./mixins/Traceable";
 export * from "./mixins/Chargable";
 export * from "./mixins/Vector2Driven";
