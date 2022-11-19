@@ -8,7 +8,7 @@ export * from "./utils/radianConverter";
 export * from "./ColorHelper";
 export * from "./extra";
 
-export * from "./angular/index";
+export * from "./math/index";
 
 export * from "./dom/Stats";
 
