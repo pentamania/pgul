@@ -8,3 +8,4 @@ export * from "./AreaRect";
 export * from "./Grid";
 export * from "./Traceable";
 export * from "./Vector2Driven";
+export { default as frac } from "./frac";

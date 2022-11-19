@@ -1,4 +1,4 @@
-import frac from "./frac";
+import frac from "../math/frac";
 import zeroFillNum from "./zeroFillNum";
 const trunc = Math.trunc;
 
