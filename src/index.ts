@@ -6,8 +6,6 @@ export * from "./Coroutine";
 export * from "./runner/index";
 export * from "./TaskQueue";
 export * from "./AreaRect";
-export * from "./Pool";
-export * from "./ObjectPoolContainer";
 export * from "./Automaton";
 export * from "./utils/radianConverter";
 export * from "./Debugger";
@@ -22,9 +20,10 @@ export * from "./gui/index";
 
 export * from "./input/index";
 
+export * from "./pooling";
+
 export * from "./mixins/Menuable";
 export * from "./mixins/Traceable";
-export * from "./mixins/Poolable";
 export * from "./mixins/Chargable";
 export * from "./mixins/Vector2Driven";
 
