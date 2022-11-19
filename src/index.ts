@@ -1,14 +1,12 @@
 export * from "./List";
-export * from "./Timer";
 export * from "./Random";
 export * from "./Vector2";
 export * from "./runner";
 export * from "./TaskQueue";
 export * from "./AreaRect";
-export * from "./Automaton";
 export * from "./utils/radianConverter";
-export * from "./Debugger";
 export * from "./ColorHelper";
+export * from "./extra";
 
 export * from "./angular/index";
 
@@ -21,7 +19,6 @@ export * from "./input/index";
 export * from "./pooling";
 
 export * from "./mixins/Traceable";
-export * from "./mixins/Chargable";
 export * from "./mixins/Vector2Driven";
 
 import * as utils from "./utils/index";

@@ -1,4 +1,4 @@
-import { parseQueryString } from "./utils/index";
+import { parseQueryString } from "../utils/index";
 
 let isProduction: boolean;
 try {
