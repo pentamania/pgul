@@ -1,5 +1,4 @@
 export * from "./Vector2";
-export * from "./radianConverter";
 export * from "./Waveformer";
 export * from "./Revolutional";
 export * from "./Random";
@@ -9,3 +8,6 @@ export * from "./Grid";
 export * from "./Traceable";
 export * from "./Vector2Driven";
 export { default as frac } from "./frac";
+
+import * as radianConverter from "./radianConverter";
+export { radianConverter };
