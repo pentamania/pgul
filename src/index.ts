@@ -1,6 +1,6 @@
 export * from "./List";
 export * from "./runner";
-export * from "./TaskQueue";
+export * from "./queuing";
 export * from "./extra";
 
 export * from "./math";

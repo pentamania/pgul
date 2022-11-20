@@ -1,35 +1,8 @@
-// GeneratorFunction-like TaskAction type
-export type TaskAction<CTX = any> = (this: CTX, ...args: any[]) => Generator;
-
-interface QueueTaskCommon<CTX = any> {
-  /** String for registered action-func, or action-func itself */
-  action: string | TaskAction<CTX>;
-
-  /** Arguments for action-func */
-  args?: any[];
-}
-
-export interface SerialQueueTask<CTX = any> extends QueueTaskCommon<CTX> {
-  /** 前回タスクからの(フレーム/時間)インターバル */
-  interval: number;
-}
-
-// // TODO 配列型も対応する？
-// export type QueueTaskArray = [
-//   number, // interval-frame
-//   string, // action type
-//   any[] // arguments/parameters
-// ];
-//
-
-// // TODO? パラレル型も対応？
-// interface ParallelQueueTask<CTX = any> extends QueueTaskCommon<CTX> {
-//   runAt: number;
-// }
-
-export type ActionDictionary<T = string> = Map<T, TaskAction>;
-
-const FAKE_EMPTY_ARRAY: never[] = [];
+import {
+  ActionDictionary,
+  QueueTaskCommon,
+  SerialQueueTask,
+} from "./interfaces";
 
 /**
  * 名前は仮
@@ -205,3 +178,5 @@ export class TaskQueue {
     this.ActionDictionary = dic;
   }
 }
+
+const FAKE_EMPTY_ARRAY: never[] = [];
