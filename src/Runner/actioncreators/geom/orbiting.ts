@@ -1,4 +1,3 @@
-import { toRadian } from "../../../index";
 import { LooseVector2 } from "../../../utilTypes";
 import { Waveformer } from "../../../math/Waveformer";
 import { TargetDeclaredRunnerAction } from "../../Runner";
