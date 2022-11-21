@@ -1,13 +1,5 @@
 import { ContextBindableGeneratorFunction } from "../utilTypes";
 
-export interface CoroutineTask<CTX = any> {
-  action: ContextBindableGeneratorFunction<CTX>;
-  args?: any[];
-}
-
-// args無指定のときに代わりに使われる仮の配列
-const PLACEHOLDER_EMPTY_ARRAY: never[] = [];
-
 /**
  * コルーチン
  */
@@ -17,12 +9,10 @@ export class Coroutine {
   protected _loop = false;
   protected _isAwake = true;
 
-  // constructor(options) {
-  // }
-
   /**
    * ルーチン処理を進める
    * ループが有効な場合はジェネレーターをリセットする
+   *
    * @returns 稼働状態であればnext結果を返す
    */
   step(): void | IteratorResult<any> {
@@ -32,12 +22,7 @@ export class Coroutine {
     // 進行
     const result = this._generator.next();
 
-    // // イベント発火
-    // this.has('next') && this.flare('next',  {
-    //   result: nextResult,
-    // })
-
-    // すべての処理が終わったら
+    // すべての処理が終わってたら
     if (result.done) {
       if (this._loop) {
         this.reset(); // 巻き戻す
@@ -46,7 +31,6 @@ export class Coroutine {
       }
     }
 
-    // return this._generator != null;
     return result;
   }
 
@@ -121,7 +105,6 @@ export class Coroutine {
   }
 
   /**
-   * @readonly
    * 稼働状態を返す。
    * falseの際はstepを実行しても進まない
    * pause/resumeなどで更新
@@ -148,3 +131,11 @@ export class Coroutine {
     })();
   }
 }
+
+export interface CoroutineTask<CTX = any> {
+  action: ContextBindableGeneratorFunction<CTX>;
+  args?: any[];
+}
+
+// args無指定のときに代わりに使われる仮の配列
+const PLACEHOLDER_EMPTY_ARRAY: never[] = [];
