@@ -2,15 +2,20 @@ import { List } from "./core/List";
 import { Random } from "./math/Random";
 
 /**
- * 配列をゲーム向けに使いやすくするためのクラス
+ * [en]
+ * Add random pickup feature to List class
+ *
+ * [jp]
+ * Listクラスにランダムピックアップ機能追加
  */
 export class RandomPickableList<T = any> extends List<T> {
   protected _random?: Random;
 
   /**
-   * 配列から無作為に選ぶ
+   * [jp] 無作為に選ぶ
    *
-   * @param random 無指定の場合はインスタンスごとの内部Randomモジュール使用
+   * @param random
+   * [jp] 無指定の場合はインスタンスごとの内部Randomモジュール使用
    */
   randomPick(random?: Random) {
     if (!random) {
@@ -22,7 +27,7 @@ export class RandomPickableList<T = any> extends List<T> {
   }
 
   /**
-   * 内部Randomモジュールのシード値を設定
+   * [jp] 内部Randomモジュールのシード値を設定
    *
    * @param seed
    */
