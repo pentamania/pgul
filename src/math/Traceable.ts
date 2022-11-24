@@ -83,6 +83,8 @@ export function Traceable<TBase extends TwoDimensionalObjectConstructor>(
      *
      * @param x
      * @param y
+     * @returns
+     * [jp] pushの結果、押し出されたvec2（適用位置）があったらそれを返す
      */
     pushTracePosition(x: number, y: number) {
       // TODO: Vectorオブジェクトはプーリングして使いまわす？
@@ -91,6 +93,7 @@ export function Traceable<TBase extends TwoDimensionalObjectConstructor>(
         this._currentTracingPosition = popped;
         return popped;
       }
+      return;
     }
 
     /**

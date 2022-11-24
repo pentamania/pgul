@@ -69,7 +69,7 @@ export class TaskQueue {
     // 進行中タスクを進める
     // タスクが同時に終了する可能性（->spliceによる配列ズレ）も考慮
     if (this._tasksInProgress.length > 0) {
-      this._tasksInProgress.slice(0).forEach((actionGen, i) => {
+      this._tasksInProgress.slice(0).forEach((actionGen) => {
         const res = actionGen.next();
         if (res.done) this.dequeue(actionGen);
       });

@@ -118,6 +118,7 @@ export function Menuable<TBase extends GConstructor>(Base: TBase) {
       while (!this._selectItem(this._currentItemIndex + i)) {
         --i;
       }
+      return true;
     }
 
     /**
@@ -132,6 +133,7 @@ export function Menuable<TBase extends GConstructor>(Base: TBase) {
       while (!this._selectItem(this._currentItemIndex + i)) {
         ++i;
       }
+      return true;
     }
 
     /**

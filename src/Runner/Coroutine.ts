@@ -123,7 +123,7 @@ export class Coroutine {
     taskList: CoroutineTask[],
     context: Coroutine
   ) {
-    const genList = taskList.map((task, i) => {
+    const genList = taskList.map((task) => {
       return task.action.apply(context, task.args || PLACEHOLDER_EMPTY_ARRAY);
     });
     return (function* () {

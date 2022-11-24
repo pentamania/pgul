@@ -227,6 +227,7 @@ export class GamepadExtension {
         btnId = id;
         return true;
       }
+      return false;
     });
     return btnId;
   }

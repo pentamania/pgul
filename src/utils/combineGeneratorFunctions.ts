@@ -30,7 +30,7 @@ export default function combineGeneratorFunctions(
   ...genFuncs: GeneratorFunction[]
 ) {
   return function* (this: any) {
-    let genList: (Generator | undefined)[] = genFuncs.map((gf) => {
+    let genList: (Generator | null)[] = genFuncs.map((gf) => {
       return gf.bind(this)();
     });
     const results: IteratorYieldResult<unknown>[] = [];
@@ -46,8 +46,9 @@ export default function combineGeneratorFunctions(
             results.push(res);
             return g;
           }
+          return null;
         })
-        .filter((g) => g != undefined);
+        .filter((g) => g != null);
 
       // console.log('genlist', genList);
       if (results.length) {
@@ -57,5 +58,7 @@ export default function combineGeneratorFunctions(
         return null;
       }
     }
+
+    return null;
   }.bind(this);
 }

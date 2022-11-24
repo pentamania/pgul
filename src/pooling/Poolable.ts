@@ -1,4 +1,4 @@
-import { Pool } from ".";
+import { Pool } from "./Pool";
 import { GConstructor } from "../utilTypes";
 
 /**
