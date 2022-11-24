@@ -1,4 +1,4 @@
-import { List } from "../List";
+import { List } from "../core/List";
 import { Vector2 } from "./Vector2";
 import {
   TwoDimensionalObject,

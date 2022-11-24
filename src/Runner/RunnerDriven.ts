@@ -1,4 +1,4 @@
-import { List } from "../List";
+import { List } from "../core/List";
 import combineGeneratorFunctions from "../utils/combineGeneratorFunctions";
 import { GConstructor } from "../utilTypes";
 import { Vector2 } from "../math/Vector2";

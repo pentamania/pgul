@@ -1,4 +1,4 @@
-export * from "./List";
+export * from "./core/List";
 export * from "./RandomPickableList";
 export * from "./runner";
 export * from "./queuing";
