@@ -1,11 +1,4 @@
-import { parseQueryString } from "../utils/index";
-
-let isProduction: boolean;
-try {
-  isProduction = process.env.NODE_ENV !== "development";
-} catch (error) {
-  isProduction = true;
-}
+import { isProduction, parseQueryString } from "../utils/index";
 
 /**
  * ビルド環境・クエリパラメータを利用した汎用デバッガ
@@ -40,7 +33,7 @@ export class Debugger<QP = { [k: string]: any }> {
    * 開発環境かどうか
    * 環境変数から設定
    */
-  static readonly isProduction: boolean = isProduction;
+  static readonly isProduction: boolean = isProduction();
 
   /**
    * URLのクエリパラメータをパースして取得
