@@ -1,10 +1,12 @@
-import { Runner, RunnerAction } from "../../Runner";
+import { BaseRunner, BaseRunnerAction } from "../../BaseRunner";
 
 /**
  * 何もしない
  * @param duration 待機時間
  */
-export function createWaitingAction(duration: number = Infinity): RunnerAction {
+export function createWaitingAction(
+  duration: number = Infinity
+): BaseRunnerAction {
   return function* () {
     let _currentCount = 0;
     while (_currentCount < duration) {
@@ -17,7 +19,9 @@ export function createWaitingAction(duration: number = Infinity): RunnerAction {
  * 指定したRunnerの活動停止を待つ
  * @param runner
  */
-export function createRunnerEndWaitingAction(runner: Runner): RunnerAction {
+export function createRunnerEndWaitingAction(
+  runner: BaseRunner
+): BaseRunnerAction {
   return function* () {
     while (!runner.dead) yield;
   };

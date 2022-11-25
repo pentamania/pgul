@@ -1,4 +1,4 @@
-import { Runner, RunnerAction, TargetDeclaredRunnerAction } from "../../Runner";
+import { BaseRunner, BaseRunnerAction } from "../../BaseRunner";
 
 /**
  * 毎フレーム、指定コールバック関数を実行するRunnerAction生成
@@ -8,9 +8,9 @@ import { Runner, RunnerAction, TargetDeclaredRunnerAction } from "../../Runner";
  * @returns
  */
 export function createEachFrameAction<RT = any>(
-  cb: (cnt: number, runner: Runner<RT>) => any,
+  cb: (cnt: number, runner: BaseRunner<RT>) => any,
   duration: number = Infinity
-): RunnerAction<RT> {
+): BaseRunnerAction<RT> {
   return function* () {
     let _currentCount = 0;
     while (_currentCount < duration) {
@@ -24,9 +24,9 @@ export function createEachFrameAction<RT = any>(
  * @alias {@link createEachFrameAction}
  */
 export function createEachStepAction<RT = any>(
-  cb: (cnt: number, runner: Runner<RT>) => any,
+  cb: (cnt: number, runner: BaseRunner<RT>) => any,
   duration?: number
-): RunnerAction<RT> {
+): BaseRunnerAction<RT> {
   return createEachFrameAction(cb, duration);
 }
 
@@ -58,9 +58,9 @@ export function createEachStepAction<RT = any>(
  */
 export function createConstantFuncRunningAction<RT = any>(
   executeNum: number,
-  executeFunc: (runner: Runner<RT>, i: number, frameCount: number) => any,
+  executeFunc: (runner: BaseRunner<RT>, i: number, frameCount: number) => any,
   execInterval: number
-): RunnerAction<RT> {
+): BaseRunnerAction<RT> {
   return function* () {
     let _frameCount = 0;
     let _currentRunningCount = 0;
@@ -93,11 +93,11 @@ export function createConstantFuncRunningAction<RT = any>(
  * @param runnerAction
  * @param duration
  */
-export function createConstantActionRunningAction<RT = any>(
+export function createConstantActionRunningAction(
   actionRunningInterval: number,
-  runnerAction: RunnerAction<RT> | TargetDeclaredRunnerAction<RT>,
+  runnerAction: (...args: any[]) => Generator,
   duration: number
-): RunnerAction | TargetDeclaredRunnerAction {
+): BaseRunnerAction {
   return function* () {
     let _cnt = 0;
     let _inActionGen: Generator | undefined = runnerAction.bind(this)();

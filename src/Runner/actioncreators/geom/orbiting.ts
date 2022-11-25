@@ -1,6 +1,6 @@
 import { LooseVector2 } from "../../../core/utilTypes";
 import { Waveformer } from "../../../math/Waveformer";
-import { TargetDeclaredRunnerAction } from "../../Runner";
+import { BaseRunnerAction } from "../../BaseRunner";
 
 export function createFixedOrbitingAction(
   centerVec: LooseVector2,
@@ -8,7 +8,7 @@ export function createFixedOrbitingAction(
   orbitRadius: number,
   orbitFreqency: number,
   duration: number = Infinity
-): TargetDeclaredRunnerAction<LooseVector2> {
+): BaseRunnerAction<LooseVector2> {
   return function* () {
     // Local vars
     let _cnt = 0;
@@ -22,8 +22,10 @@ export function createFixedOrbitingAction(
       waver.time++;
 
       // 本体位置反映
-      this.target.x = centerVec.x + waver.getMagnitude("cos");
-      this.target.y = centerVec.y + waver.getMagnitude("sin");
+      if (this.target) {
+        this.target.x = centerVec.x + waver.getMagnitude("cos");
+        this.target.y = centerVec.y + waver.getMagnitude("sin");
+      }
 
       yield _cnt++;
     }
