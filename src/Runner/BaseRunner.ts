@@ -1,4 +1,3 @@
-import { ContextBindableGeneratorFunction } from "../utilTypes";
 import { ActionDictionary } from "./ActionDictionary";
 import { Coroutine } from "./Coroutine";
 
@@ -89,10 +88,7 @@ export class BaseRunner<
    * @param action GeneratorFunctionでthisをRunnerにしたもの、文字列指定で予め登録したAction実行可能？
    * @param args 可変長でRunnerAction実行時の引数パラメータを設定（文字列指定で有効、それ以外は使いずらいかも？）
    */
-  addAction(
-    action: ContextBindableGeneratorFunction<BaseRunner<TT>>,
-    ...args: any
-  ): this {
+  addAction(action: BaseRunnerAction<TT>, ...args: any): this {
     return this.addTask({
       action,
       args: args,
@@ -139,3 +135,11 @@ export class BaseRunner<
     return this;
   }
 }
+
+/**
+ * コンテキストをBaseRunnerとした疑似GeneratorFunction型
+ */
+export type BaseRunnerAction<RT = any> = (
+  this: BaseRunner<RT>,
+  ...args: any[]
+) => Generator;

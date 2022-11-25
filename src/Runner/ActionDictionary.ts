@@ -1,12 +1,11 @@
-import { ContextBindableGeneratorFunction } from "../utilTypes";
 import { BaseRunner } from "./BaseRunner";
 
 export class ActionDictionary {
-  static map: Map<string, ContextBindableGeneratorFunction> = new Map();
+  static map: Map<string, (...args: any[]) => Generator> = new Map();
 
   static register<R extends BaseRunner = BaseRunner>(
     name: string,
-    genFunc: ContextBindableGeneratorFunction<R>
+    genFunc: (this: R, ...args: any[]) => Generator
   ) {
     this.map.set(name, genFunc);
   }

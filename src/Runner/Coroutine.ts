@@ -1,5 +1,3 @@
-import { ContextBindableGeneratorFunction } from "../utilTypes";
-
 /**
  * コルーチン
  */
@@ -132,8 +130,8 @@ export class Coroutine {
   }
 }
 
-export interface CoroutineTask<CTX = any> {
-  action: ContextBindableGeneratorFunction<CTX>;
+export interface CoroutineTask {
+  action: (...args: any[]) => Generator;
   args?: any[];
 }
 

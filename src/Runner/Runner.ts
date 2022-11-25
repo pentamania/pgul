@@ -1,6 +1,5 @@
 import { Vector2 } from "../math/Vector2";
 import { toDegree, toRadian } from "../math/radianConverter";
-import { ContextBindableGeneratorFunction } from "../utilTypes";
 import { BaseRunner } from "./BaseRunner";
 import { ActionDictionary } from "./ActionDictionary";
 
@@ -9,7 +8,10 @@ import { ActionDictionary } from "./ActionDictionary";
  * BaseRunnerにVector2要素および関連機能を持たせたクラス
  *
  * @example
+ * // Target setup
  * const point = {x: 0, y: 0};
+ *
+ * // Runner setup
  * const runner = new Runner(point);
  * // pointパラメータを1/60秒毎にx, yそれぞれ2ずつ加算する
  * // それを120ステップ行う
@@ -22,6 +24,9 @@ import { ActionDictionary } from "./ActionDictionary";
  *     yield count++;
  *   }
  * });
+ * runner.reset();
+ *
+ * // Loop while runner is alive
  * function loop() {
  *  const res = runner.step();
  *  if (res) requestAnimationFrame(loop);
@@ -63,10 +68,7 @@ export class Runner<TT = any, NA extends string = string> extends BaseRunner<
    */
   protected vector: Readonly<Vector2> = new Vector2(0, 0);
 
-  declare addAction: (
-    action: ContextBindableGeneratorFunction<Runner<TT>>,
-    ...args: any
-  ) => this;
+  declare addAction: (action: RunnerAction<TT>, ...args: any) => this;
 
   /**
    * vectorパラメータをセット
@@ -220,13 +222,15 @@ export class TargetDeclaredRunner<T = any> extends Runner<T> {
  * this参照をRunnerとしたGeneratorFunction型
  * Genericsでtargetプロパティの型を指定可能
  */
-export type RunnerAction<RT = any> = ContextBindableGeneratorFunction<
-  Runner<RT>
->;
+export type RunnerAction<RT = any> = (
+  this: Runner<RT>,
+  ...args: any[]
+) => Generator;
 
 /**
  * this参照を`TargetDeclaredRunner`としたGeneratorFunctionもどき型
  */
-export type TargetDeclaredRunnerAction<
-  T = any
-> = ContextBindableGeneratorFunction<TargetDeclaredRunner<T>>;
+export type TargetDeclaredRunnerAction<RT = any> = (
+  this: TargetDeclaredRunner<RT>,
+  ...args: any[]
+) => Generator;
