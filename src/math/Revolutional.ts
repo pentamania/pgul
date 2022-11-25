@@ -2,7 +2,7 @@ import { clamp } from "../utils";
 import {
   TwoDimensionalObject,
   TwoDimensionalObjectConstructor,
-} from "../utilTypes";
+} from "../core/utilTypes";
 import { toRadian } from "./radianConverter";
 
 // Params

@@ -1,4 +1,4 @@
-import { GConstructor } from "../utilTypes";
+import { GConstructor } from "../core/utilTypes";
 
 /**
  * Menuableのitemとして追加可能な型

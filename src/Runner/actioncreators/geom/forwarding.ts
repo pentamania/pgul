@@ -1,5 +1,5 @@
 import { RunnerAction, TargetDeclaredRunnerAction } from "../../Runner";
-import { LooseVector2 } from "../../../utilTypes";
+import { LooseVector2 } from "../../../core/utilTypes";
 
 /**
  * forwardingActionを生成して返す

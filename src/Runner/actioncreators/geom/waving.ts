@@ -1,5 +1,5 @@
 import { TargetDeclaredRunnerAction } from "../../Runner";
-import { LooseVector2 } from "../../../utilTypes";
+import { LooseVector2 } from "../../../core/utilTypes";
 import { Waveformer } from "../../../math/Waveformer";
 import { Vector2 } from "../../../math/Vector2";
 import { DEG_TO_RAD_TABLE, toRadian } from "../../../math/radianConverter";

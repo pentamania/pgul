@@ -1,4 +1,5 @@
 export * from "./core/List";
+export * from "./core/utilTypes";
 export * from "./runner";
 export * from "./queuing";
 export * from "./extra";
@@ -21,8 +22,6 @@ export { canvasHelper };
 
 import * as cssUtils from "./css/index";
 export { cssUtils };
-
-export * from "./utilTypes";
 
 export * from "./loaders/fontLoader";
 

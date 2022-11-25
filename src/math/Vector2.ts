@@ -1,4 +1,4 @@
-import { LooseVector2 } from "../utilTypes";
+import { LooseVector2 } from "../core/utilTypes";
 import { toRadian, toDegree } from "./radianConverter";
 
 const TWO_PI = Math.PI * 2;

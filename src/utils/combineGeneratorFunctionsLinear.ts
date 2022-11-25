@@ -1,4 +1,4 @@
-import { ContextBindableGeneratorFunction } from "../utilTypes";
+import { ContextBindableGeneratorFunction } from "../core/utilTypes";
 
 /**
  * Creates linear-combined GenaratorFunction

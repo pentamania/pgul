@@ -1,6 +1,6 @@
 import { List } from "../core/List";
 import combineGeneratorFunctions from "../utils/combineGeneratorFunctions";
-import { GConstructor } from "../utilTypes";
+import { GConstructor } from "../core/utilTypes";
 import { Vector2 } from "../math/Vector2";
 import {
   TargetDeclaredRunnerAction,

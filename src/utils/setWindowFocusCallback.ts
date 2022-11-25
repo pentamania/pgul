@@ -1,4 +1,4 @@
-import { LooseFunction } from "../utilTypes";
+import { LooseFunction } from "../core/utilTypes";
 
 export default function (onFocus: LooseFunction, onBlur: LooseFunction) {
   const cb = function () {
