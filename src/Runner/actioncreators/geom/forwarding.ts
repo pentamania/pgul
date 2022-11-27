@@ -1,4 +1,4 @@
-import { RunnerAction, TargetDeclaredRunnerAction } from "../../Runner";
+import { RunnerAction, TargetDeclaredRunnerAction } from "../../Runner2D";
 import { LooseVector2 } from "../../../core/utilTypes";
 
 /**

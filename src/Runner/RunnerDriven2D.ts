@@ -5,9 +5,9 @@ import { Vector2 } from "../math/Vector2";
 import {
   TargetDeclaredRunnerAction,
   TargetDeclaredRunner,
-  Runner,
+  Runner2D,
   RunnerAction,
-} from "./Runner";
+} from "./Runner2D";
 
 type ChildContainable = GConstructor<{
   children?: any[];
@@ -38,7 +38,7 @@ export type RunnerActionBundle<T = any> = RunnerActionComplex<T>[];
  * Runnerによって駆動するためのメソッドを付与
  * @param Base
  */
-export function RunnerDriven<TBase extends ChildContainable>(Base: TBase) {
+export function RunnerDriven2D<TBase extends ChildContainable>(Base: TBase) {
   return class RunnerDriven extends Base {
     _runners: TargetDeclaredRunner[] = [];
     _actionBundleList?: List<RunnerActionBundle>;
@@ -77,7 +77,7 @@ export function RunnerDriven<TBase extends ChildContainable>(Base: TBase) {
      *
      * @param runner
      */
-    addRunner(runner: Runner) {
+    addRunner(runner: Runner2D) {
       // runnerはTargetDeclaredRunnerとして扱うため、このsetTargetは大事
       runner.setTarget(this);
       runner.start();
@@ -109,7 +109,7 @@ export function RunnerDriven<TBase extends ChildContainable>(Base: TBase) {
     addActionRunner(
       ...actions: RunnerActionComplex<this>[]
     ): TargetDeclaredRunner<this> {
-      const runner = new Runner<this>();
+      const runner = new Runner2D<this>();
       actions.forEach((action) => {
         if (Array.isArray(action)) {
           // 並列処理アクションを結合
@@ -174,7 +174,7 @@ export function RunnerDriven<TBase extends ChildContainable>(Base: TBase) {
       options: { endType: "any" | "all" } = { endType: "all" }
     ) {
       let allGens: Generator[] = [];
-      const runner = new Runner<this>() as TargetDeclaredRunner;
+      const runner = new Runner2D<this>() as TargetDeclaredRunner;
 
       runnerActions.forEach((rnrAct) => {
         if (Array.isArray(rnrAct)) {
@@ -313,7 +313,7 @@ export function RunnerDriven<TBase extends ChildContainable>(Base: TBase) {
      * 指定runnerを除去
      * @param removedRunner
      */
-    removeRunner(removedRunner: Runner) {
+    removeRunner(removedRunner: Runner2D) {
       this._runners = this._runners.filter((runner) => {
         return runner !== removedRunner;
       });
@@ -387,7 +387,7 @@ export function RunnerDriven<TBase extends ChildContainable>(Base: TBase) {
      */
     static combineRunnerActionList(
       actions: RunnerActionList,
-      runnerRef: Runner
+      runnerRef: Runner2D
     ): RunnerAction {
       return combineGeneratorFunctions.bind(runnerRef)(
         ...(actions as GeneratorFunction[])
@@ -400,4 +400,4 @@ export function RunnerDriven<TBase extends ChildContainable>(Base: TBase) {
  * RunnerDriven化class型
  * 型定義用
  */
-export class RunnerDrivenClass extends RunnerDriven(class {}) {}
+export class RunnerDrivenClass extends RunnerDriven2D(class {}) {}

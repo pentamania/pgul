@@ -1,7 +1,7 @@
 import { AreaRect } from "../../../math/AreaRect";
 import { LooseVector2 } from "../../../core/utilTypes";
 import { Vector2 } from "../../../math/Vector2";
-import { TargetDeclaredRunnerAction } from "../../Runner";
+import { TargetDeclaredRunnerAction } from "../../Runner2D";
 
 const leftWallNormalVec = new Vector2(1, 0);
 const rightWallNormalVec = new Vector2(-1, 0);

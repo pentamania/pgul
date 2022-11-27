@@ -1,7 +1,7 @@
 export * from "./Coroutine";
 export * from "./BaseRunner";
-export * from "./Runner";
-export * from "./RunnerDriven";
+export * from "./Runner2D";
+export * from "./RunnerDriven2D";
 export * from "./ActionDictionary";
 
 // export * as runnerActions from "./defaultActions"; // TSエラーになる？

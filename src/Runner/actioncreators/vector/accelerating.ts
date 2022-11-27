@@ -1,5 +1,5 @@
 import { Vector2 } from "../../../math/Vector2";
-import { RunnerAction } from "../../Runner";
+import { RunnerAction } from "../../Runner2D";
 
 /**
  * 特定のspeed値に達するまでベクトル値を加算

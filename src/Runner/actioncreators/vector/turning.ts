@@ -1,4 +1,4 @@
-import { RunnerAction } from "../../Runner";
+import { RunnerAction } from "../../Runner2D";
 
 /**
  *

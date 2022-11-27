@@ -1,4 +1,4 @@
-import { TargetDeclaredRunnerAction } from "../../Runner";
+import { TargetDeclaredRunnerAction } from "../../Runner2D";
 import { LooseVector2 } from "../../../core/utilTypes";
 import { Waveformer } from "../../../math/Waveformer";
 import { Vector2 } from "../../../math/Vector2";

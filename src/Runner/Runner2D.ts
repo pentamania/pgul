@@ -49,7 +49,7 @@ import { ActionDictionary } from "./ActionDictionary";
  * でも操作可能
  *
  */
-export class Runner<TT = any, NA extends string = string> extends BaseRunner<
+export class Runner2D<TT = any, NA extends string = string> extends BaseRunner<
   TT,
   NA
 > {
@@ -214,7 +214,7 @@ export class Runner<TT = any, NA extends string = string> extends BaseRunner<
 /**
  * targetプロパティが確定したRunner
  */
-export class TargetDeclaredRunner<T = any> extends Runner<T> {
+export class TargetDeclaredRunner<T = any> extends Runner2D<T> {
   declare target: T;
 }
 
@@ -223,7 +223,7 @@ export class TargetDeclaredRunner<T = any> extends Runner<T> {
  * Genericsでtargetプロパティの型を指定可能
  */
 export type RunnerAction<RT = any> = (
-  this: Runner<RT>,
+  this: Runner2D<RT>,
   ...args: any[]
 ) => Generator;
 

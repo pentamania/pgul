@@ -1,5 +1,5 @@
 import { toRadian } from "../math/radianConverter";
-import { Runner } from "./Runner";
+import { Runner2D } from "./Runner2D";
 
 export interface BasicRunnerTarget2D {
   x: number;
@@ -13,7 +13,10 @@ export interface BasicRunnerTarget2D {
  * ひたすらvector方向に進む
  * @param duration
  */
-export function* straight(this: Runner<BasicRunnerTarget2D>, duration: number) {
+export function* straight(
+  this: Runner2D<BasicRunnerTarget2D>,
+  duration: number
+) {
   let count = 0;
   while (count < duration) {
     if (this.target) {
@@ -39,7 +42,7 @@ export function* straight(this: Runner<BasicRunnerTarget2D>, duration: number) {
  * @param degree
  */
 export function* rotate(
-  this: Runner<BasicRunnerTarget2D>,
+  this: Runner2D<BasicRunnerTarget2D>,
   duration: number,
   degree: number
 ) {
@@ -61,7 +64,7 @@ export function* rotate(
  * @param degree
  */
 export function* turnAround(
-  this: Runner<BasicRunnerTarget2D>,
+  this: Runner2D<BasicRunnerTarget2D>,
   duration: number,
   degree: number
 ) {
@@ -83,7 +86,7 @@ export function* turnAround(
  * @param magnitude
  */
 export function* accelerate(
-  this: Runner<BasicRunnerTarget2D>,
+  this: Runner2D<BasicRunnerTarget2D>,
   duration: number,
   magnitude = 1.0
 ) {
@@ -112,7 +115,7 @@ export function* accelerate(
  * @param prop
  */
 export function* to(
-  this: Runner,
+  this: Runner2D,
   duration: number,
   prop: { [k: string]: any }
 ) {
@@ -141,7 +144,7 @@ export function* to(
  * 何もせず待つ
  * @param duration
  */
-export function* wait(this: Runner, duration: number = Infinity) {
+export function* wait(this: Runner2D, duration: number = Infinity) {
   let count = 0;
   while (count < duration) {
     yield count++;
@@ -159,7 +162,7 @@ export function* wait(this: Runner, duration: number = Infinity) {
  * @param widening
  */
 export function* sine(
-  this: Runner<BasicRunnerTarget2D>,
+  this: Runner2D<BasicRunnerTarget2D>,
   duration = Infinity,
   radius = 64,
   frequency = 6,

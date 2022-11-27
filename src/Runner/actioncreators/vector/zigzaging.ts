@@ -1,5 +1,5 @@
 import { toRadian } from "../../../math/radianConverter";
-import { RunnerAction } from "../../Runner";
+import { RunnerAction } from "../../Runner2D";
 import { createVectorTurnToAction } from "./turning";
 
 const defaultDegreeList = [45, 135];

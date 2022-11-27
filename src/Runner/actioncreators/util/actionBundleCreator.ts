@@ -1,4 +1,4 @@
-import { RunnerActionBundle, RunnerActionComplex } from "../../RunnerDriven";
+import { RunnerActionBundle, RunnerActionComplex } from "../../RunnerDriven2D";
 
 type ActionCreatorWithDurationArg = (duration: number) => RunnerActionComplex;
 
