@@ -1,5 +1,5 @@
-import { List } from "./core/List";
-import { Random } from "./math/Random";
+import { List } from "../core/List";
+import { Random } from "../math/Random";
 
 /**
  * [en]
