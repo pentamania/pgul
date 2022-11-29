@@ -139,9 +139,10 @@ export class Runner2D<TT = any, NA extends string = string> extends BaseRunner<
    * 進行方向（vector）を回転
    * @param addedAngleRadian
    */
-  rotateVector(addedAngleRadian: number) {
+  rotateVector(addedAngleRadian: number): this {
     this._vectorRadian += addedAngleRadian;
     this.vector.setFromRadian(this._vectorRadian, this._speed);
+    return this;
   }
 
   /**
