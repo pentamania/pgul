@@ -1,20 +1,19 @@
-import { RunnerDriven } from "../../src/runner/RunnerDriven";
-import { Runner } from "../../src/runner/index";
+import { RunnerDriven2D, Runner2D } from "../../src/runner";
 
-class RunnerDrivenObj2D extends RunnerDriven(
+class RunnerDrivenObj2D extends RunnerDriven2D(
   class {
     children = undefined;
     x = 0;
     y = 0;
   }
 ) {}
-function* xStepAction(this: Runner) {
+function* xStepAction(this: Runner2D) {
   while (true) {
     this.target.x += 2;
     yield;
   }
 }
-function* yStepAction(this: Runner) {
+function* yStepAction(this: Runner2D) {
   while (true) {
     this.target.y += 1;
     yield;
