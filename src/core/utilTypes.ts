@@ -6,15 +6,6 @@ export type LooseObject = Record<string | number | symbol, any>;
 /** @alias LooseObject */
 export type KeyValuePairs = Record<string | number | symbol, any>;
 
-export type LooseVector2 = { x: number; y: number; [key: string]: any };
-
-/** @alias LooseVector2 */
-export interface TwoDimensionalObject {
-  x: number;
-  y: number;
-  [k: string]: any;
-}
-
 export type LooseFunction = (...args: any) => any;
 
 /**
@@ -44,11 +35,3 @@ export interface EventListenable {
  * type Positionable = GConstructor<{ setPos: (x: number, y: number) => void }>;
  */
 export type GConstructor<T = {}> = new (...args: any[]) => T;
-
-/**
- * プロパティとしてx, yを持った2Dコンストラクタ型
- */
-export type TwoDimensionalObjectConstructor = GConstructor<{
-  x: number;
-  y: number;
-}>;

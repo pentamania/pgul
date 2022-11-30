@@ -1,5 +1,5 @@
+import { LooseVector2 } from "../../../math/Vec2Like";
 import { RunnerAction, TargetDeclaredRunnerAction } from "../../Runner2D";
-import { LooseVector2 } from "../../../core/utilTypes";
 
 /**
  * forwardingActionを生成して返す

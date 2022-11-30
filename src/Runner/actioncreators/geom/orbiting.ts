@@ -1,4 +1,4 @@
-import { LooseVector2 } from "../../../core/utilTypes";
+import { LooseVector2 } from "../../../math/Vec2Like";
 import { Waveformer } from "../../../math/Waveformer";
 import { BaseRunnerAction } from "../../BaseRunner";
 

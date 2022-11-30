@@ -1,3 +1,4 @@
+export * from "./Vec2Like";
 export * from "./Vector2";
 export * from "./Waveformer";
 export * from "./Revolutional";

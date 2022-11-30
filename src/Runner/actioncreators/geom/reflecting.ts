@@ -1,5 +1,5 @@
 import { AreaRect } from "../../../math/AreaRect";
-import { LooseVector2 } from "../../../core/utilTypes";
+import { LooseVector2 } from "../../../math/Vec2Like";
 import { Vector2 } from "../../../math/Vector2";
 import { TargetDeclaredRunnerAction } from "../../Runner2D";
 

@@ -1,6 +1,6 @@
 import clamp from "../utils/clamp";
+import { TwoDimensionalObjectConstructor } from "./Vec2Like";
 import { Vector2 } from "./Vector2";
-import { TwoDimensionalObjectConstructor } from "../core/utilTypes";
 
 const DEFAULT_FRICTION = 0.9;
 const DEFAULT_SPEED = Infinity;

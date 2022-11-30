@@ -1,8 +1,8 @@
 import { TargetDeclaredRunnerAction } from "../../Runner2D";
-import { LooseVector2 } from "../../../core/utilTypes";
 import { Waveformer } from "../../../math/Waveformer";
 import { Vector2 } from "../../../math/Vector2";
 import { DEG_TO_RAD_TABLE, toRadian } from "../../../math/radianConverter";
+import { LooseVector2 } from "../../../math/Vec2Like";
 
 /** 1 wave per 60fps */
 const defaultFrequency = 1000 / 60;

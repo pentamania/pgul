@@ -1,9 +1,9 @@
 import { List } from "../core/List";
-import { Vector2 } from "./Vector2";
 import {
   TwoDimensionalObject,
   TwoDimensionalObjectConstructor,
-} from "../core/utilTypes";
+} from "./Vec2Like";
+import { Vector2 } from "./Vector2";
 
 const DEFAULT_TRACE_LIST_SIZE = 8;
 
