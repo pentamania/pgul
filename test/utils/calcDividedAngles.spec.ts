@@ -1,5 +1,5 @@
 import calcDividedAngles from "../../src/utils/calcDividedAngles";
-import { toRadian as rad } from "../../src/utils/radianConverter";
+import { toRadian as rad } from "../../src/math/radianConverter";
 
 const toleratedFloatDigits = 5;
 

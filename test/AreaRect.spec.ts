@@ -1,4 +1,4 @@
-import { AreaRect } from "../src/AreaRect";
+import { AreaRect } from "../src/math/AreaRect";
 type Coord = [number, number];
 
 describe("AreaRect: Test bounds", () => {

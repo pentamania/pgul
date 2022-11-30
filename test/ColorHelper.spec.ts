@@ -1,4 +1,4 @@
-import { HslColorHelper } from "../src/ColorHelper";
+import { HslColorHelper } from "../src/math/ColorHelper";
 
 describe("HslColorHelper/static:parseRgbString", () => {
   // Shorthand

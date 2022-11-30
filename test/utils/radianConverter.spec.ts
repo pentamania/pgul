@@ -2,7 +2,7 @@ import {
   flipRadianVertical,
   normalizeDegree,
   toRadian,
-} from "../../src/utils/radianConverter";
+} from "../../src/math/radianConverter";
 const toleratedFloatDigits = 5;
 
 describe("radianConverter#flipRadianVertical", () => {
