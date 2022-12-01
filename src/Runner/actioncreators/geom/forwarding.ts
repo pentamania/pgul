@@ -1,4 +1,4 @@
-import { LooseVector2 } from "../../../math/Vec2Like";
+import { Vec2Like } from "../../../math/Vec2Like";
 import { RunnerAction, TargetDeclaredRunnerAction } from "../../Runner2D";
 
 /**
@@ -13,7 +13,7 @@ export function createForwardingAction(
   duration: number = Infinity,
   directionDeg?: number,
   speed?: number
-): TargetDeclaredRunnerAction<LooseVector2> {
+): TargetDeclaredRunnerAction<Vec2Like> {
   return function* () {
     let _currentCount = 0;
 
@@ -33,7 +33,7 @@ export function createForwardingAction(
  *
  * @param duration
  */
-export const forwardingAction: RunnerAction<LooseVector2> = function* (
+export const forwardingAction: RunnerAction<Vec2Like> = function* (
   duration: number = Infinity
 ) {
   let _cnt = 0;

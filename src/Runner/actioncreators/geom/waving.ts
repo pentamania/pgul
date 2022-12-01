@@ -2,7 +2,7 @@ import { TargetDeclaredRunnerAction } from "../../Runner2D";
 import { Waveformer } from "../../../math/Waveformer";
 import { Vector2 } from "../../../math/Vector2";
 import { DEG_TO_RAD_TABLE, toRadian } from "../../../math/radianConverter";
-import { LooseVector2 } from "../../../math/Vec2Like";
+import { Vec2Like } from "../../../math/Vec2Like";
 
 /** 1 wave per 60fps */
 const defaultFrequency = 1000 / 60;
@@ -25,7 +25,7 @@ export interface WaveOption {
 export function createConfigurableWaveformingAction(
   waveParamRef: WaveOption,
   duration: number = Infinity
-): TargetDeclaredRunnerAction<LooseVector2> {
+): TargetDeclaredRunnerAction<Vec2Like> {
   return function* () {
     // Local vars
     const _centerPos = new Vector2().copyFrom(this.target);
@@ -79,7 +79,7 @@ export function createFixedWaveformingAction(
   waveFreqency: number = defaultFrequency,
   waveStartAngleDeg: number = 0,
   duration: number = Infinity
-): TargetDeclaredRunnerAction<LooseVector2> {
+): TargetDeclaredRunnerAction<Vec2Like> {
   return function* () {
     // Local vars
     const centerPos = new Vector2().copyFrom(this.target);

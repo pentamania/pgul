@@ -1,5 +1,5 @@
 import { AreaRect } from "../../../math/AreaRect";
-import { LooseVector2 } from "../../../math/Vec2Like";
+import { Vec2Like } from "../../../math/Vec2Like";
 import { Vector2 } from "../../../math/Vector2";
 import { TargetDeclaredRunnerAction } from "../../Runner2D";
 
@@ -18,7 +18,7 @@ export function createRectEnclosedAction(
   // prettier-ignore
   duration: number = Infinity,
   areaRectRef: AreaRect
-): TargetDeclaredRunnerAction<LooseVector2> {
+): TargetDeclaredRunnerAction<Vec2Like> {
   return function* () {
     let _currentCount = 0;
     const body = this.target;
@@ -67,7 +67,7 @@ export function createCircleEnclosedAction(
   duration: number = Infinity,
   circleRef: { radius: number },
   reflectAngleShift: number = 0
-): TargetDeclaredRunnerAction<LooseVector2> {
+): TargetDeclaredRunnerAction<Vec2Like> {
   return function* () {
     let _currentCount = 0;
     const body = this.target;
@@ -110,7 +110,7 @@ export function createCircleEnclosedActionRef(
   duration: number = Infinity,
   circleRef: { x: number; y: number; radius: number },
   reflectAngleShift: number = 0
-): TargetDeclaredRunnerAction<LooseVector2> {
+): TargetDeclaredRunnerAction<Vec2Like> {
   return function* () {
     let _currentCount = 0;
     const body = this.target;

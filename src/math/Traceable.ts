@@ -1,8 +1,5 @@
 import { List } from "../core/List";
-import {
-  TwoDimensionalObject,
-  TwoDimensionalObjectConstructor,
-} from "./Vec2Like";
+import { TwoDimensionalObjectConstructor, Vec2Like } from "./Vec2Like";
 import { Vector2 } from "./Vector2";
 
 const DEFAULT_TRACE_LIST_SIZE = 8;
@@ -34,7 +31,7 @@ export function Traceable<TBase extends TwoDimensionalObjectConstructor>(
   Base: TBase
 ) {
   return class extends Base {
-    _tracingTarget?: TwoDimensionalObject;
+    _tracingTarget?: Vec2Like;
     readonly _tracePositionList: List<Vector2> = new List();
     _currentTracingPosition?: Vector2;
 
@@ -59,7 +56,7 @@ export function Traceable<TBase extends TwoDimensionalObjectConstructor>(
      * 追跡対象を設定
      * @param target
      */
-    setTracingTarget(target: TwoDimensionalObject) {
+    setTracingTarget(target: Vec2Like) {
       this._tracingTarget = target;
       return this;
     }

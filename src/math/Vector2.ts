@@ -1,5 +1,5 @@
 import { toRadian, toDegree } from "./radianConverter";
-import { LooseVector2 } from "./Vec2Like";
+import { Vec2Like } from "./Vec2Like";
 
 const TWO_PI = Math.PI * 2;
 
@@ -44,7 +44,7 @@ export class Vector2 {
   /**
    * @param wallNormalVec
    */
-  reflectAngle(wallNormalVec: LooseVector2) {
+  reflectAngle(wallNormalVec: Vec2Like) {
     this.setFromRadian(Vector2.reflectedAngle(this, wallNormalVec));
   }
 
@@ -84,7 +84,7 @@ export class Vector2 {
     return this;
   }
 
-  copyFrom(v: LooseVector2) {
+  copyFrom(v: Vec2Like) {
     this._x = v.x;
     this._y = v.y;
     return this;
@@ -163,7 +163,7 @@ export class Vector2 {
     return deg;
   }
 
-  static distanceSquared(rhs: LooseVector2, lhs: LooseVector2) {
+  static distanceSquared(rhs: Vec2Like, lhs: Vec2Like) {
     return Math.pow(rhs.x - lhs.x, 2) + Math.pow(rhs.y - lhs.y, 2);
   }
 
@@ -173,7 +173,7 @@ export class Vector2 {
    * @param b
    * @returns
    */
-  static dot(a: LooseVector2, b: LooseVector2) {
+  static dot(a: Vec2Like, b: Vec2Like) {
     return a.x * b.x + a.y * b.y;
   }
 
@@ -182,7 +182,7 @@ export class Vector2 {
    * @param a
    * @param b
    */
-  static cross(a: LooseVector2, b: LooseVector2) {
+  static cross(a: Vec2Like, b: Vec2Like) {
     return a.x * b.y - a.y * b.x;
   }
 
@@ -197,8 +197,8 @@ export class Vector2 {
    * @returns Vector2
    */
   static reflectVector(
-    d: LooseVector2,
-    n: LooseVector2,
+    d: Vec2Like,
+    n: Vec2Like,
     vec: Vector2 = new Vector2()
   ): Vector2 {
     // Calc: 2 * (−F⋅N)
@@ -215,11 +215,11 @@ export class Vector2 {
    * @param n Wall normal vector (No mutation)
    * @returns Reflected vector's angle by radian
    */
-  static reflectedAngle(d: LooseVector2, n: LooseVector2): number {
+  static reflectedAngle(d: Vec2Like, n: Vec2Like): number {
     return this.reflectVector(d, n, innerSharedVec).getAngleByRadian();
   }
 
-  static reflectedAngleByDegree(d: LooseVector2, n: LooseVector2): number {
+  static reflectedAngleByDegree(d: Vec2Like, n: Vec2Like): number {
     return this.reflectVector(d, n, innerSharedVec).getAngleByDegree();
   }
 

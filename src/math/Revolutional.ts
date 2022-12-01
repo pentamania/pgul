@@ -1,9 +1,6 @@
 import { clamp } from "../utils";
 import { toRadian } from "./radianConverter";
-import {
-  TwoDimensionalObject,
-  TwoDimensionalObjectConstructor,
-} from "./Vec2Like";
+import { TwoDimensionalObjectConstructor, Vec2Like } from "./Vec2Like";
 
 // Params
 const DEFAULT_REVOLUTION_VELOCITY_THRESHOLD = toRadian(2);
@@ -25,7 +22,7 @@ export function Revolutional<TBase extends TwoDimensionalObjectConstructor>(
     _revolutionAngle: number = 0;
 
     /** 公転の中心 */
-    revolutionCenter?: TwoDimensionalObject = {
+    revolutionCenter?: Vec2Like = {
       x: 0,
       y: 0,
     };

@@ -1,14 +1,14 @@
-import { LooseVector2 } from "../../../math/Vec2Like";
+import { Vec2Like } from "../../../math/Vec2Like";
 import { Waveformer } from "../../../math/Waveformer";
 import { BaseRunnerAction } from "../../BaseRunner";
 
 export function createFixedOrbitingAction(
-  centerVec: LooseVector2,
+  centerVec: Vec2Like,
   waveStartAngle: number,
   orbitRadius: number,
   orbitFreqency: number,
   duration: number = Infinity
-): BaseRunnerAction<LooseVector2> {
+): BaseRunnerAction<Vec2Like> {
   return function* () {
     // Local vars
     let _cnt = 0;

@@ -1,5 +1,5 @@
 import clamp from "../utils/clamp";
-import { LooseVector2 } from "./Vec2Like";
+import { Vec2Like } from "./Vec2Like";
 import { Vector2 } from "./Vector2";
 
 export class AreaRect {
@@ -19,7 +19,7 @@ export class AreaRect {
    * オブジェクトがエリア内に収まるよう補正する
    * @param obj x,yプロパティをもつオブジェクト
    */
-  clamp(obj: LooseVector2) {
+  clamp(obj: Vec2Like) {
     obj.x = clamp(obj.x, this.left, this.right);
     obj.y = clamp(obj.y, this.top, this.bottom);
   }
