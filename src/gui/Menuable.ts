@@ -21,17 +21,20 @@ export interface FocusableMenuItem {
 }
 
 /**
- * 項目indexは追加した順番に付与
+ * 指定オブジェクトにメニュー化するMixin.
+ * 主に項目の追加、およびそれらを選択・実行する処理を追加する
+ *
  * @param Base
  */
-export function Menuable<TBase extends GConstructor>(Base: TBase) {
+export function Menuable<TBase extends GConstructor<any>>(Base: TBase) {
   return class Menuable extends Base {
     _currentItemIndex: number = 0;
     _optionItems: FocusableMenuItem[] = [];
 
     /**
      * 項目オブジェクトを追加
-     * @param item
+     *
+     * @param items
      */
     addItem(...items: FocusableMenuItem[]) {
       items.forEach((item) => {
@@ -47,6 +50,7 @@ export function Menuable<TBase extends GConstructor>(Base: TBase) {
      *
      * @param itemIndex 0 ~ アイテム数の範囲内に補正、0以下の時はループ
      * @returns
+     * 選択できたらアイテム参照、そうでなければfalse
      */
     _selectItem(itemIndex: number): FocusableMenuItem | false {
       // indexを 0 ~ 最大インデックスの範囲内に収める
@@ -72,6 +76,11 @@ export function Menuable<TBase extends GConstructor>(Base: TBase) {
       return nextItem;
     }
 
+    /**
+     * @private
+     * @returns
+     * 全ての項目がロック状態になっていればtrue
+     */
     _isAllItemLocked(): boolean {
       // lock状態になってない奴が一つも見つかなければtrue
       return this._optionItems.find((item) => !item.isLocked) === undefined;
@@ -107,7 +116,10 @@ export function Menuable<TBase extends GConstructor>(Base: TBase) {
 
     /**
      * ひとつ前の項目を選択
-     * If the prev item is locked, one
+     * ロックされていたらさらにひとつ前を選ぶ
+     *
+     * @returns
+     * 選択することができない（全てロックされている）場合、falseを返す
      */
     selectPrev() {
       if (this._isAllItemLocked()) {
@@ -123,6 +135,10 @@ export function Menuable<TBase extends GConstructor>(Base: TBase) {
 
     /**
      * ひとつ後の項目を選択
+     * ロックされていたらさらにひとつ後を選ぶ
+     *
+     * @returns
+     * 選択することができない（全てロックされている）場合、falseを返す
      */
     selectNext() {
       if (this._isAllItemLocked()) {
@@ -140,7 +156,9 @@ export function Menuable<TBase extends GConstructor>(Base: TBase) {
      * 現在のItemに仕込まれた処理を実行
      *
      * @param args 実行処理の引数
-     * @returns 実行結果を返す。何もしなかった場合はfalseを返す（仮）
+     *
+     * @returns
+     * WIP 実行結果を返す。何もしなかった場合はfalseを返す
      */
     runOption(...args: any) {
       if (this.currentItem.execute && !this.currentItem.isLocked) {
