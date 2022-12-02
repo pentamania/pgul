@@ -15,7 +15,7 @@ describe("Poolable", () => {
     static defaultName = "John Doe";
   }
 
-  test("Pooled object should be same", () => {
+  test("Basic: Should object be same when it is re-picked after pooled", () => {
     // Newly created
     const actor = Actor.pick();
 
@@ -23,11 +23,11 @@ describe("Poolable", () => {
     actor.remove();
 
     // Picked from pool
-    const otherActor = Actor.pick();
-    expect(otherActor).toBe(actor);
+    const rePickedActor = Actor.pick();
+    expect(rePickedActor).toBe(actor);
   });
 
-  test("Object returned to pool should be reset", () => {
+  test("resetParam test: Should object 'name' reset when picked from pool", () => {
     // Newly created: Change name
     const actor = Actor.pick();
     actor.name = "Alice";
@@ -36,7 +36,7 @@ describe("Poolable", () => {
     actor.remove();
 
     // Picked from pool
-    const otherActor = Actor.pick();
-    expect(otherActor.name).toBe(Actor.defaultName);
+    const rePickedActor = Actor.pick();
+    expect(rePickedActor.name).toBe(Actor.defaultName);
   });
 });
