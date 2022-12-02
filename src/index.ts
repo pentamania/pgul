@@ -17,8 +17,8 @@ export * from "./pooling";
 import * as utils from "./utils/index";
 export { utils };
 
-import * as canvasHelper from "./canvas/index";
-export { canvasHelper };
+import * as canvasUtils from "./canvas/index";
+export { canvasUtils };
 
 import * as cssUtils from "./css/index";
 export { cssUtils };
