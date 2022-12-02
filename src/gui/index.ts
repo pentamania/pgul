@@ -1,4 +1,5 @@
 export * from "./IconGauganize";
-export * from "./MenuController";
-export * from "./Menuable";
-export * from "./MenuItem";
+
+export * from "./menu/MenuController";
+export * from "./menu/Menuable";
+export * from "./menu/MenuItem";

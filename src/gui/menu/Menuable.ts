@@ -1,4 +1,4 @@
-import { GConstructor } from "../core/utilTypes";
+import { GConstructor } from "../../core/utilTypes";
 import { FocusableMenuItem } from "./MenuItem";
 
 /**
