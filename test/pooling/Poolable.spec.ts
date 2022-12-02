@@ -11,7 +11,7 @@ describe("Poolable", () => {
       this.name = Actor.defaultName;
       this.isPoolPickable = false;
     }
-    static pick: () => Actor;
+    declare static pick: () => Actor;
     static defaultName = "John Doe";
   }
 
