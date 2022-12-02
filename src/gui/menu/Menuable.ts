@@ -17,13 +17,20 @@ export function Menuable<TBase extends GConstructor<any>>(Base: TBase) {
      *
      * @param items
      */
-    addItem(...items: FocusableMenuItem[]) {
+    appendItem(...items: FocusableMenuItem[]) {
       items.forEach((item) => {
         this._optionItems.push(item);
       });
 
       // Update focus
       this._selectItem(this._currentItemIndex);
+    }
+
+    /**
+     * @alias appendItem
+     */
+    addItem(...items: FocusableMenuItem[]) {
+      return this.appendItem(...items);
     }
 
     /**
