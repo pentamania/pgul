@@ -1,7 +1,7 @@
 /**
  * 二次元Grid
  */
-export class GridHelper {
+export class Grid2D {
   private _width: number;
   private _height: number;
   private _col: number = 8;
