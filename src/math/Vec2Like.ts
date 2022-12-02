@@ -7,6 +7,9 @@ export interface Vec2Like {
   y: number;
 }
 
+/** Vec2Likeコンストラクタ型 */
+export type Vec2LikeConstructor = GConstructor<Vec2Like>;
+
 /**
  * Vec2Likeにプロパティ設定
  */
@@ -23,6 +26,7 @@ export interface LooseVector2 {
 export type TwoDimensionalObject = LooseVector2;
 
 /**
+ * @alias Vec2LikeConstructor
  * プロパティとしてx, yを持ったオブジェクトのコンストラクタ型
  */
-export type TwoDimensionalObjectConstructor = GConstructor<Vec2Like>;
+export type TwoDimensionalObjectConstructor = Vec2LikeConstructor;

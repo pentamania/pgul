@@ -1,5 +1,5 @@
 import { List } from "../core/List";
-import { TwoDimensionalObjectConstructor, Vec2Like } from "./Vec2Like";
+import { Vec2LikeConstructor, Vec2Like } from "./Vec2Like";
 import { Vector2 } from "./Vector2";
 
 const DEFAULT_TRACE_LIST_SIZE = 8;
@@ -27,9 +27,7 @@ const DEFAULT_TRACE_LIST_SIZE = 8;
  *
  * @param Base
  */
-export function Traceable<TBase extends TwoDimensionalObjectConstructor>(
-  Base: TBase
-) {
+export function Traceable<TBase extends Vec2LikeConstructor>(Base: TBase) {
   return class extends Base {
     _tracingTarget?: Vec2Like;
     readonly _tracePositionList: List<Vector2> = new List();

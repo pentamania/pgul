@@ -1,5 +1,5 @@
 import clamp from "../utils/clamp";
-import { TwoDimensionalObjectConstructor } from "./Vec2Like";
+import { Vec2LikeConstructor } from "./Vec2Like";
 import { Vector2 } from "./Vector2";
 
 const DEFAULT_FRICTION = 0.9;
@@ -9,9 +9,7 @@ const DEFAULT_SPEED = Infinity;
  * @param Base
  * @returns
  */
-export function Vector2Driven<TBase extends TwoDimensionalObjectConstructor>(
-  Base: TBase
-) {
+export function Vector2Driven<TBase extends Vec2LikeConstructor>(Base: TBase) {
   return class extends Base {
     readonly vector: Vector2 = new Vector2(0, 0);
 

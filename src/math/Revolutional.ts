@@ -1,6 +1,6 @@
 import { clamp } from "../utils";
 import { toRadian } from "./radianConverter";
-import { TwoDimensionalObjectConstructor, Vec2Like } from "./Vec2Like";
+import { Vec2LikeConstructor, Vec2Like } from "./Vec2Like";
 
 // Params
 const DEFAULT_REVOLUTION_VELOCITY_THRESHOLD = toRadian(2);
@@ -11,9 +11,7 @@ const DEFAULT_REVOLUTION_VELOCITY_THRESHOLD = toRadian(2);
  *
  * @param Base
  */
-export function Revolutional<TBase extends TwoDimensionalObjectConstructor>(
-  Base: TBase
-) {
+export function Revolutional<TBase extends Vec2LikeConstructor>(Base: TBase) {
   return class extends Base {
     /**
      * 位置計算のベースとなる回転角度（ラジアン単位）
