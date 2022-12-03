@@ -1,7 +1,7 @@
-import { Menuable } from "./Menuable";
+import { Menuify } from "./Menuify";
 
 /** Menuable拡張クラス型 */
-abstract class Menu extends Menuable(
+abstract class Menu extends Menuify(
   class {
     /**
      * @virtual

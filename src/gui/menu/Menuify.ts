@@ -7,8 +7,8 @@ import { FocusableMenuItem } from "./MenuItem";
  *
  * @param Base
  */
-export function Menuable<TBase extends GConstructor<any>>(Base: TBase) {
-  return class Menuable extends Base {
+export function Menuify<TBase extends GConstructor<any>>(Base: TBase) {
+  return class Menuify extends Base {
     _currentItemIndex: number = 0;
     _optionItems: FocusableMenuItem[] = [];
 
@@ -34,7 +34,7 @@ export function Menuable<TBase extends GConstructor<any>>(Base: TBase) {
     }
 
     /**
-     * See ${@link Menuable.selectItem}
+     * See ${@link Menuify.selectItem}
      *
      * @param itemIndex 0 ~ アイテム数の範囲内に補正、0以下の時はループ
      * @returns
