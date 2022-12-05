@@ -125,12 +125,16 @@ export function RunnerDriven2D<TBase extends ChildContainable>(Base: TBase) {
     }
 
     /**
-     * @alias addActionRunner
+     * 指定アクションを実行するrunnerを設定。
+     * addActionRunnerと違い、過去セット済みのrunnerは消去され、単一のrunnerのみをセット
+     *
      * @param actions
+     * @returns 生成したRunnerを返す
      */
     setActionRunner(
       ...actions: RunnerActionComplex<this>[]
     ): TargetDeclaredRunner<this> {
+      this.removeAllRunners();
       return this.addActionRunner(...actions);
     }
 
