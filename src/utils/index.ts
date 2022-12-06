@@ -22,3 +22,4 @@ export * from "./addAccessor";
 export * from "./addMethod";
 export * from "./isGenerator";
 export * from "./nodeEnvChecker";
+export * from "./hexConverter";
