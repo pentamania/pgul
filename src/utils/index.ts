@@ -23,3 +23,4 @@ export * from "./addMethod";
 export * from "./isGenerator";
 export * from "./nodeEnvChecker";
 export * from "./hexConverter";
+export * from "./createInterpolatedArray";
