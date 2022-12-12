@@ -1,5 +1,19 @@
 /**
  * コルーチン
+ *
+ * @example
+ * const foo = {x: 1}
+ *
+ * // Set up
+ * const coroutine = new Coroutine();
+ * coroutine.addTask({
+ *   action: function*() { foo.x++; }
+ * });
+ * coroutine.start();
+ *
+ * // Run
+ * coroutine.step();
+ * console.log(foo); // 2
  */
 export class Coroutine {
   protected _generator?: Generator;
@@ -8,10 +22,15 @@ export class Coroutine {
   protected _isAwake = true;
 
   /**
+   * [jp]
    * ルーチン処理を進める
    * ループが有効な場合はジェネレーターをリセットする
    *
-   * @returns 稼働状態であればnext結果を返す
+   * [en]
+   * Step inner Generator
+   *
+   * @returns
+   * 稼働状態であればnext結果を返す
    */
   step(): void | IteratorResult<any> {
     if (!this._isAwake) return;
@@ -33,8 +52,15 @@ export class Coroutine {
   }
 
   /**
+   * [jp]
+   * タスクを追加
+   *
+   * [en]
+   * Add coroutine task
+   *
    * @param taskObj func<*function>とarguments<any[]>をもったオブジェクト
-   * @param resetAfterAdding
+   * @param resetAfterAdding 追加後に内部Generatorをリセットするかどうか
+   * @returns this
    */
   addTask(taskObj: CoroutineTask, resetAfterAdding = false) {
     this._taskList.push(taskObj);
@@ -42,6 +68,16 @@ export class Coroutine {
     return this;
   }
 
+  /**
+   * [jp]
+   * JSONでタスク設定
+   *
+   * [en]
+   * addTaskFromJSON
+   *
+   * @param taskJson
+   * @returns this
+   */
   addTaskFromJSON(taskJson: CoroutineTask[]) {
     taskJson.forEach((tsk) => {
       this._taskList.push(tsk);
@@ -51,7 +87,13 @@ export class Coroutine {
   }
 
   /**
+   * [jp]
    * taskリストからジェネレーターをリセット
+   *
+   * [en]
+   * Reset
+   *
+   * @returns this
    */
   reset() {
     this._generator = Coroutine.convertTaskListToGenarator(
@@ -62,8 +104,14 @@ export class Coroutine {
   }
 
   /**
+   * [jp]
    * step可能にする
    * 内部ジェネレーターリセットも兼ねる
+   *
+   * [en]
+   * Reset and enable coroutine stepping
+   *
+   * @returns this
    */
   start() {
     this._isAwake = true;
@@ -71,21 +119,57 @@ export class Coroutine {
     return this;
   }
 
+  /**
+   * [jp]
+   * 処理をポーズする（step処理をスキップするようにする）
+   *
+   * [en]
+   * Pause coroutine stepping.
+   *
+   * @returns this
+   */
   pause() {
     this._isAwake = false;
     return this;
   }
 
+  /**
+   * [jp]
+   * ポーズ中の処理を再開
+   *
+   * [en]
+   * Resume coroutine stepping.
+   *
+   * @returns this
+   */
   resume() {
     this._isAwake = true;
     return this;
   }
 
+  /**
+   * [jp]
+   * 内部Generatorをクリア（コルーチン処理消去）
+   *
+   * [en]
+   * Clear current running generator.
+   *
+   * @returns this
+   */
   clear() {
     this._generator = undefined;
     return this;
   }
 
+  /**
+   * [jp]
+   * ループを設定
+   *
+   * [en]
+   * Whether to reset generator after it is "done".
+   *
+   * @returns this
+   */
   setLoop(flag = true) {
     this._loop = flag;
     return this;
@@ -103,19 +187,29 @@ export class Coroutine {
   }
 
   /**
+   * [jp]
    * 稼働状態を返す。
    * falseの際はstepを実行しても進まない
    * pause/resumeなどで更新
+   *
+   * [en]
+   * Return isAwake
+   *
    */
   get isAwake() {
     return this._isAwake;
   }
 
   /**
+   * [jp]
    * taskリストをジェネレーターオブジェクトに変換
+   *
+   * [en]
+   * convertTaskListToGenarator
    *
    * @param taskList
    * @param context task.actionのthisとして扱うオブジェクト
+   * @returns Converted Generator
    */
   static convertTaskListToGenarator(
     taskList: CoroutineTask[],
@@ -130,6 +224,7 @@ export class Coroutine {
   }
 }
 
+/** Coroutine.addTask用パラメータ型 */
 export interface CoroutineTask {
   action: (...args: any[]) => Generator;
   args?: any[];
