@@ -1,5 +1,4 @@
 export { default as parseQueryString } from "./parseQueryString";
-export { default as timesMap } from "./timesMap";
 export { default as clamp } from "./clamp";
 export { default as merge } from "./merge";
 export { default as getDistanceSquared } from "./getDistanceSquared";
