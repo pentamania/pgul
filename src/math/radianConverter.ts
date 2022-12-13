@@ -1,5 +1,3 @@
-import timesMap from "../utils/timesMap";
-
 const DEG_TO_RAD = Math.PI / 180;
 const RAD_TO_DEG = 180 / Math.PI;
 
@@ -16,11 +14,13 @@ export function toDegree(rad: number) {
   return rad * RAD_TO_DEG;
 }
 
-export const DEG_TO_RAD_TABLE = Object.freeze(
-  timesMap(360, (i) => {
-    return toRadian(i);
-  })
-);
+export const DEG_TO_RAD_TABLE = (() => {
+  const arr = [];
+  for (let i = 0; i < 360; i++) {
+    arr.push(toRadian(i));
+  }
+  return Object.freeze(arr);
+})();
 export const RAD_LEFT = DEG_TO_RAD_TABLE[0];
 export const RAD_DOWN = DEG_TO_RAD_TABLE[90];
 export const RAD_RIGHT = DEG_TO_RAD_TABLE[180];
