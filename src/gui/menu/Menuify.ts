@@ -7,17 +7,20 @@ import { FocusableMenuItem } from "./MenuItem";
  *
  * @param Base
  */
-export function Menuify<TBase extends GConstructor<any>>(Base: TBase) {
+export function Menuify<
+  TBase extends GConstructor<any>,
+  IT extends FocusableMenuItem = FocusableMenuItem
+>(Base: TBase) {
   return class Menuify extends Base {
     _currentItemIndex: number = 0;
-    _optionItems: FocusableMenuItem[] = [];
+    _optionItems: IT[] = [];
 
     /**
      * 項目オブジェクトを追加
      *
      * @param items
      */
-    appendItem(...items: FocusableMenuItem[]) {
+    appendItem(...items: IT[]) {
       items.forEach((item) => {
         this._optionItems.push(item);
       });
@@ -29,7 +32,7 @@ export function Menuify<TBase extends GConstructor<any>>(Base: TBase) {
     /**
      * @alias appendItem
      */
-    addItem(...items: FocusableMenuItem[]) {
+    addItem(...items: IT[]) {
       return this.appendItem(...items);
     }
 
@@ -40,7 +43,7 @@ export function Menuify<TBase extends GConstructor<any>>(Base: TBase) {
      * @returns
      * 選択できたらアイテム参照、そうでなければfalse
      */
-    _selectItem(itemIndex: number): FocusableMenuItem | false {
+    _selectItem(itemIndex: number): IT | false {
       // indexを 0 ~ 最大インデックスの範囲内に収める
       itemIndex =
         itemIndex < 0
@@ -155,7 +158,7 @@ export function Menuify<TBase extends GConstructor<any>>(Base: TBase) {
       return false;
     }
 
-    get currentItem() {
+    get currentItem(): IT {
       return this._optionItems[this._currentItemIndex];
     }
 
