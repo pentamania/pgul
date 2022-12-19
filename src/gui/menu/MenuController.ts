@@ -31,10 +31,10 @@ abstract class Menu extends Menuify(
  * // TODO
  *
  */
-export class MenuController<ML = any> {
-  private _currentMenu?: Menu;
-  private _menuMap: Map<ML, Menu> = new Map();
-  private _prevMenuStack: Menu[] = [];
+export class MenuController<ML = any, MT extends Menu = Menu> {
+  private _currentMenu?: MT;
+  private _menuMap: Map<ML, MT> = new Map();
+  private _prevMenuStack: MT[] = [];
 
   /**
    * メニュー切替
@@ -43,7 +43,7 @@ export class MenuController<ML = any> {
    *
    * @param menu menu to activate
    */
-  private _setActiveMenu(menu: Menu) {
+  private _setActiveMenu(menu: MT) {
     if (this._currentMenu) this._currentMenu.deactivate();
     menu.activate();
     this._currentMenu = menu;
@@ -55,7 +55,7 @@ export class MenuController<ML = any> {
    * @param label Menu label
    * @param menu
    */
-  addMenu(label: ML, menu: Menu) {
+  addMenu(label: ML, menu: MT) {
     this._menuMap.set(label, menu);
   }
 
@@ -160,12 +160,12 @@ export class MenuController<ML = any> {
   }
 
   /** 現在のメニュー参照 */
-  get currentMenu() {
+  get currentMenu(): MT | undefined {
     return this._currentMenu;
   }
 
   /** 直前のメニュー参照を取得 */
-  get previousMenu(): Menu | undefined {
+  get previousMenu(): MT | undefined {
     return this._prevMenuStack[this._prevMenuStack.length - 1];
   }
 }
