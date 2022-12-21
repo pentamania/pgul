@@ -1,4 +1,4 @@
-import { clamp } from "../utils";
+import clamp from "../core/clamp";
 import { toRadian } from "./radianConverter";
 import { Vec2LikeConstructor, Vec2Like } from "./Vec2Like";
 

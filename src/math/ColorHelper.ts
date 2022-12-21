@@ -1,4 +1,4 @@
-import clamp from "../utils/clamp";
+import clamp from "../core/clamp";
 
 // Helper vars & funcs
 const oneThird = 1 / 3;

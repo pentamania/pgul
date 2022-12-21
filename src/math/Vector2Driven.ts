@@ -1,4 +1,4 @@
-import clamp from "../utils/clamp";
+import clamp from "../core/clamp";
 import { Vec2LikeConstructor } from "./Vec2Like";
 import { Vector2 } from "./Vector2";
 
