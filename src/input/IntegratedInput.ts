@@ -6,7 +6,7 @@ import {
   D_RIGHT,
   D_UP,
 } from "./Directions";
-import { GamepadExtension, GpButtonId } from "./GamepadEx";
+import { GamepadExtension, GpButtonId, GpCodeAll } from "./GamepadEx";
 import { KbCode } from "./KbCode";
 import { StatedKeyboard } from "./StatedKeyboard";
 
@@ -25,7 +25,7 @@ export interface KeyAssignData {
   /**
    * 登録したいgamepadのボタンid（任意）
    */
-  gp?: GpButtonId;
+  gp?: GpCodeAll;
 }
 
 /** keyboard & gamepadボタン型の統合型 */
@@ -34,10 +34,10 @@ export type KeyAssignMap<T> = Map<T, KeyAssignData>;
 export type ActionLabelDefault = string | number;
 
 const directionKeyAssigns: [Direction, KeyAssignData][] = [
-  [D_UP, { kb: "ArrowUp", gp: D_UP as any }],
-  [D_DOWN, { kb: "ArrowDown", gp: D_DOWN as any }],
-  [D_LEFT, { kb: "ArrowLeft", gp: D_LEFT as any }],
-  [D_RIGHT, { kb: "ArrowRight", gp: D_RIGHT as any }],
+  [D_UP, { kb: "ArrowUp", gp: D_UP }],
+  [D_DOWN, { kb: "ArrowDown", gp: D_DOWN }],
+  [D_LEFT, { kb: "ArrowLeft", gp: D_LEFT }],
+  [D_RIGHT, { kb: "ArrowRight", gp: D_RIGHT }],
 ];
 
 /**
