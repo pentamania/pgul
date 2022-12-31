@@ -74,7 +74,7 @@ export class RecordableIntegratedInput<
     if (!ad) return;
     // console.log("toggleKeyState", actionLabel, ad);
 
-    this.keyboard.toggleKeyState(ad.kb);
+    this.keyboard.toggleKeyState(ad.kb!);
     // this.gamepad.toggleButtonState(ad.gp!);
   }
 }

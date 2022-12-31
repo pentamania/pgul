@@ -20,7 +20,7 @@ type KbDirection = typeof KbDirections[number];
 
 export interface KeyAssignData {
   /** 登録Keyboardキー */
-  kb: KbCode;
+  kb?: KbCode;
 
   /**
    * 登録したいgamepadのボタンid（任意）
@@ -72,12 +72,12 @@ export class IntegratedInput<AL extends ActionLabelDefault> {
    * @param kbKey
    * @param gpCode
    */
-  public defineKey(actionKey: AL, kbKey: KbCode, gpCode?: GpButtonId) {
+  public defineKey(actionKey: AL, kbKey?: KbCode, gpCode?: GpButtonId) {
     this._assignMap.set(actionKey, {
       kb: kbKey,
       gp: gpCode,
     });
-    this.keyboard.initializeKeyMap(kbKey);
+    if (kbKey) this.keyboard.initializeKeyMap(kbKey);
   }
 
   public assignKeyboard(label: AL, code: KbCode) {
@@ -105,7 +105,7 @@ export class IntegratedInput<AL extends ActionLabelDefault> {
 
     // Kb reset
     this._assignMap.forEach((assign) => {
-      this.keyboard.initializeKeyMap(assign.kb);
+      if (assign.kb) this.keyboard.initializeKeyMap(assign.kb);
     });
 
     this.resetStateMap();
@@ -159,7 +159,7 @@ export class IntegratedInput<AL extends ActionLabelDefault> {
     const asn = this.getKeyAssignData(actionLabel);
     if (!asn) return false;
     return (
-      this.keyboard.getKeyPress(asn.kb, threshold) ||
+      this.keyboard.getKeyPress(asn.kb!, threshold) ||
       this.gamepad.getButtonPress(asn.gp!, threshold)
     );
   }
@@ -168,7 +168,7 @@ export class IntegratedInput<AL extends ActionLabelDefault> {
     const asn = this.getKeyAssignData(actionLabel);
     if (!asn) return false;
     return (
-      this.keyboard.getKeyDown(asn.kb, border) ||
+      this.keyboard.getKeyDown(asn.kb!, border) ||
       this.gamepad.getButtonDown(asn.gp!, border)
     );
   }
@@ -176,7 +176,7 @@ export class IntegratedInput<AL extends ActionLabelDefault> {
   public getKeyUp(actionLabel: AL | Direction): boolean {
     const asn = this.getKeyAssignData(actionLabel);
     if (!asn) return false;
-    return this.keyboard.getKeyUp(asn.kb) || this.gamepad.getButtonUp(asn.gp!);
+    return this.keyboard.getKeyUp(asn.kb!) || this.gamepad.getButtonUp(asn.gp!);
   }
 
   /**
