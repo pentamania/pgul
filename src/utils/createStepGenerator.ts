@@ -15,7 +15,7 @@ type CallbackWithCtx<C> = (this: C, count: number) => any;
  * @param duration
  * @param context optional
  */
-export default function <C = any>(
+export function createStepGenerator<C = any>(
   cb: CallbackWithCtx<C>,
   duration: number,
   context: C | null = null

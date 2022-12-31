@@ -6,7 +6,7 @@ export { default as objectKeysToEnum } from "./keysToEnum";
 export { default as zeroFillNum } from "./zeroFillNum";
 export { default as combineGeneratorFunctions } from "./combineGeneratorFunctions";
 export { default as combineGeneratorFunctionsLinear } from "./combineGeneratorFunctionsLinear";
-export { default as createStepGenerator } from "./createStepGenerator";
+export * from "./createStepGenerator";
 export { default as formatToPercentage } from "./formatToPercentage";
 export { default as rangedTimes } from "./rangedTimes";
 export { default as calcDividedAngles } from "./calcDividedAngles";
