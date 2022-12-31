@@ -34,6 +34,25 @@ describe("AreaRect: Test bounds", () => {
   });
 });
 
+describe("AreaRect#clamp", () => {
+  const clamppedX = 100;
+  const clamppedY = 200;
+
+  const boundary = new AreaRect(0, 0, clamppedX, clamppedY);
+  const actor = {
+    x: 200,
+    y: 400,
+  };
+  boundary.clamp(actor);
+
+  test("Should x set to clamped value", () => {
+    expect(actor.x).toBe(clamppedX);
+  });
+  test("Should y set to clamped value", () => {
+    expect(actor.y).toBe(clamppedY);
+  });
+});
+
 describe("AreaRect#calcLineInterceptPoints", () => {
   describe("Rect coord [0, 0, 100, 200] vs Line y=0.5x+1", () => {
     const rect = new AreaRect(0, 0, 100, 200);
