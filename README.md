@@ -1,5 +1,28 @@
 # pgul
 
-ゲーム開発で汎用的に使えそうなコンポーネントや関数を集めたライブラリ（予定）。
+ゲーム開発で汎用的に使えそうなコンポーネントや関数を集めたライブラリ  
+Library of components and functions for my game-dev.
 
-一部のクラスは phina.js などの別の対応ライブラリが必要です（helpers）。
+## 使い方
+
+### npm から
+
+インストール
+
+```bash
+npm install pgul
+```
+
+使用例
+
+```js
+import { RunnerDriven2D } from "pgul";
+```
+
+### ブラウザから
+
+TODO
+
+## ドキュメンテーション
+
+TODO
