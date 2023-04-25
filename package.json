@@ -4,7 +4,7 @@
   "description": "pentamania's game util library",
   "main": "dist/pgul.js",
   "module": "dist/pgul.esm.js",
-  "types": "src/index.ts",
+  "types": "types/index.d.ts",
   "files": [
     "src",
     "dist",
