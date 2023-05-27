@@ -20,7 +20,7 @@ function* yStepAction(this: Runner2D) {
   }
 }
 
-describe("mixins/RunnerDriven#setActionRunner", () => {
+describe("runner/RunnerDriven#setActionRunner", () => {
   test("Basic: target should be updated by RunnerAction", () => {
     const rdObj2D = new RunnerDrivenObj2D();
     rdObj2D.setActionRunner(xStepAction);
@@ -46,7 +46,7 @@ describe("mixins/RunnerDriven#setActionRunner", () => {
   });
 });
 
-describe("mixins/RunnerDriven#setParallelActionRunner", () => {
+describe("runner/RunnerDriven#setParallelActionRunner", () => {
   test("Default", () => {
     const rdObj2D = new RunnerDrivenObj2D();
     rdObj2D.setParallelActionRunner([
@@ -65,4 +65,4 @@ describe("mixins/RunnerDriven#setParallelActionRunner", () => {
 });
 
 // TODO
-// describe("mixins/RunnerDriven#setActionPattern", () => {});
+// describe("runner/RunnerDriven#setActionPattern", () => {});
