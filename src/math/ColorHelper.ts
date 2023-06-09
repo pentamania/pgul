@@ -22,11 +22,11 @@ export type ColorCodeTupple = [number, number, number];
  */
 export class HslColorHelper {
   /** hue: 0 ~ 1  */
-  _h: number;
+  private _h: number;
   /** saturation: 0 ~ 1  */
-  _s: number;
+  private _s: number;
   /** luminescence: 0 ~ 1 */
-  _l: number;
+  private _l: number;
 
   /**
    * @param {number} [h=0]
