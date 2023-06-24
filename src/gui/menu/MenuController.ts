@@ -1,8 +1,13 @@
 import { Menuify } from "./Menuify";
 
+export interface MenuRequiredProps {
+  activate: () => any;
+  deactivate: () => any;
+}
+
 /** Menuable拡張クラス型 */
 abstract class Menu extends Menuify(
-  class {
+  class implements MenuRequiredProps {
     /**
      * @virtual
      * メニューを有効化
