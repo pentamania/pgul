@@ -2,22 +2,33 @@ import { Pool } from "./Pool";
 import { GConstructor } from "../core/utilTypes";
 
 /**
- * オブジェクトプーリング機能を付与する
+ * [en] Mixin which adds object-pooling feature
+ *
+ * [jp] オブジェクトプーリング機能を付与するmixin
  *
  * @example
- * class Actor extends Poolable(class {}) {
- *   name: string = "";
- *   remove() { this.isPoolPickable = true }
+ * // Pre-defined Base class
+ * // class DisplayObject {
+ * //   removeFromParent() { code }
+ * // }
+ *
+ * class Actor extends Poolable(DisplayObject) {
+ *   life: number = 0;
+ *   removeFromParent() {
+ *     this.isPoolPickable = true;
+ *     return super.removeFromParent();
+ *   }
  *   resetParam() {
- *     this.name = "John Doe"
+ *     this.life = 100;
  *     this.isPoolPickable = false
  *   }
+ *   // Re-declare returning object type
  *   declare static pick: () => Actor;
  * }
  *
  * // Newly created
  * const actor = Actor.pick();
- * actor.name = "pentamania";
+ * actor.life = 200;
  *
  * // Back to pool
  * actor.remove()
@@ -25,8 +36,8 @@ import { GConstructor } from "../core/utilTypes";
  * // Picked from pool, not newly created
  * const actor2 = Actor.pick();
  *
- * // Should be reset
- * console.log(actor2.name); // "John Doe"
+ * // Should props be reset
+ * console.log(actor2.life); // 100
  *
  * @param Base
  */
@@ -58,10 +69,12 @@ export function Poolable<TBase extends GConstructor>(
     /**
      * [jp]
      * 使用可能（プールからpick可能）かどうか判定
+     *
+     * @virtual
+     * デフォルトでは{@link isPoolPickable}フラグで判定
      * 必要に応じてオーバーライド
      *
      * @param obj
-     * @returns
      */
     static checkAvailable(obj: any): boolean {
       return (obj as PoolableClass).isPoolPickable;
