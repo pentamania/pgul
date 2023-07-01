@@ -10,10 +10,6 @@ import {
   RunnerAction,
 } from "./Runner2D";
 
-type ChildContainable = GConstructor<{
-  children?: any[];
-}>;
-
 /**
  * RunnerAction配列
  * 直列あるいは並列アクションを表現
@@ -39,7 +35,7 @@ export type RunnerActionBundle<T = any> = RunnerActionComplex<T>[];
  * Runnerによって駆動するためのメソッドを付与
  * @param Base
  */
-export function RunnerDriven2D<TBase extends ChildContainable>(Base: TBase) {
+export function RunnerDriven2D<TBase extends GConstructor>(Base: TBase) {
   return class RunnerDriven extends Base {
     _runners: TargetDeclaredRunner[] = [];
     _actionBundleList?: List<RunnerActionBundle>;
@@ -339,12 +335,15 @@ export function RunnerDriven2D<TBase extends ChildContainable>(Base: TBase) {
 
     /**
      * 全Runnerを一時停止
-     * 子要素のrunnerも再帰的に停止する
+     *
+     * (存在する場合) 子要素のrunnerも再帰的に停止する
+     *
      */
     pauseRunners() {
       this._runners.forEach((runner) => runner.pause());
-      if (this.children && this.children.length) {
-        this.children.forEach((ch) => {
+      const _this = this as RDChildrenContainable;
+      if (_this.children && _this.children.length) {
+        _this.children.forEach((ch) => {
           if (ch.pauseRunners) ch.pauseRunners();
         });
       }
@@ -352,12 +351,14 @@ export function RunnerDriven2D<TBase extends ChildContainable>(Base: TBase) {
 
     /**
      * 全Runnerを再開
-     * 子要素のrunnerも再帰的に再開する
+     *
+     * (存在する場合) 子要素のrunnerも再帰的に再開する
      */
     resumeRunners() {
       this._runners.forEach((runner) => runner.resume());
-      if (this.children && this.children.length) {
-        this.children.forEach((ch) => {
+      const _this = this as RDChildrenContainable;
+      if (_this.children && _this.children.length) {
+        _this.children.forEach((ch) => {
           if (ch.resumeRunners) ch.resumeRunners();
         });
       }
@@ -420,3 +421,7 @@ export function RunnerDriven2D<TBase extends ChildContainable>(Base: TBase) {
  * 型定義用
  */
 export class RunnerDrivenClass extends RunnerDriven2D(class {}) {}
+
+type RDChildrenContainable = {
+  children?: (RunnerDrivenClass | any)[];
+};
