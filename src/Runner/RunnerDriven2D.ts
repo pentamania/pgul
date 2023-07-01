@@ -1,6 +1,7 @@
 import { List } from "../core/List";
 import combineGeneratorFunctions from "../utils/combineGeneratorFunctions";
 import { GConstructor } from "../core/utilTypes";
+import { toDegree } from "../math/radianConverter";
 import { Vector2 } from "../math/Vector2";
 import {
   TargetDeclaredRunnerAction,
@@ -377,6 +378,20 @@ export function RunnerDriven2D<TBase extends ChildContainable>(Base: TBase) {
         vectorRef.y += runner.vy;
       });
       return vectorRef;
+    }
+
+    /**
+     * [jp]
+     * 全runnerの合成vectorの角度を返す
+     *
+     * @param asDegree
+     */
+    public getRunnerCombinedVectorAngle(asDegree: boolean = false): number {
+      const vecRadianSum = this._runners.reduce(
+        (pre, cur) => pre + cur.vectorAngle,
+        0
+      );
+      return asDegree ? toDegree(vecRadianSum) : vecRadianSum;
     }
 
     /**
