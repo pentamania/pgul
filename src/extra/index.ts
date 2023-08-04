@@ -4,3 +4,4 @@ export * from "./Chargable";
 export * from "./Debugger";
 export * from "./Timer";
 export * from "./RandomPickableList";
+export * from "./FpsRecorder";
