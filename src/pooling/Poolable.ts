@@ -60,11 +60,12 @@ export function Poolable<TBase extends GConstructor>(
      * 必要に応じてオーバーライド
      *
      * @virtual
-     * デフォルトでは`isPoolPickable`をfalseにする（=使用中状態にする）処理を実行
      */
-    resetParam(..._args: any): any {
-      this.isPoolPickable = false;
-    }
+    resetParam?(..._args: any): any;
+    // Warning: Do Not define default func to aviod unexpected overriding
+    // resetParam(..._args: any): any {
+    //   this.isPoolPickable = false;
+    // }
 
     /**
      * [jp]
