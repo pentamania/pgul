@@ -13,3 +13,5 @@ export * from "./vector/setter";
 export * from "./vector/snaking";
 export * from "./vector/turning";
 export * from "./vector/zigzaging";
+
+export * from "./types";
