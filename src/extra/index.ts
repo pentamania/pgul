@@ -5,3 +5,4 @@ export * from "./Debugger";
 export * from "./Timer";
 export * from "./RandomPickableList";
 export * from "./FpsRecorder";
+export * from "./BeatCounter";
