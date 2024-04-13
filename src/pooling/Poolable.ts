@@ -45,7 +45,8 @@ export function Poolable<TBase extends GConstructor>(
   Base: TBase
   // prePooledNum?: number
 ) {
-  const _pool = new Pool<PoolableClass>();
+  // 使う時になるまで無とする
+  let _pool: Pool<PoolableClass> | undefined;
 
   class PoolableClass extends Base {
     /**
@@ -94,6 +95,8 @@ export function Poolable<TBase extends GConstructor>(
      * @returns Instance of Mixin-ed class
      */
     static pick(..._args: any): PoolableClass {
+      if (!_pool) _pool = new Pool<PoolableClass>();
+
       let instance = _pool.pick(this.checkAvailable);
       if (!instance) {
         instance = new this();
@@ -108,6 +111,7 @@ export function Poolable<TBase extends GConstructor>(
      * インスタンスを生成してプールする
      */
     static pool() {
+      if (!_pool) _pool = new Pool<PoolableClass>();
       _pool.push(new this());
     }
 
@@ -119,14 +123,14 @@ export function Poolable<TBase extends GConstructor>(
      * Empty pool
      */
     static clearPool() {
-      _pool.clearPool();
+      _pool?.clearPool();
     }
 
     /**
      * プール数
      */
     static get pooledNum() {
-      return _pool.pooledNum;
+      return _pool?.pooledNum;
     }
   }
 
