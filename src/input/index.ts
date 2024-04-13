@@ -1,5 +1,6 @@
 export * from "./Keyboard";
 export * from "./StatedKeyboard";
+export * from "./keyboardHelpers";
 
 import * as gamepadHelper from "./gamepadHelpers";
 export { gamepadHelper };
