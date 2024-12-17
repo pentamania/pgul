@@ -98,4 +98,11 @@ export class Pool<T = any> {
   get pooledNum() {
     return this._pool.length;
   }
+
+  /**
+   * 内部プール配列参照を得る
+   */
+  get array() {
+    return this._pool;
+  }
 }

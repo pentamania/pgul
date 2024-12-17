@@ -127,7 +127,15 @@ export function Poolable<TBase extends GConstructor>(
     }
 
     /**
-     * プール数
+     * プール参照を得る
+     */
+    static getPoolArray() {
+      if (!_pool) _pool = new Pool<PoolableClass>();
+      return _pool.array;
+    }
+
+    /**
+     * プール数を得る
      */
     static get pooledNum() {
       return _pool?.pooledNum;
