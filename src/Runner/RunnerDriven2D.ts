@@ -43,12 +43,17 @@ export function RunnerDriven2D<TBase extends GConstructor>(Base: TBase) {
     /**
      * Run when all runners were removed in {@link RunnerDrivenClass.updateRunners}
      * Use in {@link RunnerDrivenClass.setActionPattern} to shift action-bundles
-     * 更新・解除を都度忘れないこと
      */
+    // 更新・解除を都度忘れないこと
     _onRunnerAllDead?: () => void;
 
     /**
-     * runnerの進行
+     * 登録runnerルーチン処理を進める
+     *
+     * ステップ処理後、処理が完了したRunnerについては登録配列（{@link _runners}）から自動削除
+     *
+     * [{@link setActionPattern}によるアクションのバンドルを登録してる場合]：
+     * 全runnerが完了状態になった際、{@link _onRunnerAllDead}を経由して次のアクションへ移行する
      */
     updateRunners() {
       if (this._runners.length) {
@@ -268,7 +273,13 @@ export function RunnerDriven2D<TBase extends GConstructor>(Base: TBase) {
      * 中ボス・ボスの複雑な行動パターンの設定に使用
      *
      * @example
-     * // TODO
+     * // WIP
+     * actor.setActionPattern([
+     *    // 1st action-set (Same as addActionRunner param)
+     *    [
+     *
+     *    ],
+     * ])
      *
      * @param actionBundles 可変長引数でActionBundleを順番にセット
      */

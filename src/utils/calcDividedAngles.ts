@@ -12,7 +12,7 @@ const PI2 = 2 * Math.PI;
  * @param centerAngleRadian 基準角度
  * @param dividedCount 分割数
  * @param angleRangeRadian 範囲角
- * @param holderArrayRef 配列参照
+ * @param holderArrayRef 配列参照：length=0による空化処理を行う
  */
 export default function calcDividedAngles(
   centerAngleRadian: number,

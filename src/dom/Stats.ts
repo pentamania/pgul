@@ -34,8 +34,14 @@ export class Stats {
   private _lineHeight: number = 0;
 
   /**
-   * @param updateEveryFrame 毎フレーム更新する
+   * @param updateEveryFrame
+   * 毎フレーム自動更新するかどうか;
+   * 更新頻度はrequestAnimationFrame依存 [default=true]
+   *
    * @param customStyles
+   * Custom CSS settings for dom
+   *
+   * @param domType "div" or "canvas" [default="canvas"]
    */
   constructor(
     updateEveryFrame = true,

@@ -17,6 +17,7 @@ import { getGamepad, getStickY, getStickX } from "./gamepadHelpers";
 const DEFAULT_DEFAULT_STICK_TILT_THRESHOLD = 0.3;
 export type GpButtonId = number;
 
+/** gamebuttonId(number) & Direction(string) */
 export type GpCodeAll = Direction | GpButtonId;
 
 /**
