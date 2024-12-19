@@ -1,12 +1,13 @@
 import { List } from "../core/List";
 import { Random } from "../math/Random";
+import shuffleArray from "../utils/shuffleArray";
 
 /**
  * [en]
- * Add random pickup feature to List class
+ * Add randomizing features to List class
  *
  * [jp]
- * Listクラスにランダムピックアップ機能追加
+ * Listクラスにランダム関係の機能追加
  */
 export class RandomPickableList<T = any> extends List<T> {
   protected _random?: Random;
@@ -34,5 +35,17 @@ export class RandomPickableList<T = any> extends List<T> {
   setRandomSeed(seed: number) {
     if (!this._random) this._random = new Random();
     this._random.seed = seed;
+  }
+
+  /**
+   * [jp] 内部配列の要素インデックスをシャッフルする
+   *
+   */
+  shuffle(rng?: Random) {
+    if (!rng) {
+      if (!this._random) this._random = new Random();
+      rng = this._random;
+    }
+    return shuffleArray(this._list, rng.random.bind(rng));
   }
 }
