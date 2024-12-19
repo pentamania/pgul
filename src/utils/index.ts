@@ -14,6 +14,7 @@ export { default as setWindowFocusCallback } from "./setWindowFocusCallback";
 export { default as periodChunkToDots } from "./periodChunkToDots";
 export { default as splitTextByLetterNum } from "./splitTextByLetterNum";
 export { default as sliceGrid } from "./sliceGrid";
+export { default as shuffleArray } from "./shuffleArray";
 export { convertPromiseToGenerator } from "./promiseToGenerator";
 export * from "./timeFormatConverter";
 export * from "./addAccessor";
