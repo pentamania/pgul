@@ -1,2 +1,2 @@
 export * from "./TaskQueue";
-export { SerialQueueTask } from "./interfaces";
+export type { SerialQueueTask } from "./interfaces";
