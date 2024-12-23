@@ -1,10 +1,12 @@
 import { Direction } from "./Directions";
 import { ActionLabelDefault, IntegratedInput } from "./IntegratedInput";
 
+type KeyId = number;
+
 /**
- * [frame, keyId]
+ * [frameNum, keyId]
  */
-export type RecordedKeyLog = [number, number];
+export type RecordedKeyLog = [number, KeyId];
 
 /**
  * IntegratedInputにキー入力を保存＆再生する機能を追加
@@ -33,8 +35,8 @@ export class RecordableIntegratedInput<
    * @param frame フレーム値
    */
   public recordInput(actionsToRecord: (AL | Direction)[], frame: number) {
-    actionsToRecord.forEach((key, keyId) => {
-      if (this.getKeyDown(key) || this.getKeyUp(key)) {
+    actionsToRecord.forEach((actionLabel, keyId) => {
+      if (this.getKeyDown(actionLabel) || this.getKeyUp(actionLabel)) {
         // console.log("recordInput", key, keyId);
         this._recordedKeyInputLog.push([frame, keyId]);
       }
@@ -42,15 +44,15 @@ export class RecordableIntegratedInput<
   }
 
   /**
-   * 記録したキー入力情報を破棄
+   * 記録したキー入力情報を破棄 & 初期状態記録
    * @param actionsToRecord
    */
   resetRecordedInput(actionsToRecord: (AL | Direction)[]) {
     this._recordedKeyInputLog.length = 0;
 
     // 初期状態を0フレーム目の入力として記録
-    actionsToRecord.forEach((action, keyId) => {
-      if (this.getKeyPress(action)) {
+    actionsToRecord.forEach((actionLabel, keyId) => {
+      if (this.getKeyPress(actionLabel)) {
         this._recordedKeyInputLog.push([0, keyId]);
       }
     });
@@ -59,13 +61,14 @@ export class RecordableIntegratedInput<
   /**
    * 複製したキー入力記録ログの配列を返す
    */
-  public getRecordedKeyInputLog() {
+  public getRecordedKeyInputLog(): RecordedKeyLog[] {
     return this._recordedKeyInputLog.slice(0);
   }
 
   /**
-   * 内部キー状態を切り替え
-   * キーボード側のみ処理（kb gp両方でやるとややこしい）
+   * 内部キー状態を切り替え（プレイを再現）
+   *
+   * 現状キーボード側のみ処理（gamepadと併用だとややこしい）
    *
    * See {@link toggleKeyStateFrame}
    */
