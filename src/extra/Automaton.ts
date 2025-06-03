@@ -17,8 +17,12 @@ export interface StateBehaviour<T, SL> {
    */
   update?: (this: T, ...arg: any) => SL | void;
 
-  // Thinking....
-  // exit?: (this: T, ...arg: any) => any;
+  /**
+   * [optional]
+   * 状態遷移を抜けるときに一度だけ行う処理
+   * - thisの参照は設定したターゲット
+   */
+  exit?: (this: T, ...arg: any) => any;
 }
 
 /**
@@ -124,6 +128,12 @@ export class Automaton<TT = any, SL = any> {
    * @param enterFuncArgs 可変長引数でenter実行時に引数を渡せる
    */
   setState(stateLabel: SL, ...enterFuncArgs: any[]): this {
+    /* Run "exit" if exists */
+    if (this._currentStateLabel) {
+      const exitFunc = this.getStateBehavior(this._currentStateLabel)?.exit;
+      if (exitFunc) exitFunc.call(this.target);
+    }
+
     const nextState = this.getStateBehavior(stateLabel);
     if (!nextState) {
       // if (process.env) console.warn("No State");
