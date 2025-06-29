@@ -48,18 +48,26 @@ export function RunnerDriven2D<TBase extends GConstructor>(Base: TBase) {
     _onRunnerAllDead?: () => void;
 
     /**
-     * 登録runnerルーチン処理を進める
-     *
-     * ステップ処理後、処理が完了したRunnerについては登録配列（{@link _runners}）から自動削除
+     * 登録したrunnerルーチン処理を進める
      *
      * [{@link setActionPattern}によるアクションのバンドルを登録してる場合]：
      * 全runnerが完了状態になった際、{@link _onRunnerAllDead}を経由して次のアクションへ移行する
+     *
+     * @param autoRemoveDoneRunner [default=true]
+     *
+     * jp:
+     * ステップ処理後、処理が完了したRunnerについては登録配列から自動削除するかどうか
+     * runner再利用する場合はfalse
+     *
+     * en:
+     * Whether to auto-remove the IteratorResult "done" runner from runner array after update.
+     * false it if you want to reuse the runners.
      */
-    updateRunners() {
+    updateRunners(autoRemoveDoneRunner: boolean = true) {
       if (this._runners.length) {
         for (let i = this._runners.length - 1; i >= 0; i--) {
           const result = this._runners[i].step();
-          if (result && result.done) {
+          if (autoRemoveDoneRunner && result && result.done) {
             this._runners.splice(i, 1);
           }
         }
