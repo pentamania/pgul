@@ -39,6 +39,18 @@ export class HslColorHelper {
     this._l = l;
   }
 
+  /**
+   * Set inner hsl values from RGB
+   * @param r
+   * @param g
+   * @param b
+   */
+  public setFromRgb(r: number, g: number, b: number) {
+    const [h, s, l] = HslColorHelper.rgbToHsl(r, g, b);
+    this._h = h;
+    this._s = s;
+    this._l = l;
+  }
 
   /**
    * Convert to [r,g,b] tuple (range: 0 ~ 255)
