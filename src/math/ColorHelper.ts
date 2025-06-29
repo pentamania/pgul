@@ -39,14 +39,26 @@ export class HslColorHelper {
     this._l = l;
   }
 
+
+  /**
+   * Convert to [r,g,b] tuple (range: 0 ~ 255)
+   * @param normalize Set to true if you want the value ranged 0.0 ~ 1.0
+   */
+  public toRgb(normalize?: boolean): ColorCodeTupple {
+    if (normalize)
+      return HslColorHelper.hslToRgbNormalized(this._h, this._s, this._l);
+    return HslColorHelper.hslToRgb(this._h, this._s, this._l);
+  }
+
   private _toRgbHex(): string {
     // hslToRgb
-    let [r, g, b] = HslColorHelper.hslToRgb(this._h, this._s, this._l);
+    let [r, g, b] = this.toRgb(false);
 
-    // Convert to 0 ~ 255 int
-    r = Math.round(r * 255);
-    g = Math.round(g * 255);
-    b = Math.round(b * 255);
+    // Convert to int
+    // TODO 25.5 -> 26になるなど不都合があるかも？
+    r = Math.round(r);
+    g = Math.round(g);
+    b = Math.round(b);
 
     // Convert to hex
     return `${r.toString(16)}${g.toString(16)}${b.toString(16)}`;
@@ -111,7 +123,7 @@ export class HslColorHelper {
    * @param s 0 ~ 1
    * @param l 0 ~ 1
    */
-  static hslToRgb(h: number, s: number, l: number): ColorCodeTupple {
+  static hslToRgbNormalized(h: number, s: number, l: number): ColorCodeTupple {
     let r, g, b;
     if (s === 0) {
       // 白黒
@@ -127,15 +139,24 @@ export class HslColorHelper {
   }
 
   /**
-   * RGB数値（10進数, 0 ~ 255）からインスタンス生成
+   * HSLを 0 ~ 255範囲のRGB値に変換
    * @see https://stackoverflow.com/a/9493060
    *
-   * @param r Normalized to 0 ~ 255
-   * @param g Normalized to 0 ~ 255
-   * @param b Normalized to 0 ~ 255
-   * @returns HslColorHelper instance
+   * @param h 0 ~ 1
+   * @param s 0 ~ 1
+   * @param l 0 ~ 1
    */
-  static fromRgb(r: number, g: number, b: number): HslColorHelper {
+  static hslToRgb(
+    ...params: Parameters<typeof HslColorHelper.hslToRgbNormalized>
+  ): ColorCodeTupple {
+    let [r, g, b] = this.hslToRgbNormalized(...params);
+    r = r * 255;
+    g = g * 255;
+    b = b * 255;
+    return [r, g, b];
+  }
+
+  static rgbToHsl(r: number, g: number, b: number): ColorCodeTupple {
     (r /= 255), (g /= 255), (b /= 255);
     const max = Math.max(r, g, b);
     const min = Math.min(r, g, b);
@@ -163,7 +184,20 @@ export class HslColorHelper {
       h /= 6;
     }
 
-    return new HslColorHelper(h, s, l);
+    return [h, s, l];
+  }
+
+  /**
+   * RGB数値（10進数, 0 ~ 255）からインスタンス生成
+   * @see https://stackoverflow.com/a/9493060
+   *
+   * @param r Normalized to 0 ~ 255
+   * @param g Normalized to 0 ~ 255
+   * @param b Normalized to 0 ~ 255
+   * @returns HslColorHelper instance
+   */
+  static fromRgb(r: number, g: number, b: number): HslColorHelper {
+    return new HslColorHelper(...this.rgbToHsl(r, g, b));
   }
 
   /**
