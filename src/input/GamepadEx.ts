@@ -29,6 +29,12 @@ export class GamepadExtension {
   /** gamepad index cache: 無い場合、毎回つながっているGamePadを探しに行く */
   private _gpIndex?: number;
 
+  /** indexによって紐づけられた大本のGamePadオブジェクトを返す（無ければnull）*/
+  getBaseGamepad(): Gamepad | null {
+    if (this._gpIndex == null) return null;
+    return getGamepad(this._gpIndex);
+  }
+
   /** スティック傾き処理におけるデフォルト値 */
   defaultStickTiltThreshold: number = DEFAULT_DEFAULT_STICK_TILT_THRESHOLD;
 
