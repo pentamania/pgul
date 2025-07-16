@@ -6,7 +6,7 @@ export interface MenuRequiredProps {
 }
 
 /** Menuable拡張クラス型 */
-abstract class Menu extends Menuify(
+export abstract class Menu extends Menuify(
   class implements MenuRequiredProps {
     /**
      * @virtual
@@ -36,10 +36,10 @@ abstract class Menu extends Menuify(
  * // TODO
  *
  */
-export class MenuController<ML = any, MT extends Menu = Menu> {
-  private _currentMenu?: MT;
-  private _menuMap: Map<ML, MT> = new Map();
-  private _prevMenuStack: MT[] = [];
+export class MenuController<TMenuLabel = any, TMenu extends Menu = Menu> {
+  private _currentMenu?: TMenu;
+  private _menuMap: Map<TMenuLabel, TMenu> = new Map();
+  private _prevMenuStack: TMenu[] = [];
 
   /**
    * メニュー切替
@@ -48,7 +48,7 @@ export class MenuController<ML = any, MT extends Menu = Menu> {
    *
    * @param menu menu to activate
    */
-  private _setActiveMenu(menu: MT) {
+  private _setActiveMenu(menu: TMenu) {
     if (this._currentMenu) this._currentMenu.deactivate();
     menu.activate();
     this._currentMenu = menu;
@@ -60,7 +60,7 @@ export class MenuController<ML = any, MT extends Menu = Menu> {
    * @param label Menu label
    * @param menu
    */
-  addMenu(label: ML, menu: MT) {
+  addMenu(label: TMenuLabel, menu: TMenu) {
     this._menuMap.set(label, menu);
   }
 
@@ -70,23 +70,26 @@ export class MenuController<ML = any, MT extends Menu = Menu> {
    * @param label Menu label
    * @returns
    */
-  getMenu(label: ML) {
+  getMenu(label: TMenuLabel) {
     return this._menuMap.get(label);
   }
 
   /**
    * アクティブにしたいメニューをlabel指定
    *
-   * @param label
+   * @param menuOrLabel
    * @param resetState
    */
-  setActiveMenu(label: ML, resetState: boolean = false) {
+  setActiveMenu(menuOrLabel: TMenu | TMenuLabel, resetState: boolean = false) {
     if (this._currentMenu) {
       // 現在のメニューをスタック保存
       this._prevMenuStack.push(this._currentMenu);
     }
 
-    let nextMenu = this.getMenu(label);
+    let nextMenu =
+      typeof menuOrLabel === "string"
+        ? this.getMenu(menuOrLabel)
+        : (menuOrLabel as TMenu);
     if (nextMenu) {
       this._setActiveMenu(nextMenu);
       if (resetState) nextMenu.selectItem(0);
@@ -133,7 +136,7 @@ export class MenuController<ML = any, MT extends Menu = Menu> {
     if (!this.currentMenu) return;
     const runResult = this.currentMenu.runOption(...args);
     if (typeof runResult === "string") {
-      this.setActiveMenu((runResult as unknown) as ML);
+      this.setActiveMenu((runResult as unknown) as TMenuLabel);
     }
     return runResult;
   }
@@ -165,12 +168,12 @@ export class MenuController<ML = any, MT extends Menu = Menu> {
   }
 
   /** 現在のメニュー参照 */
-  get currentMenu(): MT | undefined {
+  get currentMenu(): TMenu | undefined {
     return this._currentMenu;
   }
 
   /** 直前のメニュー参照を取得 */
-  get previousMenu(): MT | undefined {
+  get previousMenu(): TMenu | undefined {
     return this._prevMenuStack[this._prevMenuStack.length - 1];
   }
 }
