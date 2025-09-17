@@ -1,6 +1,6 @@
 {
   "name": "pgul",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "pentamania's game util library",
   "main": "dist/pgul.js",
   "module": "dist/pgul.esm.js",
