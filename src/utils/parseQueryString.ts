@@ -54,10 +54,22 @@ function decodeValue(encodedStringValue: string): string | number | boolean {
 
 /**
  * クエリストリングをパース
- * @param str テスト用、通常は指定しない
+ * - Usually works only for browsers
+ *
+ * @param paramString
+ * Usually not specified; only for testing
+ * [jp]テスト用、通常は指定しない
+ *
+ * @returns Parsed result object
  */
-export default function parse(str?: string): { [k: string]: any } {
-  const paramString = str || window.location.search.substr(1);
+export default function parse(paramString?: string): { [k: string]: any } {
+  /* Check URL query string */
+  if (!paramString && typeof window !== "undefined")
+    paramString = window.location.search.substring(1);
+
+  /* Fail to get any string (Usually in NodeJS) */
+  if (!paramString) return Object.create(null);
+
   const result: { [k: string]: any } = Object.create(null);
   return paramString.split("&").reduce((obj, v) => {
     const pair = v.split("=") as [string, string];
