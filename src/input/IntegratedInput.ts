@@ -55,10 +55,20 @@ export class IntegratedInput<AL extends ActionLabelDefault> {
 
   // 内部input
   readonly keyboard: StatedKeyboard = new StatedKeyboard(true);
-  readonly gamepad: GamepadExtension;
+
+  /** All referenced gamepads (wrapper) */
+  readonly gamepads: GamepadExtension[];
+
+  /**
+   * Ensured gamepad (wrapper) obj.
+   * may not work as expected if actual gamepad is not connected
+   */
+  get gamepad() {
+    return this.gamepads[0];
+  }
 
   constructor(gamepadIndex?: number) {
-    this.gamepad = new GamepadExtension(gamepadIndex);
+    this.gamepads = [new GamepadExtension(gamepadIndex)];
   }
 
   /**
@@ -139,7 +149,7 @@ export class IntegratedInput<AL extends ActionLabelDefault> {
    */
   public updateKeyStates(autoPlayMode?: boolean) {
     this.keyboard.updateKeyStates(autoPlayMode);
-    this.gamepad.updateStates(autoPlayMode);
+    this.gamepads.forEach((gp) => gp.updateStates(autoPlayMode));
   }
 
   /**
@@ -147,7 +157,7 @@ export class IntegratedInput<AL extends ActionLabelDefault> {
    */
   public resetStateMap() {
     this.keyboard.resetStateMap();
-    this.gamepad.resetStateMap();
+    this.gamepads.forEach((gp) => gp.resetStateMap());
   }
 
   /**
@@ -158,25 +168,29 @@ export class IntegratedInput<AL extends ActionLabelDefault> {
   public getKeyPress(actionLabel: AL | Direction, threshold = 0): boolean {
     const asn = this.getKeyAssignData(actionLabel);
     if (!asn) return false;
-    return (
-      this.keyboard.getKeyPress(asn.kb!, threshold) ||
-      this.gamepad.getButtonPress(asn.gp!, threshold)
-    );
+
+    const anyGPadFound: boolean =
+      this.gamepads.findIndex((gp) => gp.getButtonPress(asn.gp!, threshold)) !==
+      -1;
+    return this.keyboard.getKeyPress(asn.kb!, threshold) || anyGPadFound;
   }
 
   public getKeyDown(actionLabel: AL | Direction, border?: number): boolean {
     const asn = this.getKeyAssignData(actionLabel);
     if (!asn) return false;
-    return (
-      this.keyboard.getKeyDown(asn.kb!, border) ||
-      this.gamepad.getButtonDown(asn.gp!, border)
-    );
+
+    const anyGPadFound: boolean =
+      this.gamepads.findIndex((gp) => gp.getButtonDown(asn.gp!, border)) !== -1;
+    return this.keyboard.getKeyDown(asn.kb!, border) || anyGPadFound;
   }
 
   public getKeyUp(actionLabel: AL | Direction): boolean {
     const asn = this.getKeyAssignData(actionLabel);
     if (!asn) return false;
-    return this.keyboard.getKeyUp(asn.kb!) || this.gamepad.getButtonUp(asn.gp!);
+
+    const anyGPadFound: boolean =
+      this.gamepads.findIndex((gp) => gp.getButtonUp(asn.gp!)) !== -1;
+    return this.keyboard.getKeyUp(asn.kb!) || anyGPadFound;
   }
 
   /**
