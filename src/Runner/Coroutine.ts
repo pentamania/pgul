@@ -162,6 +162,15 @@ export class Coroutine {
   }
 
   /**
+   * [en]
+   * Clean up inner tasks & generator
+   */
+  discard() {
+    delete this._generator;
+    this._taskList.length = 0;
+  }
+
+  /**
    * [jp]
    * ループを設定
    *
