@@ -65,15 +65,16 @@ export function RunnerDriven2D<TBase extends GConstructor>(Base: TBase) {
      */
     updateRunners(autoRemoveDoneRunner: boolean = true) {
       if (this._runners.length) {
-        for (let i = this._runners.length - 1; i >= 0; i--) {
+        let _anyRunnerAlive = false;
+        for (let i = this._runners.length - 1; 0 <= i; i--) {
           const result = this._runners[i].step();
-          if (autoRemoveDoneRunner && result && result.done) {
-            this._runners.splice(i, 1);
-          }
+          if (result) _anyRunnerAlive = true;
         }
-        if (!this._runners.length) {
-          // All runner removed
+        if (!_anyRunnerAlive) {
           if (this._onRunnerAllDead) this._onRunnerAllDead();
+        }
+        if (autoRemoveDoneRunner) {
+          this._runners = this._runners.filter((rnr) => !rnr.dead);
         }
       }
     }
