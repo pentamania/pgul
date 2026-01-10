@@ -127,7 +127,7 @@ export class Automaton<TT = any, SL = any> {
    * @param stateLabel ステートを示すラベル
    * @param enterFuncArgs 可変長引数でenter実行時に引数を渡せる
    */
-  setState(stateLabel: SL, ...enterFuncArgs: any[]): this {
+  setState(stateLabel: SL, ...enterFuncArgs: any[]) {
     /* Run "exit" if exists */
     if (this._currentStateLabel) {
       const exitFunc = this.getStateBehavior(this._currentStateLabel)?.exit;
@@ -137,11 +137,11 @@ export class Automaton<TT = any, SL = any> {
     const nextState = this.getStateBehavior(stateLabel);
     if (!nextState) {
       // if (process.env) console.warn("No State");
-      return this;
+      return;
     }
     nextState.enter.call(this.target, ...enterFuncArgs);
     this._currentStateLabel = stateLabel;
-    return this;
+    // return this;
   }
 
   /**
